@@ -6,6 +6,12 @@ using UnityEngine.AI;
 using DG.Tweening;
 using BehaviourAPI.Core;
 
+enum PoliceStates 
+{
+        Patrol,
+        Investigate
+}
+
 public class PoliceBehaviour : MonoBehaviour
 {
     [Header("Health")]
@@ -13,15 +19,22 @@ public class PoliceBehaviour : MonoBehaviour
     private int health = 100;
 
     [Header("Patrol")]
-    public List<Transform> patrolPositions;
+    [SerializeField]
+    private List<Transform> patrolPositions;
     private int currentPatrolIndex = 0;
     private Coroutine patrolCorutine = null;
 
+    [Header("Paranoia/Thread")]
+    [SerializeField]
+    private int paranoia = 0;
 
     [Header("Investigate")]
-    public InvestigableObject InvestigableObject = null;
+    public InvestigableObject investigableObject = null;
 
     public NavMeshAgent agent;
+
+    [SerializeField]
+    private PoliceStates state = PoliceStates.Patrol;
 
     // Start is called before the first frame update
     private void Awake()
@@ -32,19 +45,20 @@ public class PoliceBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
-    public void Patrol() 
+    public void Patrol()
     {
-        if (patrolCorutine != null) 
+        state = PoliceStates.Patrol;
+        if (patrolCorutine != null)
         {
             StopCoroutine(patrolCorutine);
             patrolCorutine = null;
         }
         patrolCorutine = StartCoroutine(PatrolCorutine());
 
-        IEnumerator PatrolCorutine() 
+        IEnumerator PatrolCorutine()
         {
             while (true)
             {
@@ -65,9 +79,10 @@ public class PoliceBehaviour : MonoBehaviour
 
 
 
-    public void Investigate() 
+    public void Investigate()
     {
-        Vector3 investigatePostion = InvestigableObject.transform.position;
+        state = PoliceStates.Investigate;
+        Vector3 investigatePostion = investigableObject.investigatePosition.position;
 
         //Stop patrolling
         if (patrolCorutine != null)
@@ -82,22 +97,34 @@ public class PoliceBehaviour : MonoBehaviour
 
         IEnumerator InvestigateCorutine(Vector3 investigatePostion)
         {
-            InvestigableObject = null;
             agent.SetDestination(investigatePostion); //Go to investigate position
             yield return new WaitUntil(() => { return isPathComplete(); }); //Wait for arrival at pos
             //Launch animation or sth and later return to patrol?
+            DOVirtual.DelayedCall(investigableObject.investigateTime, () => {
+                Debug.Log("Finished investigating");
+                investigableObject?.HasBeenInvestigated();
+                investigableObject = null;
+            });
         }
-
     }
 
 
-    public bool CheckInvestigate() 
+    public bool CheckInvestigate()
     {
-        
-        if (InvestigableObject != null) 
+
+        if (investigableObject != null)
         {
-            Debug.Log("CheckInvestigate");
             //Return success and in SFM launch investigate
+            return investigableObject.ShouldInvestigate();
+        }
+        return false;
+    }
+
+    public bool CheckEndedInvestigate()
+    {
+
+        if (investigableObject == null)
+        {
             return true;
         }
         return false;
@@ -105,11 +132,24 @@ public class PoliceBehaviour : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Trigger");
-        if (other.TryGetComponent(out InvestigableObject)) 
+        if (other.TryGetComponent(out investigableObject))
         {
-            Debug.Log("investigate");
         }
     }
 
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.TryGetComponent(out investigableObject))
+        {
+            investigableObject = null;
+        }
+    }
+
+
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(transform.position + new Vector3(0,1,0), new Vector3(15,1,15));
+    }
 }
