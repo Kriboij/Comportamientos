@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using DG.Tweening;
+using BehaviourAPI.Core;
 
 public class PoliceBehaviour : MonoBehaviour
 {
@@ -18,7 +19,7 @@ public class PoliceBehaviour : MonoBehaviour
 
 
     [Header("Investigate")]
-    private InvestigableObject InvestigableObject = null;
+    public InvestigableObject InvestigableObject = null;
 
     public NavMeshAgent agent;
 
@@ -66,8 +67,9 @@ public class PoliceBehaviour : MonoBehaviour
 
     public void Investigate() 
     {
-        Vector3 investigatePostion = Vector3.one;
+        Vector3 investigatePostion = InvestigableObject.transform.position;
 
+        //Stop patrolling
         if (patrolCorutine != null)
         {
             StopCoroutine(patrolCorutine);
@@ -75,6 +77,7 @@ public class PoliceBehaviour : MonoBehaviour
             agent.SetDestination(transform.position);
         }
 
+        //Start investigating
         StartCoroutine(InvestigateCorutine(investigatePostion));
 
         IEnumerator InvestigateCorutine(Vector3 investigatePostion)
@@ -82,26 +85,28 @@ public class PoliceBehaviour : MonoBehaviour
             agent.SetDestination(investigatePostion); //Go to investigate position
             yield return new WaitUntil(() => { return isPathComplete(); }); //Wait for arrival at pos
             //Launch animation or sth and later return to patrol?
-
-            InvestigableObject = null;
+            DOVirtual.DelayedCall(2f, () => { InvestigableObject = null; Debug.Log("Ended investigating"); });
         }
 
     }
 
 
-    public void CheckInvestigate() 
+    public bool CheckInvestigate() 
     {
         if (InvestigableObject != null) 
         {
             //Return success and in SFM launch investigate
+            return true;
         }
+        return false;
     }
 
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log("Trigger");
         if (other.TryGetComponent(out InvestigableObject)) 
         {
-            
+            Debug.Log("investigate");
         }
     }
 
