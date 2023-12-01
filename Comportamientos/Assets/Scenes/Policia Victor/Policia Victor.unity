@@ -209,7 +209,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 91772105}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.00000006597032, y: 0.94868326, z: -0.31622785, w: -0.0000001979109}
+  m_LocalRotation: {x: -0.00000007056206, y: 0.94868326, z: -0.31622788, w: -0.00000021168611}
   m_LocalPosition: {x: 54.929173, y: 6.036, z: 65.24245}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -495,7 +495,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 995145562}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.000000029802322, y: -0.000000011616308, z: 0.000000008712227, w: 1}
+  m_LocalRotation: {x: 0.000000029802322, y: 0.0000000037050825, z: -0.0000000027787976, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -695,7 +695,7 @@ Transform:
   m_GameObject: {fileID: 1845865797}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 39, y: 0.572, z: 38.4}
+  m_LocalPosition: {x: 41.1, y: 0.572, z: 31.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1060,14 +1060,14 @@ MonoBehaviour:
     identifier: 
   data:
     graphs:
-    - name: Pocile FSM
+    - name: Police FSM
       id: 6003b60d-4af5-4645-ac7a-2cfe2b5b3fcf
       graph:
         rid: 3043071748899864576
       nodes:
       - name: Patrol State
         id: 4ccf626c-75e4-447b-afcb-4d79aa3b2ba7
-        position: {x: 448, y: 208}
+        position: {x: 1600.4767, y: -57.38092}
         node:
           rid: 3043071748899864577
         references:
@@ -1082,7 +1082,7 @@ MonoBehaviour:
         - b039be7d-ea93-4214-979b-8984952db50d
       - name: Investigate State
         id: a4d0feb6-e14d-46b4-ad30-2271a4780b3f
-        position: {x: 1035, y: 196}
+        position: {x: 1226.0938, y: -214.95139}
         node:
           rid: 3043071751487750144
         references:
@@ -1095,9 +1095,9 @@ MonoBehaviour:
         - b039be7d-ea93-4214-979b-8984952db50d
         childIds:
         - 1f194994-0a82-4eb3-8d28-5fe20e84bb35
-      - name: 
+      - name: PatrolToInvestigate
         id: b039be7d-ea93-4214-979b-8984952db50d
-        position: {x: 751, y: 123}
+        position: {x: 1334.9929, y: 51.35614}
         node:
           rid: 3043071751487750146
         references:
@@ -1108,40 +1108,27 @@ MonoBehaviour:
             Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
         - fieldName: Action
           value:
-            rid: 3043071751487750167
+            rid: -2
           fieldType: BehaviourAPI.Core.Actions.Action, BehaviourAPI.Core, Version=0.0.0.0,
             Culture=neutral, PublicKeyToken=null
         parentIds:
         - 4ccf626c-75e4-447b-afcb-4d79aa3b2ba7
         childIds:
         - a4d0feb6-e14d-46b4-ad30-2271a4780b3f
-      - name: 
-        id: 85d91792-1a3f-40d4-9f8b-fbf0d2d595d0
-        position: {x: 452, y: 505}
-        node:
-          rid: 3043071751487750152
-        references:
-        - fieldName: Action
-          value:
-            rid: 3043071751487750153
-          fieldType: BehaviourAPI.Core.Actions.Action, BehaviourAPI.Core, Version=0.0.0.0,
-            Culture=neutral, PublicKeyToken=null
-        parentIds: []
-        childIds: []
-      - name: 
+      - name: InvestigateToPatrol
         id: 1f194994-0a82-4eb3-8d28-5fe20e84bb35
-        position: {x: 759, y: 284}
+        position: {x: 1491.5942, y: -323.63745}
         node:
           rid: 3043071751487750154
         references:
         - fieldName: Perception
           value:
-            rid: 3043071751487750155
+            rid: 8148621444984340480
           fieldType: BehaviourAPI.Core.Perceptions.Perception, BehaviourAPI.Core,
             Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
         - fieldName: Action
           value:
-            rid: 3043071751487750168
+            rid: -2
           fieldType: BehaviourAPI.Core.Actions.Action, BehaviourAPI.Core, Version=0.0.0.0,
             Culture=neutral, PublicKeyToken=null
         parentIds:
@@ -1152,6 +1139,8 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
     - rid: 3043071748899864576
       type: {class: FSM, ns: BehaviourAPI.StateMachines, asm: BehaviourAPI.StateMachines}
       data: 
@@ -1176,7 +1165,7 @@ MonoBehaviour:
     - rid: 3043071751487750146
       type: {class: StateTransition, ns: BehaviourAPI.StateMachines, asm: BehaviourAPI.StateMachines}
       data:
-        StatusFlags: 2
+        StatusFlags: -1
     - rid: 3043071751487750150
       type: {class: CustomPerception, ns: BehaviourAPI.UnityToolkit.GUIDesigner.Framework, asm: BehaviourAPI.UnityToolkit.GUIDesigner.Framework}
       data:
@@ -1195,47 +1184,14 @@ MonoBehaviour:
         unpause:
           componentName: 
           methodName: 
-    - rid: 3043071751487750152
-      type: {class: State, ns: BehaviourAPI.StateMachines, asm: BehaviourAPI.StateMachines}
-      data: 
-    - rid: 3043071751487750153
-      type: {class: DelayAction, ns: BehaviourAPI.UnityToolkit, asm: BehaviourAPI.UnityToolkit}
-      data:
-        delayTime: 2
     - rid: 3043071751487750154
       type: {class: StateTransition, ns: BehaviourAPI.StateMachines, asm: BehaviourAPI.StateMachines}
       data:
-        StatusFlags: 4
-    - rid: 3043071751487750155
-      type: {class: CustomPerception, ns: BehaviourAPI.UnityToolkit.GUIDesigner.Framework, asm: BehaviourAPI.UnityToolkit.GUIDesigner.Framework}
+        StatusFlags: -1
+    - rid: 8148621444984340480
+      type: {class: UnityTimePerception, ns: BehaviourAPI.UnityToolkit, asm: BehaviourAPI.UnityToolkit}
       data:
-        init:
-          componentName: 
-          methodName: 
-        check:
-          componentName: PoliceBehaviour
-          methodName: CheckInvestigate
-        reset:
-          componentName: 
-          methodName: 
-        pause:
-          componentName: 
-          methodName: 
-        unpause:
-          componentName: 
-          methodName: 
-    - rid: 3043071751487750167
-      type: {class: SimpleAction, ns: BehaviourAPI.UnityToolkit.GUIDesigner.Framework, asm: BehaviourAPI.UnityToolkit.GUIDesigner.Framework}
-      data:
-        method:
-          componentName: PoliceBehaviour
-          methodName: Investigate
-    - rid: 3043071751487750168
-      type: {class: SimpleAction, ns: BehaviourAPI.UnityToolkit.GUIDesigner.Framework, asm: BehaviourAPI.UnityToolkit.GUIDesigner.Framework}
-      data:
-        method:
-          componentName: PoliceBehaviour
-          methodName: Patrol
+        TotalTime: 2
 --- !u!54 &8619338778860520379
 Rigidbody:
   m_ObjectHideFlags: 0

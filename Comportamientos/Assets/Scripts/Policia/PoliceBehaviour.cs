@@ -82,10 +82,10 @@ public class PoliceBehaviour : MonoBehaviour
 
         IEnumerator InvestigateCorutine(Vector3 investigatePostion)
         {
+            InvestigableObject = null;
             agent.SetDestination(investigatePostion); //Go to investigate position
             yield return new WaitUntil(() => { return isPathComplete(); }); //Wait for arrival at pos
             //Launch animation or sth and later return to patrol?
-            DOVirtual.DelayedCall(2f, () => { InvestigableObject = null; Debug.Log("Ended investigating"); });
         }
 
     }
@@ -93,8 +93,10 @@ public class PoliceBehaviour : MonoBehaviour
 
     public bool CheckInvestigate() 
     {
+        
         if (InvestigableObject != null) 
         {
+            Debug.Log("CheckInvestigate");
             //Return success and in SFM launch investigate
             return true;
         }
