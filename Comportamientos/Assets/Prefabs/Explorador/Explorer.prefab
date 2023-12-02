@@ -365,6 +365,7 @@ GameObject:
   - component: {fileID: 2404545583888511884}
   - component: {fileID: 858214253061971339}
   - component: {fileID: 4228462441880761402}
+  - component: {fileID: 6103699376078470518}
   m_Layer: 0
   m_Name: Explorer
   m_TagString: Untagged
@@ -481,6 +482,25 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &6103699376078470518
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4094225952327244793}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd02d7c7223a1ca45a47893382d64d23, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 100
+  explorePositions: []
+  paintingTime: 0
+  faintTime: 0
+  state: 0
+  thinkingCloudBehaviour: {fileID: 0}
+  agent: {fileID: 0}
 --- !u!1 &4182818299025419330
 GameObject:
   m_ObjectHideFlags: 0

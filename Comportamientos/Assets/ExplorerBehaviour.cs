@@ -22,29 +22,31 @@ enum ExplorerStates
 public class ExplorerBehaviour : MonoBehaviour
 {
     [Header("Health")]
-    [SerializeField]
-    private int health = 50;
+    [SerializeField] private int health = 50;
 
     [Header("Exploring")]
-    [SerializeField]
-    private List<Transform> explorePositions;
+    [SerializeField] private List<Transform> explorePositions;
     private int currentPositionIndex = 0;
     private Coroutine exploringCorutine = null;
 
-    [Header("Painting")] [SerializeField] private float paintingTime;
+    [Header("Painting")] 
+    [SerializeField] private float paintingTime;
     private Transform paintingPosition;
     private Coroutine paintCorutine = null;
+    
+    [Header("Faint")] 
+    [SerializeField] private float faintTime;
+    private Coroutine faintCorutine;
 
+    [Header("General Variables")]
+    [SerializeField] private ExplorerStates state = ExplorerStates.Exploring;
+    
     [Header("Thinking bubble")]
-    [SerializeField]
-    ThinkingCloudBehaviour thinkingCloudBehaviour;
-
-    public NavMeshAgent agent;
-
-    [SerializeField]
-    private ExplorerStates state = ExplorerStates.Exploring;
-
+    [SerializeField] ThinkingCloudBehaviour thinkingCloudBehaviour;
+    
     private Coroutine exploreCorutine;
+    private Transform doorPosition;
+    public NavMeshAgent agent;
 
     // Start is called before the first frame update
     private void Awake()
@@ -85,6 +87,39 @@ public class ExplorerBehaviour : MonoBehaviour
         state = ExplorerStates.LookingAt;
         transform.LookAt(objective);
     }
+
+    public void Escape()
+    {
+        state = ExplorerStates.Escaping;
+    }
+    
+    public void Faint()
+    {
+        state = ExplorerStates.Painting;
+        thinkingCloudBehaviour.UpdateCloud(1);
+
+        if (faintCorutine != null)
+        {
+            StopCoroutine(faintCorutine);
+            exploreCorutine = null;
+        }
+        faintCorutine = StartCoroutine(FaintCorutine());
+    }
+
+    public void InteractingDoor(GameObject door)
+    {
+        doorPosition = door.transform;
+        state = ExplorerStates.InteractingDoor;
+        thinkingCloudBehaviour.UpdateCloud(1);
+
+        if (paintCorutine != null)
+        {
+            StopCoroutine(paintCorutine);
+            exploreCorutine = null;
+        }
+        agent.SetDestination(doorPosition.position);
+        //doorPosition.gameObject.GetComponent<DoorContoller>().Open();
+    }
     
     private IEnumerator PaintCorutine()
     {
@@ -98,6 +133,13 @@ public class ExplorerBehaviour : MonoBehaviour
         yield return new WaitUntil(() => { return IsPathComplete(); });
     }
 
+    private IEnumerator FaintCorutine()
+    {
+        agent.enabled = false;
+        yield return new WaitForSeconds(faintTime);
+        agent.enabled = true;
+    }
+    
     bool IsPathComplete()
     {
         return (!agent.pathPending &&
