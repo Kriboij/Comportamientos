@@ -93,9 +93,14 @@ public class ExplorerBehaviour : MonoBehaviour
         state = ExplorerStates.Escaping;
     }
     
+    public void Hide()
+    {
+        state = ExplorerStates.Hiding;
+    }
+    
     public void Faint()
     {
-        state = ExplorerStates.Painting;
+        state = ExplorerStates.Fainted;
         thinkingCloudBehaviour.UpdateCloud(1);
 
         if (faintCorutine != null)
@@ -146,26 +151,7 @@ public class ExplorerBehaviour : MonoBehaviour
                 agent.remainingDistance <= agent.stoppingDistance &&
                 (!agent.hasPath || agent.velocity.sqrMagnitude == 0f));
     }
-
-
-
-    public void Investigate()
-    {
-        
-    }
-
-
-    public bool CheckInvestigate()
-    {
-
-        return false;
-    }
-
-    public bool CheckEndedInvestigate()
-    {
-
-        return false;
-    }
+    
 
     private void OnTriggerEnter(Collider other)
     {
