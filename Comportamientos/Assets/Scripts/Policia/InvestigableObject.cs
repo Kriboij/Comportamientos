@@ -7,10 +7,15 @@ public class InvestigableObject : MonoBehaviour
     public bool recentlyInvestigated = false;
     public float investigationCooldownSeconds = 10f;
 
+    public float curiosity = 1;
+    public float investigateThreshold = 50;
+
     [SerializeField]
     public int investigateTime = 2;
 
     public Transform investigatePosition;
+
+    private Coroutine cooldown =null;
 
     // Start is called before the first frame update
     void Start()
@@ -18,22 +23,28 @@ public class InvestigableObject : MonoBehaviour
         if(investigatePosition==null) investigatePosition = transform;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
-    public bool ShouldInvestigate() 
+    public bool ShouldInvestigate(int paranoia) 
     {
-        return !recentlyInvestigated;
+        float investigateLevel = curiosity * paranoia;
+        if (!recentlyInvestigated || investigateLevel > investigateThreshold) 
+        {
+            return true;
+        }
+        return false;
     }
 
     public void HasBeenInvestigated() 
     {
         recentlyInvestigated = true;
 
-        StartCoroutine(InvestigationCooldown());
+        if (cooldown != null) 
+        {
+            StopCoroutine(cooldown);
+            cooldown = null;
+        }
+
+        cooldown = StartCoroutine(InvestigationCooldown());
 
         IEnumerator InvestigationCooldown() 
         {

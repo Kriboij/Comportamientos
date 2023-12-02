@@ -31,6 +31,10 @@ public class PoliceBehaviour : MonoBehaviour
     [Header("Investigate")]
     public InvestigableObject investigableObject = null;
 
+    [Header("Thinking bubble")]
+    [SerializeField]
+    ThinkingCloudBehaviour thinkingCloudBehaviour;
+
     public NavMeshAgent agent;
 
     [SerializeField]
@@ -42,15 +46,12 @@ public class PoliceBehaviour : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 
     public void Patrol()
     {
         state = PoliceStates.Patrol;
+        thinkingCloudBehaviour.UpdateCloud(0);
+
         if (patrolCorutine != null)
         {
             StopCoroutine(patrolCorutine);
@@ -82,6 +83,8 @@ public class PoliceBehaviour : MonoBehaviour
     public void Investigate()
     {
         state = PoliceStates.Investigate;
+        thinkingCloudBehaviour.UpdateCloud(1);
+
         Vector3 investigatePostion = investigableObject.investigatePosition.position;
 
         //Stop patrolling
@@ -100,6 +103,7 @@ public class PoliceBehaviour : MonoBehaviour
             agent.SetDestination(investigatePostion); //Go to investigate position
             yield return new WaitUntil(() => { return isPathComplete(); }); //Wait for arrival at pos
             //Launch animation or sth and later return to patrol?
+            transform.LookAt(investigatePostion);
             DOVirtual.DelayedCall(investigableObject.investigateTime, () => {
                 Debug.Log("Finished investigating");
                 investigableObject?.HasBeenInvestigated();
@@ -115,7 +119,7 @@ public class PoliceBehaviour : MonoBehaviour
         if (investigableObject != null)
         {
             //Return success and in SFM launch investigate
-            return investigableObject.ShouldInvestigate();
+            return investigableObject.ShouldInvestigate(paranoia);
         }
         return false;
     }
@@ -134,6 +138,7 @@ public class PoliceBehaviour : MonoBehaviour
     {
         if (other.TryGetComponent(out investigableObject))
         {
+            //TODO Maybe change collider to sphere and add a raycast check
         }
     }
 

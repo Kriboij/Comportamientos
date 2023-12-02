@@ -352,6 +352,9 @@ GameObject:
   - component: {fileID: 9094209062600743600}
   - component: {fileID: 6717426290210984017}
   - component: {fileID: 5002409856515761587}
+  - component: {fileID: 8091112879484061807}
+  - component: {fileID: 7407785389446255209}
+  - component: {fileID: 9040380153509945643}
   m_Layer: 0
   m_Name: Police
   m_TagString: Untagged
@@ -374,6 +377,7 @@ Transform:
   m_Children:
   - {fileID: 3347828666924026408}
   - {fileID: 1537596483646089029}
+  - {fileID: 1984927078082796482}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
 --- !u!95 &9094209062600743600
@@ -431,6 +435,230 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a98592a5735517b4595cbc2b6460bec6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  health: 100
+  patrolPositions:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  paranoia: 0
+  investigableObject: {fileID: 0}
+  thinkingCloudBehaviour: {fileID: 3782425425500440970}
+  agent: {fileID: 0}
+  state: 0
+--- !u!114 &8091112879484061807
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3214455660108776758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7033c32493b38240a6a2c47736ac9c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  executeOnLoop: 1
+  interruptOptions: 0
+  _eventHandler:
+    debugStatusChanges: 0
+    identifier: 
+  data:
+    graphs:
+    - name: Police FSM
+      id: 6003b60d-4af5-4645-ac7a-2cfe2b5b3fcf
+      graph:
+        rid: 3043071748899864576
+      nodes:
+      - name: Patrol State
+        id: 4ccf626c-75e4-447b-afcb-4d79aa3b2ba7
+        position: {x: 1600.4767, y: -57.38092}
+        node:
+          rid: 3043071748899864577
+        references:
+        - fieldName: Action
+          value:
+            rid: 3043071748899864578
+          fieldType: BehaviourAPI.Core.Actions.Action, BehaviourAPI.Core, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+        parentIds:
+        - 22016ee2-fe9a-40f7-9b04-3b29e7f438fe
+        childIds:
+        - b039be7d-ea93-4214-979b-8984952db50d
+      - name: Investigate State
+        id: a4d0feb6-e14d-46b4-ad30-2271a4780b3f
+        position: {x: 1226.0938, y: -214.95139}
+        node:
+          rid: 3043071751487750144
+        references:
+        - fieldName: Action
+          value:
+            rid: 3043071751487750145
+          fieldType: BehaviourAPI.Core.Actions.Action, BehaviourAPI.Core, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+        parentIds:
+        - b039be7d-ea93-4214-979b-8984952db50d
+        childIds:
+        - 22016ee2-fe9a-40f7-9b04-3b29e7f438fe
+      - name: PatrolToInvestigate
+        id: b039be7d-ea93-4214-979b-8984952db50d
+        position: {x: 1334.9929, y: 51.35614}
+        node:
+          rid: 3043071751487750146
+        references:
+        - fieldName: Perception
+          value:
+            rid: 3043071751487750150
+          fieldType: BehaviourAPI.Core.Perceptions.Perception, BehaviourAPI.Core,
+            Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        - fieldName: Action
+          value:
+            rid: -2
+          fieldType: BehaviourAPI.Core.Actions.Action, BehaviourAPI.Core, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+        parentIds:
+        - 4ccf626c-75e4-447b-afcb-4d79aa3b2ba7
+        childIds:
+        - a4d0feb6-e14d-46b4-ad30-2271a4780b3f
+      - name: InvestigationToPatrol
+        id: 22016ee2-fe9a-40f7-9b04-3b29e7f438fe
+        position: {x: 1521, y: -333}
+        node:
+          rid: 8148621444984340484
+        references:
+        - fieldName: Perception
+          value:
+            rid: 8148621444984340485
+          fieldType: BehaviourAPI.Core.Perceptions.Perception, BehaviourAPI.Core,
+            Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        - fieldName: Action
+          value:
+            rid: -2
+          fieldType: BehaviourAPI.Core.Actions.Action, BehaviourAPI.Core, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+        parentIds:
+        - a4d0feb6-e14d-46b4-ad30-2271a4780b3f
+        childIds:
+        - 4ccf626c-75e4-447b-afcb-4d79aa3b2ba7
+    pushPerceptions: []
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 3043071748899864576
+      type: {class: FSM, ns: BehaviourAPI.StateMachines, asm: BehaviourAPI.StateMachines}
+      data: 
+    - rid: 3043071748899864577
+      type: {class: State, ns: BehaviourAPI.StateMachines, asm: BehaviourAPI.StateMachines}
+      data: 
+    - rid: 3043071748899864578
+      type: {class: SimpleAction, ns: BehaviourAPI.UnityToolkit.GUIDesigner.Framework, asm: BehaviourAPI.UnityToolkit.GUIDesigner.Framework}
+      data:
+        method:
+          componentName: PoliceBehaviour
+          methodName: Patrol
+    - rid: 3043071751487750144
+      type: {class: State, ns: BehaviourAPI.StateMachines, asm: BehaviourAPI.StateMachines}
+      data: 
+    - rid: 3043071751487750145
+      type: {class: SimpleAction, ns: BehaviourAPI.UnityToolkit.GUIDesigner.Framework, asm: BehaviourAPI.UnityToolkit.GUIDesigner.Framework}
+      data:
+        method:
+          componentName: PoliceBehaviour
+          methodName: Investigate
+    - rid: 3043071751487750146
+      type: {class: StateTransition, ns: BehaviourAPI.StateMachines, asm: BehaviourAPI.StateMachines}
+      data:
+        StatusFlags: -1
+    - rid: 3043071751487750150
+      type: {class: CustomPerception, ns: BehaviourAPI.UnityToolkit.GUIDesigner.Framework, asm: BehaviourAPI.UnityToolkit.GUIDesigner.Framework}
+      data:
+        init:
+          componentName: 
+          methodName: 
+        check:
+          componentName: PoliceBehaviour
+          methodName: CheckInvestigate
+        reset:
+          componentName: 
+          methodName: 
+        pause:
+          componentName: 
+          methodName: 
+        unpause:
+          componentName: 
+          methodName: 
+    - rid: 8148621444984340484
+      type: {class: StateTransition, ns: BehaviourAPI.StateMachines, asm: BehaviourAPI.StateMachines}
+      data:
+        StatusFlags: -1
+    - rid: 8148621444984340485
+      type: {class: CustomPerception, ns: BehaviourAPI.UnityToolkit.GUIDesigner.Framework, asm: BehaviourAPI.UnityToolkit.GUIDesigner.Framework}
+      data:
+        init:
+          componentName: 
+          methodName: 
+        check:
+          componentName: PoliceBehaviour
+          methodName: CheckEndedInvestigate
+        reset:
+          componentName: 
+          methodName: 
+        pause:
+          componentName: 
+          methodName: 
+        unpause:
+          componentName: 
+          methodName: 
+--- !u!54 &7407785389446255209
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3214455660108776758}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!65 &9040380153509945643
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3214455660108776758}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 15, y: 1, z: 15}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1 &3927364329047651755
 GameObject:
   m_ObjectHideFlags: 0
@@ -1222,3 +1450,116 @@ Transform:
   - {fileID: 1364184715639192511}
   m_Father: {fileID: 153970604372101320}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &8467965209280494414
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 7454986386063945197}
+    m_Modifications:
+    - target: {fileID: 7246430868342017469, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: m_Name
+      value: Thinking bubble
+      objectReference: {fileID: 0}
+    - target: {fileID: 7930735414412468364, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: m_Pivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7930735414412468364, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: m_Pivot.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7930735414412468364, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7930735414412468364, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7930735414412468364, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7930735414412468364, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7930735414412468364, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 625
+      objectReference: {fileID: 0}
+    - target: {fileID: 7930735414412468364, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 352
+      objectReference: {fileID: 0}
+    - target: {fileID: 7930735414412468364, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7930735414412468364, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7930735414412468364, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7930735414412468364, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.00000016292068
+      objectReference: {fileID: 0}
+    - target: {fileID: 7930735414412468364, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7930735414412468364, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7930735414412468364, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7930735414412468364, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7930735414412468364, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 2.64
+      objectReference: {fileID: 0}
+    - target: {fileID: 7930735414412468364, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7930735414412468364, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7930735414412468364, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+--- !u!224 &1984927078082796482 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 7930735414412468364, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+  m_PrefabInstance: {fileID: 8467965209280494414}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3782425425500440970 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4754005276562797252, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+  m_PrefabInstance: {fileID: 8467965209280494414}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dcddfdf77fe480249873fa145df2c373, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
