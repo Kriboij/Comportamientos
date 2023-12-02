@@ -10,6 +10,8 @@ public class InvestigableObject : MonoBehaviour
     public float curiosity = 1;
     public float investigateThreshold = 50;
 
+    public int investigateChance = 10;
+
     [SerializeField]
     public int investigateTime = 2;
 
@@ -24,12 +26,17 @@ public class InvestigableObject : MonoBehaviour
     }
 
 
-    public bool ShouldInvestigate(int paranoia) 
+    public bool ShouldInvestigate(int paranoia)
     {
         float investigateLevel = curiosity * paranoia;
-        if (!recentlyInvestigated || investigateLevel > investigateThreshold) 
+        if (!recentlyInvestigated || investigateLevel > investigateThreshold)
         {
-            return true;
+            int random = Random.Range(0, 10);
+            Debug.Log("random: " + random);
+            if (random < investigateChance || investigateLevel > investigateThreshold)
+            {
+                return true;
+            }
         }
         return false;
     }
