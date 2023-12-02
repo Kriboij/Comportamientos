@@ -35,7 +35,8 @@ public class PoliceBehaviour : MonoBehaviour
     [SerializeField]
     ThinkingCloudBehaviour thinkingCloudBehaviour;
 
-    public NavMeshAgent agent;
+    private NavMeshAgent agent;
+    private Animator animator;
 
     [SerializeField]
     private PoliceStates state = PoliceStates.Patrol;
@@ -44,6 +45,7 @@ public class PoliceBehaviour : MonoBehaviour
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
+        animator = GetComponent<Animator>();
     }
 
 
@@ -103,11 +105,14 @@ public class PoliceBehaviour : MonoBehaviour
             agent.SetDestination(investigatePostion); //Go to investigate position
             yield return new WaitUntil(() => { return isPathComplete(); }); //Wait for arrival at pos
             //Launch animation or sth and later return to patrol?
-            transform.LookAt(investigatePostion);
+            Debug.Log("Reached destinaiton");
+            transform.DOLookAt(investigableObject.transform.position,0.5f,AxisConstraint.Y);
+            animator.SetBool("Investigate",true);
             DOVirtual.DelayedCall(investigableObject.investigateTime, () => {
                 Debug.Log("Finished investigating");
                 investigableObject?.HasBeenInvestigated();
                 investigableObject = null;
+                animator.SetBool("Investigate", false);
             });
         }
     }
@@ -118,8 +123,13 @@ public class PoliceBehaviour : MonoBehaviour
 
         if (investigableObject != null)
         {
-            //Return success and in SFM launch investigate
-            return investigableObject.ShouldInvestigate(paranoia);
+            if (investigableObject.ShouldInvestigate(paranoia)) 
+            {
+                //If should be investigated activate transition
+                return true;
+            }
+            //If not delete reference
+            investigableObject = null;
         }
         return false;
     }
@@ -129,6 +139,7 @@ public class PoliceBehaviour : MonoBehaviour
 
         if (investigableObject == null)
         {
+            //If object reference has been deleted transition to patrol
             return true;
         }
         return false;
