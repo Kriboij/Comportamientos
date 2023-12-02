@@ -53,6 +53,7 @@ public class PoliceBehaviour : MonoBehaviour
     {
         state = PoliceStates.Patrol;
         thinkingCloudBehaviour.UpdateCloud(0);
+        animator.SetBool("Investigate", false);
 
         if (patrolCorutine != null)
         {
@@ -105,11 +106,10 @@ public class PoliceBehaviour : MonoBehaviour
             agent.SetDestination(investigatePostion); //Go to investigate position
             yield return new WaitUntil(() => { return isPathComplete(); }); //Wait for arrival at pos
             //Launch animation or sth and later return to patrol?
-            Debug.Log("Reached destinaiton");
-            transform.DOLookAt(investigableObject.transform.position,0.5f,AxisConstraint.Y);
-            animator.SetBool("Investigate",true);
+            transform.DOLookAt(investigableObject.transform.position, 0.5f, AxisConstraint.Y).OnComplete(() => { animator.SetBool("Investigate",true);});
+            
             DOVirtual.DelayedCall(investigableObject.investigateTime, () => {
-                Debug.Log("Finished investigating");
+                Debug.Log("Finished investigating: " + investigableObject);
                 investigableObject?.HasBeenInvestigated();
                 investigableObject = null;
                 animator.SetBool("Investigate", false);
