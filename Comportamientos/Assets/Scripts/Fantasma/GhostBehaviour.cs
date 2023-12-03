@@ -19,6 +19,11 @@ public class GhostBehaviour : MonoBehaviour
     [SerializeField]
     ThinkingCloudBehaviour thinkingCloudBehaviour;
 
+    [Header("Scare")]
+    [SerializeField]
+    private Coroutine scareCorutine = null;
+
+
 
     private static readonly int IdleState = Animator.StringToHash("Base Layer.idle");
     private static readonly int MoveState = Animator.StringToHash("Base Layer.move");
@@ -27,13 +32,17 @@ public class GhostBehaviour : MonoBehaviour
 
     private NavMeshAgent agent;
     private Animator animator;
+    private Vision vision;
+    private ScareObject entity;
 
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
+        vision = GetComponentInChildren<Vision>();
     }
 
+    #region PATROL
     public void Patrol()
     {
 
@@ -44,16 +53,16 @@ public class GhostBehaviour : MonoBehaviour
         }
         patrolCorutine = StartCoroutine(PatrolCorutine());
 
-        
+
 
         IEnumerator PatrolCorutine()
         {
             while (true)
             {
-                
+
                 currentPatrolIndex = GeneratePosition();
                 agent.SetDestination(patrolPositions[currentPatrolIndex].position);
-                yield return new WaitUntil(() => { return isPathComplete(); });              
+                yield return new WaitUntil(() => { return isPathComplete(); });
                 yield return new WaitForSeconds(1);
 
                 //animator.CrossFade(MoveState, 1f, 0, 0);
@@ -75,7 +84,7 @@ public class GhostBehaviour : MonoBehaviour
     {
         int random = Random.Range(0, patrolPositions.Count);
 
-        while(random == lastPosition)
+        while (random == lastPosition)
         {
             random = Random.Range(0, patrolPositions.Count);
         }
@@ -84,20 +93,69 @@ public class GhostBehaviour : MonoBehaviour
 
         return random;
     }
+    #endregion
 
-
-
-    // Start is called before the first frame update
-    void Start()
+    #region SCARE
+    public void Scare()
     {
-        Patrol();
+        if (scareCorutine != null)
+        {
+            StopCoroutine(scareCorutine);
+            patrolCorutine = null;
+        }
+        scareCorutine = StartCoroutine(ScareCorutine());
+
+
+
+        IEnumerator ScareCorutine()
+        {
+            while (true)
+            {
+                entity.Escape();
+                yield return new WaitForSeconds(1);
+
+                //animator.CrossFade(MoveState, 1f, 0, 0);
+            }
+        }
+
+        Debug.Log("Asustando");
+        animator.CrossFade(AttackState, 0.1f, 0, 0);
+
+    }
+    #endregion
+
+    #region VISION
+
+    public bool IsWatchingScareObject()
+    {
+        foreach (var trigger in vision.VisibleTriggers)
+        {
+            var entityAux = trigger.GetComponent<ScareObject>();
+            if (entityAux != null)
+            {
+                entity = entityAux;
+                Debug.Log("Lo veo");
+            }
+            return true;
+        }
+        return false;
     }
 
-
-
-    // Update is called once per frame
-    void Update()
+    public bool IsNotWatchingScareObject()
     {
-        
+        foreach (var trigger in vision.VisibleTriggers)
+        {
+            var entityAux = trigger.GetComponent<ScareObject>();
+            if (entityAux == null)
+            {
+                Debug.Log("No veo");
+                return true;
+            }
+            
+        }
+        return false;
     }
+    #endregion
+
+
 }
