@@ -1,3 +1,4 @@
+using System;
 using BehaviourAPI.Core;
 using BehaviourAPI.Core.Actions;
 using BehaviourAPI.Core.Perceptions;
@@ -9,6 +10,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using BehaviourAPI.UtilitySystems;
 using UnityEngine;
 using UnityEngine.AI;
+using Vector3 = System.Numerics.Vector3;
 
 enum ExplorerStates 
 {
@@ -52,6 +54,7 @@ public class ExplorerBehaviour : MonoBehaviour
     private Animator _animator;
     private Vision _vision;
     private Detection _detection;
+    private Vector3 position;
     
     private FSM _fsm;
     
@@ -154,11 +157,49 @@ public class ExplorerBehaviour : MonoBehaviour
 
     void Update()
     {
+        _distance = CalculateDistance();
         _us.Update();
         _fsm.Update();
     }
+
+    private float CalculateDistance()
+    {
+        float[] distances = new float[4];
+        
+        var policePos = FindObjectOfType<PoliceBehaviour>().transform.position;
+        var criminalPos = FindObjectOfType<CriminalBehaviour>().transform.position;
+        //var beastPos = FindObjectOfType<BeastBehaviour>().transform.position;
+        //var ghostPos = FindObjectOfType<GhostBehaviour>().transform.position;
+        
+        Vector3 policeVector = new Vector3(policePos.x, policePos.y, policePos.z);
+        Vector3 criminalVector = new Vector3(criminalPos.x, criminalPos.y, criminalPos.z);
+        //Vector3 beastVector = new Vector3(beastPos.x, beastPos.y, beastPos.z);
+        //Vector3 ghostVector = new Vector3(ghostPos.x, ghostPos.y, ghostPos.z);
+        
+        distances[0] = Vector3.Distance (position, policeVector);
+        distances[1] = Vector3.Distance (position, criminalVector);
+        //distances[2] = Vector3.Distance (position, beastVector);
+        //distances[3] = Vector3.Distance (position, ghostVector);
+
+        return Mathf.Max(distances);
+    }
     
-    
+    void ChangePatrolPoint(int change)
+    {
+        if(explorePositions.Count == 0)
+        {
+            return;
+        }
+        currentExploreIndex += change;
+        currentExploreIndex %= explorePositions.Count;
+        agent.SetDestination(explorePositions[currentExploreIndex].position);
+        if(currentExploreIndex < 0)
+        {
+            currentExploreIndex = explorePositions.Count - 1;
+        }
+    }
+
+
     #region METODOS MAQUINA ESTADOS IMPLEMENTACION
     void StartExploring()
     {
@@ -330,21 +371,6 @@ public class ExplorerBehaviour : MonoBehaviour
     
     #endregion
     
-    
-    void ChangePatrolPoint(int change)
-    {
-        if(explorePositions.Count == 0)
-        {
-            return;
-        }
-        currentExploreIndex += change;
-        currentExploreIndex %= explorePositions.Count;
-        agent.SetDestination(explorePositions[currentExploreIndex].position);
-        if(currentExploreIndex < 0)
-        {
-            currentExploreIndex = explorePositions.Count - 1;
-        }
-    }
     
 }
 
