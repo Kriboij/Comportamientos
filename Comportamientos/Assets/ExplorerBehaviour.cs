@@ -31,79 +31,85 @@ public class ExplorerBehaviour : MonoBehaviour
     [SerializeField] private int currentExploreIndex = 0;
     
     [Header("Painting")] 
+    [SerializeField] private float paintingTime;
     
     [Header("Faint")] 
-
+    [SerializeField] private float faintingTime;
+    
+    [Header("Watching")] 
+    [SerializeField] private int rotation;
     [Header("General Variables")]
     
+    [Header("Escaping")] 
+    [SerializeField] private Transform escapePoint;
+    
     [Header("Thinking bubble")]
-    [SerializeField]
-    ThinkingCloudBehaviour thinkingCloudBehaviour;
+    [SerializeField] ThinkingCloudBehaviour thinkingCloudBehaviour;
+    
+    [SerializeField] private Transform objective;
     
     public NavMeshAgent agent;
-    private Animator animator;
-    private Vision vision;
-    private Detection detection;
-    private FSM fsm;
-    private UtilitySystem us;
-    [SerializeField] private Transform objective;
-    private Vector3 wallPosition;
-    private float paintTime;
-    private float paintingTime;
-    private int rotation = 1;
-    private float distance;
+    private Animator _animator;
+    private Vision _vision;
+    private Detection _detection;
+    
+    private FSM _fsm;
+    
+    private UtilitySystem _us;
+    private float _distance;
 
     // Start is called before the first frame update
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
-        animator = GetComponent<Animator>();
-        vision = GetComponentInChildren<Vision>();
-        detection = GetComponentInChildren<Detection>();
+        _animator = GetComponent<Animator>();
+        _vision = GetComponentInChildren<Vision>();
+        _detection = GetComponentInChildren<Detection>();
         
-        fsm = new FSM();
-        us = new UtilitySystem();
+        _fsm = new FSM();
+        _us = new UtilitySystem();
+        
 
-        #region SISTEMA DE UTILIDAD
+        #region CREACION SISTEMA DE UTILIDAD
 
-        VariableFactor anxiety = us.CreateVariable(() => distance, 0f, 1f);
-        VariableFactor fear = us.CreateVariable(() => distance, 0f, 1f);
+        VariableFactor anxiety = _us.CreateVariable(() => _distance, 0f, 1f);
+        VariableFactor fear = _us.CreateVariable(() => _distance, 0f, 1f);
 
-        ExponentialCurveFactor fearCurve = us.CreateCurve<ExponentialCurveFactor>(fear);
+        ExponentialCurveFactor fearCurve = _us.CreateCurve<ExponentialCurveFactor>(fear);
         fearCurve.Exponent = 2;
         fearCurve.DespX = -0.2f;
 
-        SigmoidCurveFactor anxietyCurve = us.CreateCurve<SigmoidCurveFactor>(anxiety);
+        SigmoidCurveFactor anxietyCurve = _us.CreateCurve<SigmoidCurveFactor>(anxiety);
         anxietyCurve.GrownRate = -0.3f;
         anxietyCurve.Midpoint = 0.5f;
+        
+        FunctionalAction faintAction = new FunctionalAction(StartFainting, Fainting, null);
+        UtilityAction faintUtilityAction = _us.CreateAction(fearCurve, faintAction);
+        
+        FunctionalAction anxietyAction = new FunctionalAction(StartEscaping, Escaping, null);
+        UtilityAction anxietyUtilityAction = _us.CreateAction(fearCurve, faintAction);
 
         #endregion
         
         
-        #region ESTADOS
-        
-        FunctionalAction faintAction = new FunctionalAction(StartFainting, Fainting, null);
-        UtilityAction faintUtilityAction = us.CreateAction(fearCurve, faintAction);
-        
-        FunctionalAction anxietyAction = new FunctionalAction(StartEscaping, Escaping, null);
-        UtilityAction anxietyUtilityAction = us.CreateAction(fearCurve, faintAction);
+        #region CREACION ESTADOS
 
         FunctionalAction exploringAction = new FunctionalAction(StartExploring, Exploring, null); //Estado
-        State exploring = fsm.CreateState(exploringAction);
+        State exploring = _fsm.CreateState(exploringAction);
 
         FunctionalAction watchingAction = new FunctionalAction(StartWatching, Watching, null); //Estado
-        State watching = fsm.CreateState(watchingAction);
+        State watching = _fsm.CreateState(watchingAction);
         
         FunctionalAction advancingAction = new FunctionalAction(StartAdvancing, Advancing, null); //Estado
-        State advancing = fsm.CreateState(watchingAction);
+        State advancing = _fsm.CreateState(watchingAction);
         
         FunctionalAction paintingAction = new FunctionalAction(StartPainting, Painting, null); //Estado
-        State painting = fsm.CreateState(paintingAction);
+        State painting = _fsm.CreateState(paintingAction);
         
         #endregion 
 
         
-        #region PERCECPCIONES ESTADOS
+        #region CREACION PERCECPCIONES ESTADOS
         
         ConditionPerception detectObjective = new ConditionPerception(null, IsDetectingObjective, null);
         
@@ -126,41 +132,43 @@ public class ExplorerBehaviour : MonoBehaviour
         #endregion
 
         
-        #region TRANSICIONES ESTADOS
+        #region CREACION TRANSICIONES ESTADOS
         
-        fsm.CreateTransition(exploring, watching, detectObjective, statusFlags: StatusFlags.Running);
+        _fsm.CreateTransition(exploring, watching, detectObjective, statusFlags: StatusFlags.Running);
         
-        fsm.CreateTransition(watching, advancing, watchObjective, statusFlags: StatusFlags.Running);
+        _fsm.CreateTransition(watching, advancing, watchObjective, statusFlags: StatusFlags.Running);
         
-        fsm.CreateTransition(advancing, painting, canPaint, statusFlags: StatusFlags.Running);
+        _fsm.CreateTransition(advancing, painting, canPaint, statusFlags: StatusFlags.Running);
         
-        fsm.CreateTransition(painting, exploring, stopPaint, statusFlags: StatusFlags.Running);
+        _fsm.CreateTransition(painting, exploring, stopPaint, statusFlags: StatusFlags.Running);
         
-        fsm.CreateTransition(advancing, exploring, stopAdvance, statusFlags: StatusFlags.Running);
+        _fsm.CreateTransition(advancing, exploring, stopAdvance, statusFlags: StatusFlags.Running);
         
         #endregion
 
         
-        fsm.SetEntryState(exploring);
-        fsm.Start();
-        us.Start();
+        _fsm.SetEntryState(exploring);
+        _fsm.Start();
+        _us.Start();
     }
 
     void Update()
     {
-        us.Update();
-        fsm.Update();
+        _us.Update();
+        _fsm.Update();
     }
-
+    
+    
+    #region METODOS MAQUINA ESTADOS IMPLEMENTACION
     void StartExploring()
     {
         thinkingCloudBehaviour.UpdateCloud(0);
-        //agent.isStopped = false;
+        agent.isStopped = false;
     }
 
     public Status Exploring()
     {
-        if (isPathComplete())
+        if (IsPathComplete())
         {
             ChangePatrolPoint(1);
         }
@@ -169,7 +177,7 @@ public class ExplorerBehaviour : MonoBehaviour
     
     void StartPainting()
     {
-        //thinkingCloudBehaviour.UpdateCloud(1);
+        thinkingCloudBehaviour.UpdateCloud(0);
         agent.isStopped = true;
     }
 
@@ -178,28 +186,27 @@ public class ExplorerBehaviour : MonoBehaviour
         var wallController = objective.GetComponent<WallController>();
         if (wallController != null)
         {
-            wallController.Paint();
+            DOVirtual.DelayedCall(paintingTime, () => wallController.Paint());
         }
         return Status.Running;
     }
     
     void StartWatching()
     {
-        //thinkingCloudBehaviour.UpdateCloud(2);
+        thinkingCloudBehaviour.UpdateCloud(0);
         agent.isStopped = true;
     }
 
     public Status Watching()
     {
         Debug.Log(rotation);
-        transform.Rotate(0, rotation, 0);
+        transform.Rotate(0, rotation * Time.deltaTime, 0);
         return Status.Running;
     }
     
     void StartAdvancing()
     {
-        //thinkingCloudBehaviour.UpdateCloud(3);
-        Debug.Log("Empiezo a avanzar");
+        thinkingCloudBehaviour.UpdateCloud(0);
         agent.isStopped = false;
     }
 
@@ -209,23 +216,44 @@ public class ExplorerBehaviour : MonoBehaviour
         return Status.Running;
     }
     
+    #endregion
+    
+
+    #region METODOS SISTEMA DE UTILIDAD
     void StartFainting()
     {
+        thinkingCloudBehaviour.UpdateCloud(0);
+        agent.isStopped = true;
     }
 
     public Status Fainting()
     {
+        StartCoroutine(Faint());
         return Status.Running;
+    }
+
+    private IEnumerator Faint()
+    {
+        yield return new WaitForSeconds(faintingTime);
+        Destroy(this.gameObject);
     }
     
     void StartEscaping()
     {
+        thinkingCloudBehaviour.UpdateCloud(0);
+        agent.isStopped = false;
     }
 
     public Status Escaping()
     {
+        agent.SetDestination(escapePoint.position);
         return Status.Running;
     }
+    
+    #endregion IMPLEMENTACION
+    
+    
+    #region COMPROBACIONES
     
     bool IsEmptyWall()
     {
@@ -257,7 +285,7 @@ public class ExplorerBehaviour : MonoBehaviour
     
     bool IsWatchingObjective()
     {
-        foreach(var a in vision.VisibleTriggers)
+        foreach(var a in _vision.VisibleTriggers)
         {
             if (a.GetComponent<WallController>()) // ||a.GetComponent<BeastBehaviour>() || a.GetComponent<WallController>()
             {
@@ -271,7 +299,7 @@ public class ExplorerBehaviour : MonoBehaviour
     
     bool IsDetectingObjective()
     {
-        foreach(var a in detection.DetectableTriggers)
+        foreach(var a in _detection.DetectableTriggers)
         {
             if (a.GetComponent<WallController>())
             {
@@ -285,17 +313,26 @@ public class ExplorerBehaviour : MonoBehaviour
 
     bool IsOnEmpty()
     {
-        return isPathComplete() && !objective.GetComponent<WallController>();
+        return IsPathComplete() && !objective.GetComponent<WallController>();
     }
     
     bool IsOnWall()
     {
-        return isPathComplete() && objective.GetComponent<WallController>();
+        return IsPathComplete() && objective.GetComponent<WallController>();
     }
+    
+    bool IsPathComplete()
+    {
+        return (!agent.pathPending &&
+                agent.remainingDistance <= agent.stoppingDistance &&
+                (!agent.hasPath || agent.velocity.sqrMagnitude == 0f));
+    }
+    
+    #endregion
+    
     
     void ChangePatrolPoint(int change)
     {
-        Debug.Log("Estoy cambiando");
         if(explorePositions.Count == 0)
         {
             return;
@@ -308,14 +345,6 @@ public class ExplorerBehaviour : MonoBehaviour
             currentExploreIndex = explorePositions.Count - 1;
         }
     }
-
-    bool isPathComplete()
-    {
-        return (!agent.pathPending &&
-                agent.remainingDistance <= agent.stoppingDistance &&
-                (!agent.hasPath || agent.velocity.sqrMagnitude == 0f));
-    }
-    
     
 }
 
