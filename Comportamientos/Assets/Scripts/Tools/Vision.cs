@@ -13,7 +13,7 @@ public class Vision : MonoBehaviour
     {
         VisibleTriggers = new List<Transform>();
     }
-
+    /*
     private void OnTriggerStay(Collider other)
     {
         VisionTrigger visionTrigger = other.GetComponent<VisionTrigger>();
@@ -48,5 +48,15 @@ public class Vision : MonoBehaviour
         {
             VisibleTriggers.Remove(visionTrigger.Body);
         }
+    }
+    */
+    private void OnTriggerEnter(Collider other)
+    {
+        VisibleTriggers.Add(other.transform);
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        VisibleTriggers.Remove(other.transform);
     }
 }

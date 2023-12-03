@@ -6,6 +6,7 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
+using BehaviourAPI.UtilitySystems;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -26,8 +27,8 @@ public class ExplorerBehaviour : MonoBehaviour
     [SerializeField] private int health = 50;
 
     [Header("Exploring")]
-    private List<Transform> explorePositions;
-    private int currentExploreIndex = 0;
+    [SerializeField] private List<Transform> explorePositions;
+    [SerializeField] private int currentExploreIndex = 0;
     
     [Header("Painting")] 
     
@@ -42,11 +43,15 @@ public class ExplorerBehaviour : MonoBehaviour
     public NavMeshAgent agent;
     private Animator animator;
     private Vision vision;
-    FSM fsm;
-    private Transform objective;
+    private Detection detection;
+    private FSM fsm;
+    private UtilitySystem us;
+    [SerializeField] private Transform objective;
     private Vector3 wallPosition;
     private float paintTime;
     private float paintingTime;
+    private int rotation = 1;
+    private float distance;
 
     // Start is called before the first frame update
     private void Awake()
@@ -54,10 +59,36 @@ public class ExplorerBehaviour : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
         vision = GetComponentInChildren<Vision>();
-            
+        detection = GetComponentInChildren<Detection>();
+        
         fsm = new FSM();
+        us = new UtilitySystem();
 
-        FunctionalAction exploringAction = new FunctionalAction(StartExplore, Exploring, null); //Estado
+        #region SISTEMA DE UTILIDAD
+
+        VariableFactor anxiety = us.CreateVariable(() => distance, 0f, 1f);
+        VariableFactor fear = us.CreateVariable(() => distance, 0f, 1f);
+
+        ExponentialCurveFactor fearCurve = us.CreateCurve<ExponentialCurveFactor>(fear);
+        fearCurve.Exponent = 2;
+        fearCurve.DespX = -0.2f;
+
+        SigmoidCurveFactor anxietyCurve = us.CreateCurve<SigmoidCurveFactor>(anxiety);
+        anxietyCurve.GrownRate = -0.3f;
+        anxietyCurve.Midpoint = 0.5f;
+
+        #endregion
+        
+        
+        #region ESTADOS
+        
+        FunctionalAction faintAction = new FunctionalAction(StartFainting, Fainting, null);
+        UtilityAction faintUtilityAction = us.CreateAction(fearCurve, faintAction);
+        
+        FunctionalAction anxietyAction = new FunctionalAction(StartEscaping, Escaping, null);
+        UtilityAction anxietyUtilityAction = us.CreateAction(fearCurve, faintAction);
+
+        FunctionalAction exploringAction = new FunctionalAction(StartExploring, Exploring, null); //Estado
         State exploring = fsm.CreateState(exploringAction);
 
         FunctionalAction watchingAction = new FunctionalAction(StartWatching, Watching, null); //Estado
@@ -69,46 +100,62 @@ public class ExplorerBehaviour : MonoBehaviour
         FunctionalAction paintingAction = new FunctionalAction(StartPainting, Painting, null); //Estado
         State painting = fsm.CreateState(paintingAction);
         
-        ConditionPerception detectObjective = new ConditionPerception(null, IsDetectingObjective, null);
-        ConditionPerception watchObjective = new ConditionPerception(null, IsWatchingObjective, null);
-        ConditionPerception onObjective = new ConditionPerception(null, IsOnEmpty, null);
-        ConditionPerception onWall = new ConditionPerception(null, IsOnWall, null);
-        ConditionPerception emptyWall = new ConditionPerception(null, IsEmptyWall, null);
-        ConditionPerception paintedWall = new ConditionPerception(null, IsPaintedWall, null);
-        AndPerception canPaint = new AndPerception(emptyWall, onWall);
-        AndPerception stopPaint = new AndPerception(paintedWall, onWall);
-        AndPerception stopAdvance = new AndPerception(onObjective);
-        fsm.CreateTransition(exploring, watching, detectObjective, statusFlags: StatusFlags.Running);
-        fsm.CreateTransition(watching, advancing, watchObjective, statusFlags: StatusFlags.Running);
-        fsm.CreateTransition(advancing, painting, canPaint, statusFlags: StatusFlags.Running); // 1.Dde donde partimos, 2. Estado al que pasamos, 3. Condicion 1, 4. Condicion 2
-        fsm.CreateTransition(painting, exploring, stopPaint, statusFlags: StatusFlags.Running);
-        fsm.CreateTransition(advancing, exploring, stopAdvance, statusFlags: StatusFlags.Running);
+        #endregion 
 
+        
+        #region PERCECPCIONES ESTADOS
+        
+        ConditionPerception detectObjective = new ConditionPerception(null, IsDetectingObjective, null);
+        
+        ConditionPerception watchObjective = new ConditionPerception(null, IsWatchingObjective, null);
+        
+        ConditionPerception onObjective = new ConditionPerception(null, IsOnEmpty, null);
+        
+        ConditionPerception onWall = new ConditionPerception(null, IsOnWall, null);
+        
+        ConditionPerception emptyWall = new ConditionPerception(null, IsEmptyWall, null);
+        
+        ConditionPerception paintedWall = new ConditionPerception(null, IsPaintedWall, null);
+        
+        AndPerception canPaint = new AndPerception(emptyWall, onWall);
+        
+        AndPerception stopPaint = new AndPerception(paintedWall, onWall);
+        
+        OrPerception stopAdvance = new OrPerception(onObjective, stopPaint);
+
+        #endregion
+
+        
+        #region TRANSICIONES ESTADOS
+        
+        fsm.CreateTransition(exploring, watching, detectObjective, statusFlags: StatusFlags.Running);
+        
+        fsm.CreateTransition(watching, advancing, watchObjective, statusFlags: StatusFlags.Running);
+        
+        fsm.CreateTransition(advancing, painting, canPaint, statusFlags: StatusFlags.Running);
+        
+        fsm.CreateTransition(painting, exploring, stopPaint, statusFlags: StatusFlags.Running);
+        
+        fsm.CreateTransition(advancing, exploring, stopAdvance, statusFlags: StatusFlags.Running);
+        
+        #endregion
+
+        
         fsm.SetEntryState(exploring);
         fsm.Start();
-        
-        
-        /*
-        FunctionalAction escapingAction = new FunctionalAction(StartEscaping, Escaping, null); //Estado
-        State escaping = fsm.CreateState(escapingAction);
-        
-        FunctionalAction hidingAction = new FunctionalAction(StartExplore, Exploring, null); //Estado
-        State hiding = fsm.CreateState(hidingAction);
-
-        FunctionalAction faintingAction = new FunctionalAction(StartPainting, Painting, null); //Estado
-        State fainting = fsm.CreateState(faintingAction);
-         */
+        us.Start();
     }
 
     void Update()
     {
+        us.Update();
         fsm.Update();
     }
 
-    void StartExplore()
+    void StartExploring()
     {
         thinkingCloudBehaviour.UpdateCloud(0);
-        agent.isStopped = false;
+        //agent.isStopped = false;
     }
 
     public Status Exploring()
@@ -122,7 +169,7 @@ public class ExplorerBehaviour : MonoBehaviour
     
     void StartPainting()
     {
-        thinkingCloudBehaviour.UpdateCloud(1);
+        //thinkingCloudBehaviour.UpdateCloud(1);
         agent.isStopped = true;
     }
 
@@ -138,19 +185,21 @@ public class ExplorerBehaviour : MonoBehaviour
     
     void StartWatching()
     {
-        thinkingCloudBehaviour.UpdateCloud(2);
+        //thinkingCloudBehaviour.UpdateCloud(2);
         agent.isStopped = true;
     }
 
     public Status Watching()
     {
-        transform.Rotate(0, 1, 0);
+        Debug.Log(rotation);
+        transform.Rotate(0, rotation, 0);
         return Status.Running;
     }
     
     void StartAdvancing()
     {
-        thinkingCloudBehaviour.UpdateCloud(3);
+        //thinkingCloudBehaviour.UpdateCloud(3);
+        Debug.Log("Empiezo a avanzar");
         agent.isStopped = false;
     }
 
@@ -160,35 +209,24 @@ public class ExplorerBehaviour : MonoBehaviour
         return Status.Running;
     }
     
-    /*
-    
-    void StartEscaping()
-    {
-        
-    }
-
-    public Status Escaping()
-    {
-    }
-    
-    void StartHiding()
-    {
-        
-    }
-
-    public Status Hiding()
-    {
-    }
-    
     void StartFainting()
     {
-        
     }
 
     public Status Fainting()
     {
+        return Status.Running;
     }
-    */
+    
+    void StartEscaping()
+    {
+    }
+
+    public Status Escaping()
+    {
+        return Status.Running;
+    }
+    
     bool IsEmptyWall()
     {
         var wallController = objective.GetComponent<WallController>();
@@ -221,18 +259,27 @@ public class ExplorerBehaviour : MonoBehaviour
     {
         foreach(var a in vision.VisibleTriggers)
         {
-            if (a.GetComponent<PoliceBehaviour>()) // ||a.GetComponent<BeastBehaviour>() || a.GetComponent<WallController>()
+            if (a.GetComponent<WallController>()) // ||a.GetComponent<BeastBehaviour>() || a.GetComponent<WallController>()
             {
                 objective = a;
                 return true;
             }
         }
-
+        Debug.Log("No lo veo");
         return false;
     }
     
     bool IsDetectingObjective()
     {
+        foreach(var a in detection.DetectableTriggers)
+        {
+            if (a.GetComponent<WallController>())
+            {
+                Debug.Log("Detecto");
+                return true;
+            }
+        }
+        Debug.Log("No Detecto");
         return false;
     }
 
@@ -248,13 +295,14 @@ public class ExplorerBehaviour : MonoBehaviour
     
     void ChangePatrolPoint(int change)
     {
+        Debug.Log("Estoy cambiando");
         if(explorePositions.Count == 0)
         {
             return;
         }
-        agent.SetDestination(explorePositions[currentExploreIndex].position);
         currentExploreIndex += change;
         currentExploreIndex %= explorePositions.Count;
+        agent.SetDestination(explorePositions[currentExploreIndex].position);
         if(currentExploreIndex < 0)
         {
             currentExploreIndex = explorePositions.Count - 1;
