@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using DG.Tweening;
 using BehaviourAPI.Core;
+using System.Reflection;
 
 enum PoliceStates 
 {
@@ -12,17 +13,27 @@ enum PoliceStates
         Investigate
 }
 
+//TODO adjust agent speed when walking or running
+//TODO make all animations
+//TODO make combat system
+//TODO change police vision
+//TODO Finish BT 
+
 public class PoliceBehaviour : MonoBehaviour
 {
     [Header("Health")]
     [SerializeField]
-    private int health = 100;
+    private int maxHealth = 100;
+    public int currentHealth = 100;
+    [SerializeField]
+    private int timeToHealSeconds = 10;
+
 
     [Header("Patrol")]
     [SerializeField]
     private List<Transform> patrolPositions;
     private int currentPatrolIndex = 0;
-    private Coroutine patrolCorutine = null;
+    private Coroutine currentCorutine = null;
 
     [Header("Paranoia/Thread")]
     [SerializeField]
@@ -30,6 +41,20 @@ public class PoliceBehaviour : MonoBehaviour
 
     [Header("Investigate")]
     public InvestigableObject investigableObject = null;
+
+    [Header("Reinforcements")]
+    [SerializeField]
+    private int numbeOfReinforcements;
+    [SerializeField]
+    private int timeToCall;
+    [SerializeField]
+    private int timeToSpawn;
+    [SerializeField]
+    private Transform reinforcementsSpawnPos;
+
+    [Header("Flee")]
+    [SerializeField]
+    private Transform FleePos;
 
     [Header("Thinking bubble")]
     [SerializeField]
@@ -48,19 +73,19 @@ public class PoliceBehaviour : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
-
+    #region Patrol
     public void Patrol()
     {
         state = PoliceStates.Patrol;
         thinkingCloudBehaviour.UpdateCloud(0);
         animator.SetBool("Investigate", false);
 
-        if (patrolCorutine != null)
+        if (currentCorutine != null)
         {
-            StopCoroutine(patrolCorutine);
-            patrolCorutine = null;
+            StopCoroutine(currentCorutine);
+            currentCorutine = null;
         }
-        patrolCorutine = StartCoroutine(PatrolCorutine());
+        currentCorutine = StartCoroutine(PatrolCorutine());
 
         IEnumerator PatrolCorutine()
         {
@@ -74,15 +99,10 @@ public class PoliceBehaviour : MonoBehaviour
         }
     }
 
-    bool isPathComplete()
-    {
-        return (!agent.pathPending &&
-            agent.remainingDistance <= agent.stoppingDistance &&
-            (!agent.hasPath || agent.velocity.sqrMagnitude == 0f));
-    }
+    #endregion
 
 
-
+    #region Investigate
     public void Investigate()
     {
         state = PoliceStates.Investigate;
@@ -91,10 +111,10 @@ public class PoliceBehaviour : MonoBehaviour
         Vector3 investigatePostion = investigableObject.investigatePosition.position;
 
         //Stop patrolling
-        if (patrolCorutine != null)
+        if (currentCorutine != null)
         {
-            StopCoroutine(patrolCorutine);
-            patrolCorutine = null;
+            StopCoroutine(currentCorutine);
+            currentCorutine = null;
             agent.SetDestination(transform.position);
         }
 
@@ -116,8 +136,77 @@ public class PoliceBehaviour : MonoBehaviour
             });
         }
     }
+    #endregion
 
+    #region Heal and Reinforcements
 
+    public void Heal() 
+    {
+        if (currentCorutine != null)
+        {
+            StopCoroutine(currentCorutine);
+            currentCorutine = null;
+            agent.SetDestination(transform.position);
+        }
+
+        currentCorutine = StartCoroutine(HealCorutine());
+
+        IEnumerator HealCorutine() 
+        {
+            yield return new WaitForSeconds(timeToHealSeconds);
+            currentHealth = maxHealth;
+        }
+    }
+
+    public void Reinforcements() 
+    {
+        if (currentCorutine != null)
+        {
+            StopCoroutine(currentCorutine);
+            currentCorutine = null;
+            agent.SetDestination(transform.position);
+        }
+
+        currentCorutine = StartCoroutine(ReinforcementsCorutine());
+
+        IEnumerator ReinforcementsCorutine()
+        {
+
+            yield return new WaitForSeconds(timeToCall);
+            yield return new WaitForSeconds(timeToSpawn);
+            for (int i = 0; i < numbeOfReinforcements; i++) 
+            {
+                PoliceBehaviour instance = Instantiate(this,reinforcementsSpawnPos);
+                //TODO Asign instance same data as current police also make a method to shuffle instance patrol positions so that they dont go always together
+            }
+        }
+    }
+
+    #endregion
+
+    #region Flee
+
+    public void Flee() 
+    {
+        if (currentCorutine != null)
+        {
+            StopCoroutine(currentCorutine);
+            currentCorutine = null;
+            agent.SetDestination(transform.position);
+        }
+
+        currentCorutine = StartCoroutine(FleeCorutine());
+
+        IEnumerator FleeCorutine()
+        {
+            agent.SetDestination(FleePos.position);
+            yield return new WaitUntil(() => { return isPathComplete(); });
+        }
+    }
+
+    #endregion
+
+    #region Perceptions
     public bool CheckInvestigate()
     {
 
@@ -145,6 +234,21 @@ public class PoliceBehaviour : MonoBehaviour
         return false;
     }
 
+
+    public bool checkHealth() 
+    {
+        //Returns True if low on health
+        if (currentHealth < 20) 
+        {
+            return true;
+        }
+        return false;
+    }
+
+    #endregion
+
+
+    #region Other
     private void OnTriggerEnter(Collider other)
     {
         if (other.TryGetComponent(out investigableObject))
@@ -163,9 +267,19 @@ public class PoliceBehaviour : MonoBehaviour
 
 
 
+    bool isPathComplete()
+    {
+        return (!agent.pathPending &&
+            agent.remainingDistance <= agent.stoppingDistance &&
+            (!agent.hasPath || agent.velocity.sqrMagnitude == 0f));
+    }
+
+
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireCube(transform.position + new Vector3(0,1,0), new Vector3(15,1,15));
     }
+
+    #endregion
 }
