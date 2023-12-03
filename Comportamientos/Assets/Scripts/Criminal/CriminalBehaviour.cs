@@ -49,7 +49,7 @@ public class CriminalBehaviour : MonoBehaviour
         FunctionalAction watchPoliceAction = new FunctionalAction(StartWatchPolice, WatchPolice, null); //Estado
         State watchPolice = fsm.CreateState(watchPoliceAction);
 
-        ConditionPerception checkPolice = new ConditionPerception(null, IsWatchingPoliceman, null); //Trancisión para la conexión
+        ConditionPerception checkPolice = new ConditionPerception(null, IsWatchingPoliceman, null); //TrancisiÃ³n para la conexiÃ³n
         fsm.CreateTransition(patrolling, watchPolice, checkPolice, statusFlags: StatusFlags.Running); // 1.Dde donde partimos, 2. Estado al que pasamos, 3. Condicion 1, 4. Condicion 2
 
         FunctionalAction fleeAction = new FunctionalAction(StartFlee, Fleeing, null); //Estado

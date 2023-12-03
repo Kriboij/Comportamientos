@@ -1,20 +1,21 @@
-using System;
-using BehaviourAPI.UnityToolkit;
+using BehaviourAPI.Core;
+using BehaviourAPI.Core.Actions;
+using BehaviourAPI.Core.Perceptions;
+using BehaviourAPI.StateMachines;
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using UnityEngine.AI;
-using DG.Tweening;
-using BehaviourAPI.Core;
-using Random = UnityEngine.Random;
 
 enum ExplorerStates 
 {
         Exploring,
         Painting,
-        LookingAt,
+        Watching,
+        AdvanceTo,
         Escaping,
-        InteractingDoor,
         Hiding,
         Fainted,
 }
@@ -25,150 +26,248 @@ public class ExplorerBehaviour : MonoBehaviour
     [SerializeField] private int health = 50;
 
     [Header("Exploring")]
-    [SerializeField] private List<Transform> explorePositions;
-    private int currentPositionIndex = 0;
-    private Coroutine exploringCorutine = null;
-
+    private List<Transform> explorePositions;
+    private int currentExploreIndex = 0;
+    
     [Header("Painting")] 
-    [SerializeField] private float paintingTime;
-    private Transform paintingPosition;
-    private Coroutine paintCorutine = null;
     
     [Header("Faint")] 
-    [SerializeField] private float faintTime;
-    private Coroutine faintCorutine;
 
     [Header("General Variables")]
-    [SerializeField] private ExplorerStates state = ExplorerStates.Exploring;
     
     [Header("Thinking bubble")]
-    [SerializeField] ThinkingCloudBehaviour thinkingCloudBehaviour;
+    [SerializeField]
+    ThinkingCloudBehaviour thinkingCloudBehaviour;
     
-    private Coroutine exploreCorutine;
-    private Transform doorPosition;
     public NavMeshAgent agent;
+    private Animator animator;
+    private Vision vision;
+    FSM fsm;
+    private Transform objective;
+    private Vector3 wallPosition;
+    private float paintTime;
+    private float paintingTime;
 
     // Start is called before the first frame update
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
+        animator = GetComponent<Animator>();
+        vision = GetComponentInChildren<Vision>();
+            
+        fsm = new FSM();
+
+        FunctionalAction exploringAction = new FunctionalAction(StartExplore, Exploring, null); //Estado
+        State exploring = fsm.CreateState(exploringAction);
+
+        FunctionalAction watchingAction = new FunctionalAction(StartWatching, Watching, null); //Estado
+        State watching = fsm.CreateState(watchingAction);
+        
+        FunctionalAction advancingAction = new FunctionalAction(StartAdvancing, Advancing, null); //Estado
+        State advancing = fsm.CreateState(watchingAction);
+        
+        FunctionalAction paintingAction = new FunctionalAction(StartPainting, Painting, null); //Estado
+        State painting = fsm.CreateState(paintingAction);
+        
+        ConditionPerception detectObjective = new ConditionPerception(null, IsDetectingObjective, null);
+        ConditionPerception watchObjective = new ConditionPerception(null, IsWatchingObjective, null);
+        ConditionPerception onObjective = new ConditionPerception(null, IsOnEmpty, null);
+        ConditionPerception onWall = new ConditionPerception(null, IsOnWall, null);
+        ConditionPerception emptyWall = new ConditionPerception(null, IsEmptyWall, null);
+        ConditionPerception paintedWall = new ConditionPerception(null, IsPaintedWall, null);
+        AndPerception canPaint = new AndPerception(emptyWall, onWall);
+        AndPerception stopPaint = new AndPerception(paintedWall, onWall);
+        AndPerception stopAdvance = new AndPerception(onObjective);
+        fsm.CreateTransition(exploring, watching, detectObjective, statusFlags: StatusFlags.Running);
+        fsm.CreateTransition(watching, advancing, watchObjective, statusFlags: StatusFlags.Running);
+        fsm.CreateTransition(advancing, painting, canPaint, statusFlags: StatusFlags.Running); // 1.Dde donde partimos, 2. Estado al que pasamos, 3. Condicion 1, 4. Condicion 2
+        fsm.CreateTransition(painting, exploring, stopPaint, statusFlags: StatusFlags.Running);
+        fsm.CreateTransition(advancing, exploring, stopAdvance, statusFlags: StatusFlags.Running);
+
+        fsm.SetEntryState(exploring);
+        fsm.Start();
+        
+        
+        /*
+        FunctionalAction escapingAction = new FunctionalAction(StartEscaping, Escaping, null); //Estado
+        State escaping = fsm.CreateState(escapingAction);
+        
+        FunctionalAction hidingAction = new FunctionalAction(StartExplore, Exploring, null); //Estado
+        State hiding = fsm.CreateState(hidingAction);
+
+        FunctionalAction faintingAction = new FunctionalAction(StartPainting, Painting, null); //Estado
+        State fainting = fsm.CreateState(faintingAction);
+         */
     }
 
-
-    public void Explore()
+    void Update()
     {
-        state = ExplorerStates.Exploring;
+        fsm.Update();
+    }
+
+    void StartExplore()
+    {
         thinkingCloudBehaviour.UpdateCloud(0);
+        agent.isStopped = false;
+    }
 
-        if (exploreCorutine != null)
+    public Status Exploring()
+    {
+        if (isPathComplete())
         {
-            StopCoroutine(exploreCorutine);
-            exploreCorutine = null;
+            ChangePatrolPoint(1);
         }
-        exploreCorutine = StartCoroutine(ExploreCorutine());
+        return Status.Running;
     }
     
-    public void Paint(Transform paint)
+    void StartPainting()
     {
-        paintingPosition = paint;
-        state = ExplorerStates.Painting;
         thinkingCloudBehaviour.UpdateCloud(1);
+        agent.isStopped = true;
+    }
 
-        if (paintCorutine != null)
+    public Status Painting()
+    {
+        var wallController = objective.GetComponent<WallController>();
+        if (wallController != null)
         {
-            StopCoroutine(paintCorutine);
-            exploreCorutine = null;
+            wallController.Paint();
         }
-        exploreCorutine = StartCoroutine(PaintCorutine());
+        return Status.Running;
     }
     
-    public void Look(Transform objective)
+    void StartWatching()
     {
-        state = ExplorerStates.LookingAt;
-        transform.LookAt(objective);
+        thinkingCloudBehaviour.UpdateCloud(2);
+        agent.isStopped = true;
     }
 
-    public void Escape()
+    public Status Watching()
     {
-        state = ExplorerStates.Escaping;
+        transform.Rotate(0, 1, 0);
+        return Status.Running;
     }
     
-    public void Hide()
+    void StartAdvancing()
     {
-        state = ExplorerStates.Hiding;
+        thinkingCloudBehaviour.UpdateCloud(3);
+        agent.isStopped = false;
     }
-    
-    public void Faint()
-    {
-        state = ExplorerStates.Fainted;
-        thinkingCloudBehaviour.UpdateCloud(1);
 
-        if (faintCorutine != null)
+    public Status Advancing()
+    {
+        agent.SetDestination(objective.position);
+        return Status.Running;
+    }
+    
+    /*
+    
+    void StartEscaping()
+    {
+        
+    }
+
+    public Status Escaping()
+    {
+    }
+    
+    void StartHiding()
+    {
+        
+    }
+
+    public Status Hiding()
+    {
+    }
+    
+    void StartFainting()
+    {
+        
+    }
+
+    public Status Fainting()
+    {
+    }
+    */
+    bool IsEmptyWall()
+    {
+        var wallController = objective.GetComponent<WallController>();
+        if(wallController!=null)
         {
-            StopCoroutine(faintCorutine);
-            exploreCorutine = null;
+            if (!wallController.IsPainted())
+            {
+                return true;
+            }
         }
-        faintCorutine = StartCoroutine(FaintCorutine());
+
+        return false;
     }
-
-    public void InteractingDoor(GameObject door)
+    
+    bool IsPaintedWall()
     {
-        doorPosition = door.transform;
-        state = ExplorerStates.InteractingDoor;
-        thinkingCloudBehaviour.UpdateCloud(1);
-
-        if (paintCorutine != null)
+        var wallController = objective.GetComponent<WallController>();
+        if (wallController!=null)
         {
-            StopCoroutine(paintCorutine);
-            exploreCorutine = null;
+            if (wallController.IsPainted())
+            {
+                return true;
+            }
         }
-        agent.SetDestination(doorPosition.position);
-        //doorPosition.gameObject.GetComponent<DoorContoller>().Open();
+
+        return false;
     }
     
-    private IEnumerator PaintCorutine()
+    bool IsWatchingObjective()
     {
-        agent.SetDestination(paintingPosition.position);
-        yield return new WaitForSeconds(paintingTime);
+        foreach(var a in vision.VisibleTriggers)
+        {
+            if (a.GetComponent<PoliceBehaviour>()) // ||a.GetComponent<BeastBehaviour>() || a.GetComponent<WallController>()
+            {
+                objective = a;
+                return true;
+            }
+        }
+
+        return false;
     }
     
-    private IEnumerator ExploreCorutine()
+    bool IsDetectingObjective()
     {
-        agent.SetDestination(explorePositions[(int) Random.Range(0f, explorePositions.Count)].position);
-        yield return new WaitUntil(() => { return IsPathComplete(); });
+        return false;
     }
 
-    private IEnumerator FaintCorutine()
+    bool IsOnEmpty()
     {
-        agent.enabled = false;
-        yield return new WaitForSeconds(faintTime);
-        agent.enabled = true;
+        return isPathComplete() && !objective.GetComponent<WallController>();
     }
     
-    bool IsPathComplete()
+    bool IsOnWall()
+    {
+        return isPathComplete() && objective.GetComponent<WallController>();
+    }
+    
+    void ChangePatrolPoint(int change)
+    {
+        if(explorePositions.Count == 0)
+        {
+            return;
+        }
+        agent.SetDestination(explorePositions[currentExploreIndex].position);
+        currentExploreIndex += change;
+        currentExploreIndex %= explorePositions.Count;
+        if(currentExploreIndex < 0)
+        {
+            currentExploreIndex = explorePositions.Count - 1;
+        }
+    }
+
+    bool isPathComplete()
     {
         return (!agent.pathPending &&
                 agent.remainingDistance <= agent.stoppingDistance &&
                 (!agent.hasPath || agent.velocity.sqrMagnitude == 0f));
     }
     
-
-    private void OnTriggerEnter(Collider other)
-    {
-       
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-       
-    }
-
-
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(transform.position + new Vector3(0,1,0), new Vector3(15,1,15));
-    }
+    
 }
 
