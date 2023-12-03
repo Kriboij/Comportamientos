@@ -117,8 +117,6 @@ public class GhostBehaviour : MonoBehaviour
                 //animator.CrossFade(MoveState, 1f, 0, 0);
             }
         }
-
-        Debug.Log("Asustando");
         animator.CrossFade(AttackState, 0.1f, 0, 0);
 
     }
@@ -134,9 +132,9 @@ public class GhostBehaviour : MonoBehaviour
             if (entityAux != null)
             {
                 entity = entityAux;
-                Debug.Log("Lo veo");
+                return true;
             }
-            return true;
+            
         }
         return false;
     }
@@ -148,7 +146,6 @@ public class GhostBehaviour : MonoBehaviour
             var entityAux = trigger.GetComponent<ScareObject>();
             if (entityAux == null)
             {
-                Debug.Log("No veo");
                 return true;
             }
             
