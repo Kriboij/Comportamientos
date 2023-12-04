@@ -139,7 +139,7 @@ public class ExplorerBehaviour : MonoBehaviour
         
         _fsm.CreateTransition(exploring, watching, detectObjective, statusFlags: StatusFlags.Running);
         
-        _fsm.CreateTransition(watching, advancing, watchObjective, statusFlags: StatusFlags.Running);
+        _fsm.CreateTransition(watching, advancing, watchObjective, statusFlags: StatusFlags.stopAdvance);
         
         _fsm.CreateTransition(advancing, painting, canPaint, statusFlags: StatusFlags.Running);
         
@@ -157,8 +157,8 @@ public class ExplorerBehaviour : MonoBehaviour
 
     void Update()
     {
-        _distance = CalculateDistance();
-        _us.Update();
+        //_distance = CalculateDistance();
+        //_us.Update();
         _fsm.Update();
     }
 
@@ -209,6 +209,7 @@ public class ExplorerBehaviour : MonoBehaviour
 
     public Status Exploring()
     {
+        Debug.Log("Estoy explorando");
         if (IsPathComplete())
         {
             ChangePatrolPoint(1);
@@ -240,9 +241,9 @@ public class ExplorerBehaviour : MonoBehaviour
 
     public Status Watching()
     {
-        Debug.Log(rotation);
+        Debug.Log("Estoy rotando");
         transform.Rotate(0, rotation * Time.deltaTime, 0);
-        return Status.Running;
+        return Status.stopAdvance;
     }
     
     void StartAdvancing()
@@ -253,6 +254,7 @@ public class ExplorerBehaviour : MonoBehaviour
 
     public Status Advancing()
     {
+        Debug.Log("NO SE EJECUTA");
         agent.SetDestination(objective.position);
         return Status.Running;
     }
@@ -330,6 +332,7 @@ public class ExplorerBehaviour : MonoBehaviour
         {
             if (a.GetComponent<WallController>()) // ||a.GetComponent<BeastBehaviour>() || a.GetComponent<WallController>()
             {
+                Debug.Log("Lo he visto");
                 objective = a;
                 return true;
             }
