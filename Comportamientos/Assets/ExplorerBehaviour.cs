@@ -10,14 +10,13 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using BehaviourAPI.UtilitySystems;
 using UnityEngine;
 using UnityEngine.AI;
-using Vector3 = System.Numerics.Vector3;
 
 enum ExplorerStates 
 {
         Exploring,
         Painting,
         Watching,
-        AdvanceTo,
+        Advancing,
         Escaping,
         Hiding,
         Fainted,
@@ -60,6 +59,8 @@ public class ExplorerBehaviour : MonoBehaviour
     
     private UtilitySystem _us;
     private float _distance;
+    private ExplorerStates _states;
+    private Transform exploreObjective;
 
     // Start is called before the first frame update
     private void Awake()
@@ -104,7 +105,7 @@ public class ExplorerBehaviour : MonoBehaviour
         State watching = _fsm.CreateState(watchingAction);
         
         FunctionalAction advancingAction = new FunctionalAction(StartAdvancing, Advancing, null); //Estado
-        State advancing = _fsm.CreateState(watchingAction);
+        State advancing = _fsm.CreateState(advancingAction);
         
         FunctionalAction paintingAction = new FunctionalAction(StartPainting, Painting, null); //Estado
         State painting = _fsm.CreateState(paintingAction);
@@ -152,13 +153,13 @@ public class ExplorerBehaviour : MonoBehaviour
         
         _fsm.SetEntryState(exploring);
         _fsm.Start();
-        _us.Start();
+        //_us.Start();
     }
 
     void Update()
     {
-        _distance = CalculateDistance();
-        _us.Update();
+        //_distance = CalculateDistance();
+        //_us.Update();
         _fsm.Update();
     }
 
@@ -199,11 +200,28 @@ public class ExplorerBehaviour : MonoBehaviour
         }
     }
 
+    void CalculateRotation(Transform a)
+    {
+        Vector3 posA = transform.position;
+        Vector3 posB = a.transform.position;
+        Vector3 A = posB - posA;
+        Vector3 B = transform.forward;
+        float angle = Vector3.SignedAngle(A, B, Vector3.up);
+        if (angle > 0)
+        {
+            rotation = -Mathf.Abs(rotation);
+        }
+        else
+        {
+            rotation = Mathf.Abs(rotation);
+        }
+    }
 
     #region METODOS MAQUINA ESTADOS IMPLEMENTACION
     void StartExploring()
     {
         thinkingCloudBehaviour.UpdateCloud(0);
+        Debug.Log("Estoy explorando");
         agent.isStopped = false;
     }
 
@@ -211,13 +229,23 @@ public class ExplorerBehaviour : MonoBehaviour
     {
         if (IsPathComplete())
         {
-            ChangePatrolPoint(1);
+            if (_states != ExplorerStates.Exploring)
+            {
+                ChangePatrolPoint(0);
+            }
+            else
+            {
+                ChangePatrolPoint(1);
+            }
         }
+        _states = ExplorerStates.Exploring;
         return Status.Running;
     }
     
     void StartPainting()
     {
+        _states = ExplorerStates.Painting;
+        Debug.Log("Estoy pintando");
         thinkingCloudBehaviour.UpdateCloud(0);
         agent.isStopped = true;
     }
@@ -234,19 +262,23 @@ public class ExplorerBehaviour : MonoBehaviour
     
     void StartWatching()
     {
+        _states = ExplorerStates.Watching;
+        Debug.Log("Estoy buscando el objetivo de interes");
         thinkingCloudBehaviour.UpdateCloud(0);
         agent.isStopped = true;
+        CalculateRotation(objective);
     }
 
     public Status Watching()
     {
-        Debug.Log(rotation);
         transform.Rotate(0, rotation * Time.deltaTime, 0);
         return Status.Running;
     }
     
     void StartAdvancing()
     {
+        _states = ExplorerStates.Advancing;
+        Debug.Log("Estoy yendo hacia el objetivo de interes");
         thinkingCloudBehaviour.UpdateCloud(0);
         agent.isStopped = false;
     }
@@ -328,13 +360,12 @@ public class ExplorerBehaviour : MonoBehaviour
     {
         foreach(var a in _vision.VisibleTriggers)
         {
-            if (a.GetComponent<WallController>()) // ||a.GetComponent<BeastBehaviour>() || a.GetComponent<WallController>()
+            if (a == objective) // ||a.GetComponent<BeastBehaviour>() || a.GetComponent<WallController>()
             {
-                objective = a;
+                Debug.Log("He visualizado lo que he");
                 return true;
             }
         }
-        Debug.Log("No lo veo");
         return false;
     }
     
@@ -344,11 +375,14 @@ public class ExplorerBehaviour : MonoBehaviour
         {
             if (a.GetComponent<WallController>())
             {
-                Debug.Log("Detecto");
-                return true;
+                if (!a.GetComponent<WallController>().IsPainted())
+                {
+                    objective = a;
+                    Debug.Log("HOLAAAAAA");
+                    return true;
+                }
             }
         }
-        Debug.Log("No Detecto");
         return false;
     }
 

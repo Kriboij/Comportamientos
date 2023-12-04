@@ -11,13 +11,15 @@ using UnityEngine.AI;
 
 public class WallController : MonoBehaviour
 {
+    private bool painted = false;
 
     public bool IsPainted()
     {
-        return false;
+        return painted;
     }
     
     public void Paint()
     {
+        painted = true;
     }
 }
