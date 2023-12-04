@@ -62,6 +62,9 @@ public class ExplorerBehaviour : MonoBehaviour
     private ExplorerStates _states;
     private Transform exploreObjective;
 
+    private VariableFactor anxiety;
+    private VariableFactor fear;
+
     // Start is called before the first frame update
     private void Awake()
     {
@@ -69,6 +72,7 @@ public class ExplorerBehaviour : MonoBehaviour
         _animator = GetComponent<Animator>();
         _vision = GetComponentInChildren<Vision>();
         _detection = GetComponentInChildren<Detection>();
+        _distance = CalculateDistance();
         
         _fsm = new FSM();
         _us = new UtilitySystem();
@@ -76,22 +80,22 @@ public class ExplorerBehaviour : MonoBehaviour
 
         #region CREACION SISTEMA DE UTILIDAD
 
-        VariableFactor anxiety = _us.CreateVariable(() => _distance, 0f, 1f);
-        VariableFactor fear = _us.CreateVariable(() => _distance, 0f, 1f);
+        anxiety = _us.CreateVariable(() => 1f, 0f, _distance);
+        fear = _us.CreateVariable(() => 1f, 0f, _distance);
 
         ExponentialCurveFactor fearCurve = _us.CreateCurve<ExponentialCurveFactor>(fear);
-        fearCurve.Exponent = 2;
-        fearCurve.DespX = -0.2f;
+        fearCurve.Exponent = -50f;
+        fearCurve.DespX = 0;
 
         SigmoidCurveFactor anxietyCurve = _us.CreateCurve<SigmoidCurveFactor>(anxiety);
-        anxietyCurve.GrownRate = -0.3f;
+        anxietyCurve.GrownRate = 40f;
         anxietyCurve.Midpoint = 0.5f;
         
         FunctionalAction faintAction = new FunctionalAction(StartFainting, Fainting, null);
-        UtilityAction faintUtilityAction = _us.CreateAction(fearCurve, faintAction);
+        UtilityAction faintUtilityAction = _us.CreateAction(fearCurve, faintAction, finishOnComplete:true);
         
         FunctionalAction anxietyAction = new FunctionalAction(StartEscaping, Escaping, null);
-        UtilityAction anxietyUtilityAction = _us.CreateAction(fearCurve, faintAction);
+        UtilityAction anxietyUtilityAction = _us.CreateAction(anxiety, anxietyAction, finishOnComplete:true);
 
         #endregion
         
@@ -140,7 +144,7 @@ public class ExplorerBehaviour : MonoBehaviour
         
         _fsm.CreateTransition(exploring, watching, detectObjective, statusFlags: StatusFlags.Running);
         
-        _fsm.CreateTransition(watching, advancing, watchObjective, statusFlags: StatusFlags.stopAdvance);
+        _fsm.CreateTransition(watching, advancing, watchObjective, statusFlags: StatusFlags.Running);
         
         _fsm.CreateTransition(advancing, painting, canPaint, statusFlags: StatusFlags.Running);
         
@@ -153,13 +157,16 @@ public class ExplorerBehaviour : MonoBehaviour
         
         _fsm.SetEntryState(exploring);
         _fsm.Start();
-        //_us.Start();
+        _us.Start();
     }
 
     void Update()
     {
-        //_distance = CalculateDistance();
-        //_us.Update();
+        Debug.Log(_distance);
+        Debug.Log(anxiety);
+        Debug.Log(anxiety.Utility);
+        _distance = CalculateDistance();
+        _us.Update();
         _fsm.Update();
     }
 
@@ -168,17 +175,17 @@ public class ExplorerBehaviour : MonoBehaviour
         float[] distances = new float[4];
         
         var policePos = FindObjectOfType<PoliceBehaviour>().transform.position;
-        var criminalPos = FindObjectOfType<CriminalBehaviour>().transform.position;
+        //var criminalPos = FindObjectOfType<CriminalBehaviour>().transform.position;
         //var beastPos = FindObjectOfType<BeastBehaviour>().transform.position;
         //var ghostPos = FindObjectOfType<GhostBehaviour>().transform.position;
-        
-        Vector3 policeVector = new Vector3(policePos.x, policePos.y, policePos.z);
-        Vector3 criminalVector = new Vector3(criminalPos.x, criminalPos.y, criminalPos.z);
+
+        Vector3 policeVector = policePos;
+        //Vector3 criminalVector = new Vector3(criminalPos.x, criminalPos.y, criminalPos.z);
         //Vector3 beastVector = new Vector3(beastPos.x, beastPos.y, beastPos.z);
         //Vector3 ghostVector = new Vector3(ghostPos.x, ghostPos.y, ghostPos.z);
         
         distances[0] = Vector3.Distance (position, policeVector);
-        distances[1] = Vector3.Distance (position, criminalVector);
+        //distances[1] = Vector3.Distance (position, criminalVector);
         //distances[2] = Vector3.Distance (position, beastVector);
         //distances[3] = Vector3.Distance (position, ghostVector);
 
@@ -227,7 +234,6 @@ public class ExplorerBehaviour : MonoBehaviour
 
     public Status Exploring()
     {
-        Debug.Log("Estoy explorando");
         if (IsPathComplete())
         {
             if (_states != ExplorerStates.Exploring)
@@ -273,7 +279,7 @@ public class ExplorerBehaviour : MonoBehaviour
     public Status Watching()
     {
         transform.Rotate(0, rotation * Time.deltaTime, 0);
-        return Status.stopAdvance;
+        return Status.Running;
     }
     
     void StartAdvancing()
@@ -286,7 +292,6 @@ public class ExplorerBehaviour : MonoBehaviour
 
     public Status Advancing()
     {
-        Debug.Log("NO SE EJECUTA");
         agent.SetDestination(objective.position);
         return Status.Running;
     }
@@ -297,6 +302,7 @@ public class ExplorerBehaviour : MonoBehaviour
     #region METODOS SISTEMA DE UTILIDAD
     void StartFainting()
     {
+        Debug.Log("Me desmayo");
         thinkingCloudBehaviour.UpdateCloud(0);
         agent.isStopped = true;
     }
@@ -310,17 +316,19 @@ public class ExplorerBehaviour : MonoBehaviour
     private IEnumerator Faint()
     {
         yield return new WaitForSeconds(faintingTime);
-        Destroy(this.gameObject);
+        agent.isStopped = false;
     }
     
     void StartEscaping()
     {
+        Debug.Log("Empiezo a escapar");
         thinkingCloudBehaviour.UpdateCloud(0);
         agent.isStopped = false;
     }
 
     public Status Escaping()
     {
+        Debug.Log("Estoy escapando");
         agent.SetDestination(escapePoint.position);
         return Status.Running;
     }
@@ -380,7 +388,6 @@ public class ExplorerBehaviour : MonoBehaviour
                 if (!a.GetComponent<WallController>().IsPainted())
                 {
                     objective = a;
-                    Debug.Log("HOLAAAAAA");
                     return true;
                 }
             }
