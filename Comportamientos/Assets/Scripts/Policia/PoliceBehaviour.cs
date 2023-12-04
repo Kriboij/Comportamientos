@@ -6,6 +6,7 @@ using UnityEngine.AI;
 using DG.Tweening;
 using BehaviourAPI.Core;
 using System.Reflection;
+using BehaviourAPI.UnityToolkit.GUIDesigner.Runtime;
 
 enum PoliceStates 
 {
@@ -62,6 +63,8 @@ public class PoliceBehaviour : MonoBehaviour
 
     private NavMeshAgent agent;
     private Animator animator;
+    [SerializeField]
+    private Vision vision;
 
     [SerializeField]
     private PoliceStates state = PoliceStates.Patrol;
@@ -201,6 +204,7 @@ public class PoliceBehaviour : MonoBehaviour
         {
             agent.SetDestination(FleePos.position);
             yield return new WaitUntil(() => { return isPathComplete(); });
+            //GetComponent<EditorBehaviourRunner>().update missing
         }
     }
 
@@ -209,16 +213,16 @@ public class PoliceBehaviour : MonoBehaviour
     #region Perceptions
     public bool CheckInvestigate()
     {
-
-        if (investigableObject != null)
+        foreach (var trigger in vision.VisibleTriggers) 
         {
-            if (investigableObject.ShouldInvestigate(paranoia)) 
+            investigableObject = trigger.GetComponent<InvestigableObject>();
+            if (investigableObject != null) 
             {
-                //If should be investigated activate transition
-                return true;
+                if (investigableObject.ShouldInvestigate(paranoia)) 
+                {
+                    return true;
+                }
             }
-            //If not delete reference
-            investigableObject = null;
         }
         return false;
     }
