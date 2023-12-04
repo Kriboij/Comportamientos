@@ -140,7 +140,7 @@ public class ExplorerBehaviour : MonoBehaviour
         
         _fsm.CreateTransition(exploring, watching, detectObjective, statusFlags: StatusFlags.Running);
         
-        _fsm.CreateTransition(watching, advancing, watchObjective, statusFlags: StatusFlags.Running);
+        _fsm.CreateTransition(watching, advancing, watchObjective, statusFlags: StatusFlags.stopAdvance);
         
         _fsm.CreateTransition(advancing, painting, canPaint, statusFlags: StatusFlags.Running);
         
@@ -227,6 +227,7 @@ public class ExplorerBehaviour : MonoBehaviour
 
     public Status Exploring()
     {
+        Debug.Log("Estoy explorando");
         if (IsPathComplete())
         {
             if (_states != ExplorerStates.Exploring)
@@ -272,7 +273,7 @@ public class ExplorerBehaviour : MonoBehaviour
     public Status Watching()
     {
         transform.Rotate(0, rotation * Time.deltaTime, 0);
-        return Status.Running;
+        return Status.stopAdvance;
     }
     
     void StartAdvancing()
@@ -285,6 +286,7 @@ public class ExplorerBehaviour : MonoBehaviour
 
     public Status Advancing()
     {
+        Debug.Log("NO SE EJECUTA");
         agent.SetDestination(objective.position);
         return Status.Running;
     }
