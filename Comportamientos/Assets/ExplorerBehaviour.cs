@@ -53,7 +53,6 @@ public class ExplorerBehaviour : MonoBehaviour
     private Animator _animator;
     private Vision _vision;
     private Detection _detection;
-    private Vector3 position;
     
     private FSM _fsm;
     
@@ -80,11 +79,11 @@ public class ExplorerBehaviour : MonoBehaviour
 
         #region CREACION SISTEMA DE UTILIDAD
 
-        anxiety = _us.CreateVariable(() => 1f, 0f, _distance);
-        fear = _us.CreateVariable(() => 1f, 0f, _distance);
+        anxiety = _us.CreateVariable(() => 5f/_distance, 0f, 1f);
+        fear = _us.CreateVariable(() => 1f/_distance, 0f, 1f);
 
         ExponentialCurveFactor fearCurve = _us.CreateCurve<ExponentialCurveFactor>(fear);
-        fearCurve.Exponent = -50f;
+        fearCurve.Exponent = 50f;
         fearCurve.DespX = 0;
 
         SigmoidCurveFactor anxietyCurve = _us.CreateCurve<SigmoidCurveFactor>(anxiety);
@@ -162,9 +161,6 @@ public class ExplorerBehaviour : MonoBehaviour
 
     void Update()
     {
-        Debug.Log(_distance);
-        Debug.Log(anxiety);
-        Debug.Log(anxiety.Utility);
         _distance = CalculateDistance();
         _us.Update();
         _fsm.Update();
@@ -184,7 +180,7 @@ public class ExplorerBehaviour : MonoBehaviour
         //Vector3 beastVector = new Vector3(beastPos.x, beastPos.y, beastPos.z);
         //Vector3 ghostVector = new Vector3(ghostPos.x, ghostPos.y, ghostPos.z);
         
-        distances[0] = Vector3.Distance (position, policeVector);
+        distances[0] = Vector3.Distance (transform.position, policeVector);
         //distances[1] = Vector3.Distance (position, criminalVector);
         //distances[2] = Vector3.Distance (position, beastVector);
         //distances[3] = Vector3.Distance (position, ghostVector);
