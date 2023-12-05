@@ -7,6 +7,7 @@ using DG.Tweening;
 using BehaviourAPI.Core;
 using System.Reflection;
 using BehaviourAPI.UnityToolkit.GUIDesigner.Runtime;
+using BehaviourAPI.StateMachines;
 
 enum PoliceStates 
 {
@@ -40,8 +41,7 @@ public class PoliceBehaviour : MonoBehaviour
     [SerializeField]
     private int paranoia = 0;
 
-    [Header("Investigate")]
-    public InvestigableObject investigableObject = null;
+
 
     [Header("Reinforcements")]
     [SerializeField]
@@ -68,6 +68,11 @@ public class PoliceBehaviour : MonoBehaviour
 
     [SerializeField]
     private PoliceStates state = PoliceStates.Patrol;
+
+
+    private InvestigableObject investigableObject = null;
+    private AttackableEntity attackableEntity = null;
+    private bool enemyNotOnSight;
 
     // Start is called before the first frame update
     private void Awake()
@@ -210,6 +215,35 @@ public class PoliceBehaviour : MonoBehaviour
 
     #endregion
 
+    #region Chase
+
+    public Status Chase() 
+    {
+
+        if (currentCorutine != null)
+        {
+            StopCoroutine(currentCorutine);
+            currentCorutine = null;
+            agent.SetDestination(transform.position);
+        }
+
+        currentCorutine = StartCoroutine(ChaseCorutine());
+
+        IEnumerator ChaseCorutine()
+        {
+            agent.SetDestination(FleePos.position);
+            yield return new WaitUntil(() => { return isPathComplete(); });
+            yield return Status.Success;
+            //GetComponent<EditorBehaviourRunner>().update missing
+        }
+
+        return Status.Running;
+
+    }
+
+    #endregion
+
+
     #region Perceptions
     public bool CheckInvestigate()
     {
@@ -227,6 +261,39 @@ public class PoliceBehaviour : MonoBehaviour
         return false;
     }
 
+    public bool DetectEnemy()
+    {
+        foreach (var trigger in vision.VisibleTriggers)
+        {
+            attackableEntity = trigger.GetComponent<AttackableEntity>();
+            if (attackableEntity != null)
+            {
+                Debug.Log("Enemigo pillado");
+                enemyNotOnSight = false;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public bool EnemyLost()
+    {
+        foreach (var trigger in vision.VisibleTriggers)
+        {
+            attackableEntity = trigger.GetComponent<AttackableEntity>();
+            if (attackableEntity != null)
+            {
+                //Enemy still on sight
+                enemyNotOnSight=false;
+                return false;
+            }
+        }
+        //Enemy wasnt found after 2 seconds return true
+        DOVirtual.DelayedCall(2f, () => { if (!enemyNotOnSight) { enemyNotOnSight = true; } });
+        return enemyNotOnSight;
+    }
+
+
     public bool CheckEndedInvestigate()
     {
 
@@ -239,14 +306,14 @@ public class PoliceBehaviour : MonoBehaviour
     }
 
 
-    public bool checkHealth() 
+    public Status CheckHealth() 
     {
         //Returns True if low on health
         if (currentHealth < 20) 
         {
-            return true;
+            return Status.Success;
         }
-        return false;
+        return Status.Failure;
     }
 
     #endregion
