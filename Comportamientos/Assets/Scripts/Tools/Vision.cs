@@ -53,4 +53,49 @@ public class Vision : MonoBehaviour
             VisibleTriggers.Remove(visionTrigger.Body);
         }
     }
+
+
+    //COMPROBACIONES
+
+    public bool IsWatchingPoliceman()
+    {
+        foreach (var trigger in VisibleTriggers)
+        {
+            var police = trigger.GetComponent<PoliceBehaviour>();
+            if (police != null)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public bool IsWatchingCriminal()
+    {
+        foreach (var trigger in VisibleTriggers)
+        {
+            var criminal = trigger.GetComponent<CriminalBehaviour>();
+            if (criminal != null)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public bool IsWatchingHuman()
+    {
+        if (IsWatchingPoliceman())
+        {
+            return true;
+        }
+        if (IsWatchingCriminal())
+        {
+            return true;
+        }
+        return false;
+    }
+
+    
+
 }
