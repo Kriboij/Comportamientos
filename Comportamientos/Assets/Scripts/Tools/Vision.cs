@@ -25,8 +25,7 @@ public class Vision : MonoBehaviour
             if (Physics.Raycast(transform.position, direction.normalized, out var hit, raycastRange,sceneMask))
             {
                 if(hit.collider.gameObject == visionTrigger.gameObject)
-                {
-                    Debug.Log("Add");
+                {   
                     if (!VisibleTriggers.Contains(visionTrigger.Body))
                     {
                         VisibleTriggers.Add(visionTrigger.Body);
@@ -36,7 +35,7 @@ public class Vision : MonoBehaviour
             }
             else
             {
-                Debug.Log("Remove");
+                
                 VisibleTriggers.Remove(visionTrigger.Body);
             }
 

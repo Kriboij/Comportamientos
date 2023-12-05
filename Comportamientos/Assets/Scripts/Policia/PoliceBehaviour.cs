@@ -278,12 +278,12 @@ public class PoliceBehaviour : MonoBehaviour
             (!agent.hasPath || agent.velocity.sqrMagnitude == 0f));
     }
 
-
+    /*
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireCube(transform.position + new Vector3(0,1,0), new Vector3(15,1,15));
     }
-
+    */
     #endregion
 }
