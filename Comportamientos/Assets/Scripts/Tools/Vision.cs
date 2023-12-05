@@ -24,16 +24,20 @@ public class Vision : MonoBehaviour
             float raycastRange = direction.magnitude;
             if (Physics.Raycast(transform.position, direction.normalized, out var hit, raycastRange,sceneMask))
             {
-                Debug.Log("Remove");
-                VisibleTriggers.Remove(visionTrigger.Body);
+                if(hit.collider.gameObject == visionTrigger.gameObject)
+                {
+                    Debug.Log("Add");
+                    if (!VisibleTriggers.Contains(visionTrigger.Body))
+                    {
+                        VisibleTriggers.Add(visionTrigger.Body);
+                    }
+                }    
+                
             }
             else
             {
-                Debug.Log("Add");
-                if (!VisibleTriggers.Contains(visionTrigger.Body))
-                {
-                    VisibleTriggers.Add(visionTrigger.Body);
-                }
+                Debug.Log("Remove");
+                VisibleTriggers.Remove(visionTrigger.Body);
             }
 
 

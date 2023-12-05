@@ -1267,6 +1267,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Criminal
       objectReference: {fileID: 0}
+    - target: {fileID: 8639607242501955736, guid: 26abf1dbfeb75584a943b6fc9992ee6c, type: 3}
+      propertyPath: VisibleTriggers.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
