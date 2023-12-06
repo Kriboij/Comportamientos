@@ -93,8 +93,8 @@ public class ExplorerBehaviour : MonoBehaviour
         FunctionalAction faintAction = new FunctionalAction(StartFainting, Fainting, null);
         UtilityAction faintUtilityAction = _us.CreateAction(fearCurve, faintAction, finishOnComplete:true);
         
-        FunctionalAction anxietyAction = new FunctionalAction(StartEscaping, Escaping, null);
-        UtilityAction anxietyUtilityAction = _us.CreateAction(anxiety, anxietyAction, finishOnComplete:true);
+        FunctionalAction escapeAction = new FunctionalAction(StartEscaping, Escaping, null);
+        UtilityAction escapeUtilityAction = _us.CreateAction(anxiety, escapeAction, finishOnComplete:true);
 
         #endregion
         
