@@ -73,6 +73,7 @@ public class PoliceBehaviour : MonoBehaviour
     private InvestigableObject investigableObject = null;
     private AttackableEntity attackableEntity = null;
     private bool enemyNotOnSight;
+    private Tween enemyLostTween = null;
 
     // Start is called before the first frame update
     private void Awake()
@@ -99,6 +100,7 @@ public class PoliceBehaviour : MonoBehaviour
         {
             while (true)
             {
+                agent.stoppingDistance = 0.2f;
                 agent.SetDestination(patrolPositions[currentPatrolIndex].position);
                 yield return new WaitUntil(() => { return isPathComplete(); });
                 currentPatrolIndex++;
@@ -131,6 +133,7 @@ public class PoliceBehaviour : MonoBehaviour
 
         IEnumerator InvestigateCorutine(Vector3 investigatePostion)
         {
+            agent.stoppingDistance = 0.2f;
             agent.SetDestination(investigatePostion); //Go to investigate position
             yield return new WaitUntil(() => { return isPathComplete(); }); //Wait for arrival at pos
             //Launch animation or sth and later return to patrol?
@@ -207,6 +210,7 @@ public class PoliceBehaviour : MonoBehaviour
 
         IEnumerator FleeCorutine()
         {
+            agent.stoppingDistance = 0.2f;
             agent.SetDestination(FleePos.position);
             yield return new WaitUntil(() => { return isPathComplete(); });
             //GetComponent<EditorBehaviourRunner>().update missing
@@ -219,7 +223,7 @@ public class PoliceBehaviour : MonoBehaviour
 
     public Status Chase() 
     {
-
+        Status status = Status.Paused;
         if (currentCorutine != null)
         {
             StopCoroutine(currentCorutine);
@@ -231,18 +235,36 @@ public class PoliceBehaviour : MonoBehaviour
 
         IEnumerator ChaseCorutine()
         {
-            agent.SetDestination(FleePos.position);
+            //TODO adjust stoppingDistance based on attack type
+            agent.stoppingDistance = 5;
+            agent.SetDestination(attackableEntity.transform.position);
+            status = Status.Running;
             yield return new WaitUntil(() => { return isPathComplete(); });
-            yield return Status.Success;
-            //GetComponent<EditorBehaviourRunner>().update missing
+            status = Status.Success;
         }
-
-        return Status.Running;
-
+        return status;
     }
 
     #endregion
 
+
+    #region Attacks
+
+    public void Hit() 
+    {
+    
+
+    
+    }
+
+    public void Shoot() 
+    {
+    
+
+    
+    }
+
+    #endregion
 
     #region Perceptions
     public bool CheckInvestigate()
@@ -289,7 +311,10 @@ public class PoliceBehaviour : MonoBehaviour
             }
         }
         //Enemy wasnt found after 2 seconds return true
-        DOVirtual.DelayedCall(2f, () => { if (!enemyNotOnSight) { enemyNotOnSight = true; } });
+        if (enemyLostTween!=null) 
+        {
+            enemyLostTween = DOVirtual.DelayedCall(2f, () => { if (!enemyNotOnSight) { enemyNotOnSight = true; enemyLostTween = null; } });
+        }
         return enemyNotOnSight;
     }
 
@@ -316,27 +341,20 @@ public class PoliceBehaviour : MonoBehaviour
         return Status.Failure;
     }
 
+    public Status checkDanger() 
+    {
+        //Returns True if low on danger
+        if (paranoia < 70)
+        {
+            return Status.Success;
+        }
+        return Status.Failure;
+    }
+
     #endregion
 
 
     #region Other
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.TryGetComponent(out investigableObject))
-        {
-            //TODO Maybe change collider to sphere and add a raycast check
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.TryGetComponent(out investigableObject))
-        {
-            investigableObject = null;
-        }
-    }
-
-
 
     bool isPathComplete()
     {
@@ -344,6 +362,18 @@ public class PoliceBehaviour : MonoBehaviour
             agent.remainingDistance <= agent.stoppingDistance &&
             (!agent.hasPath || agent.velocity.sqrMagnitude == 0f));
     }
+
+    public Status PathStatus()
+    {
+        if (!agent.pathPending &&
+            agent.remainingDistance <= agent.stoppingDistance &&
+            (!agent.hasPath || agent.velocity.sqrMagnitude == 0f))
+        {
+            return Status.Success;
+        }
+        return Status.Running;
+    }
+
 
     /*
     private void OnDrawGizmos()

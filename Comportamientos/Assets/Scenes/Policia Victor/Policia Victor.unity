@@ -1427,7 +1427,7 @@ Transform:
   m_GameObject: {fileID: 1530965097}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 34.62, y: 0.78, z: 36.91}
+  m_LocalPosition: {x: 32.2, y: 0.78, z: 12.8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2329,6 +2329,18 @@ PrefabInstance:
       value: BehaviourAPI.UnityToolkit.GUIDesigner.Framework BehaviourAPI.UnityToolkit.GUIDesigner.Framework.CustomAction
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
+      propertyPath: managedReferences[8148621559079370752]
+      value: BehaviourAPI.UnityToolkit.GUIDesigner.Framework BehaviourAPI.UnityToolkit.GUIDesigner.Framework.CustomAction
+      objectReference: {fileID: 0}
+    - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
+      propertyPath: managedReferences[8148621559079370753]
+      value: BehaviourAPI.BehaviourTrees BehaviourAPI.BehaviourTrees.ConditionNode
+      objectReference: {fileID: 0}
+    - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
+      propertyPath: managedReferences[8148621559079370754]
+      value: BehaviourAPI.UnityToolkit.GUIDesigner.Framework BehaviourAPI.UnityToolkit.GUIDesigner.Framework.CustomPerception
+      objectReference: {fileID: 0}
+    - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: data.graphs.Array.data[0].nodes.Array.size
       value: 9
       objectReference: {fileID: 0}
@@ -2402,35 +2414,35 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: data.graphs.Array.data[1].nodes.Array.data[11].id
-      value: eb153273-0504-4238-a802-1456396b4aee
-      objectReference: {fileID: 0}
-    - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
-      propertyPath: data.graphs.Array.data[1].nodes.Array.data[12].id
       value: 3c21c10e-74f4-4438-8019-4467e7e027a2
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
-      propertyPath: data.graphs.Array.data[1].nodes.Array.data[13].id
+      propertyPath: data.graphs.Array.data[1].nodes.Array.data[12].id
       value: e1140d89-95e5-48ee-b108-cdc36512549a
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
-      propertyPath: data.graphs.Array.data[1].nodes.Array.data[14].id
+      propertyPath: data.graphs.Array.data[1].nodes.Array.data[13].id
       value: 2475ebe7-9f7a-4b71-bb2d-926da2532a28
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
-      propertyPath: data.graphs.Array.data[1].nodes.Array.data[15].id
+      propertyPath: data.graphs.Array.data[1].nodes.Array.data[14].id
       value: 1dceed1d-4455-4f85-8be6-2d1b2458f768
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
-      propertyPath: data.graphs.Array.data[1].nodes.Array.data[16].id
+      propertyPath: data.graphs.Array.data[1].nodes.Array.data[15].id
       value: 18cba734-d611-4953-ab67-cecfd82085a5
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
-      propertyPath: data.graphs.Array.data[1].nodes.Array.data[17].id
+      propertyPath: data.graphs.Array.data[1].nodes.Array.data[16].id
       value: 15463449-7e4d-4297-9c19-0cab86fa53ae
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
-      propertyPath: data.graphs.Array.data[1].nodes.Array.data[18].id
+      propertyPath: data.graphs.Array.data[1].nodes.Array.data[17].id
       value: d8fcb52e-1bce-449e-ae46-a29343b0e00b
+      objectReference: {fileID: 0}
+    - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
+      propertyPath: data.graphs.Array.data[1].nodes.Array.data[18].id
+      value: 0199be31-4c00-4097-a36c-d0fc0d862b80
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: managedReferences[8148621491124830235].subgraphId
@@ -2578,67 +2590,67 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: data.graphs.Array.data[1].nodes.Array.data[11].name
-      value: Evaluar Estado
-      objectReference: {fileID: 0}
-    - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
-      propertyPath: data.graphs.Array.data[1].nodes.Array.data[11].node
-      value: 8148621491124830228
-      objectReference: {fileID: 0}
-    - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
-      propertyPath: data.graphs.Array.data[1].nodes.Array.data[12].name
       value: Curarse
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
-      propertyPath: data.graphs.Array.data[1].nodes.Array.data[12].node
+      propertyPath: data.graphs.Array.data[1].nodes.Array.data[11].node
       value: 8148621491124830229
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
-      propertyPath: data.graphs.Array.data[1].nodes.Array.data[13].name
+      propertyPath: data.graphs.Array.data[1].nodes.Array.data[12].name
       value: Pedir Refuerzos
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
-      propertyPath: data.graphs.Array.data[1].nodes.Array.data[13].node
+      propertyPath: data.graphs.Array.data[1].nodes.Array.data[12].node
       value: 8148621491124830230
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
-      propertyPath: data.graphs.Array.data[1].nodes.Array.data[14].name
+      propertyPath: data.graphs.Array.data[1].nodes.Array.data[13].name
       value: Evaluar amenaza
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
-      propertyPath: data.graphs.Array.data[1].nodes.Array.data[14].node
+      propertyPath: data.graphs.Array.data[1].nodes.Array.data[13].node
       value: 8148621491124830232
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
-      propertyPath: data.graphs.Array.data[1].nodes.Array.data[15].name
+      propertyPath: data.graphs.Array.data[1].nodes.Array.data[14].name
       value: Evaluar Estado
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
-      propertyPath: data.graphs.Array.data[1].nodes.Array.data[15].node
+      propertyPath: data.graphs.Array.data[1].nodes.Array.data[14].node
       value: 8148621541506547715
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
-      propertyPath: data.graphs.Array.data[1].nodes.Array.data[16].name
+      propertyPath: data.graphs.Array.data[1].nodes.Array.data[15].name
       value: Attack sequence
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
-      propertyPath: data.graphs.Array.data[1].nodes.Array.data[16].node
+      propertyPath: data.graphs.Array.data[1].nodes.Array.data[15].node
       value: 8148621541506547718
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
-      propertyPath: data.graphs.Array.data[1].nodes.Array.data[17].name
+      propertyPath: data.graphs.Array.data[1].nodes.Array.data[16].name
       value: Choose attack type
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
-      propertyPath: data.graphs.Array.data[1].nodes.Array.data[17].node
+      propertyPath: data.graphs.Array.data[1].nodes.Array.data[16].node
       value: 8148621541506547719
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
-      propertyPath: data.graphs.Array.data[1].nodes.Array.data[18].name
+      propertyPath: data.graphs.Array.data[1].nodes.Array.data[17].name
       value: Chase
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
-      propertyPath: data.graphs.Array.data[1].nodes.Array.data[18].node
+      propertyPath: data.graphs.Array.data[1].nodes.Array.data[17].node
       value: 8148621541506547720
+      objectReference: {fileID: 0}
+    - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
+      propertyPath: data.graphs.Array.data[1].nodes.Array.data[18].name
+      value: Evaluar estado
+      objectReference: {fileID: 0}
+    - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
+      propertyPath: data.graphs.Array.data[1].nodes.Array.data[18].node
+      value: 8148621559079370753
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: managedReferences[7328930099488358402].TargetStatus
@@ -2721,6 +2733,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
+      propertyPath: managedReferences[8148621559079370752].stop.methodName
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
+      propertyPath: managedReferences[8148621559079370754].init.methodName
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: managedReferences[8148621491124830235].InterruptOptions
       value: 2
       objectReference: {fileID: 0}
@@ -2790,6 +2810,26 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: managedReferences[8148621541506547722].start.methodName
+      value: Chase
+      objectReference: {fileID: 0}
+    - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
+      propertyPath: managedReferences[8148621559079370752].pause.methodName
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
+      propertyPath: managedReferences[8148621559079370752].start.methodName
+      value: Flee
+      objectReference: {fileID: 0}
+    - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
+      propertyPath: managedReferences[8148621559079370754].check.methodName
+      value: CheckHealth
+      objectReference: {fileID: 0}
+    - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
+      propertyPath: managedReferences[8148621559079370754].pause.methodName
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
+      propertyPath: managedReferences[8148621559079370754].reset.methodName
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
@@ -2990,7 +3030,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: managedReferences[8148621541506547722].update.methodName
-      value: Chase
+      value: PathStatus
+      objectReference: {fileID: 0}
+    - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
+      propertyPath: managedReferences[8148621559079370752].update.methodName
+      value: PathStatus
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: data.graphs.Array.data[1].nodes.Array.data[10].position.x
@@ -3002,67 +3046,67 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: data.graphs.Array.data[1].nodes.Array.data[11].position.x
-      value: 741
+      value: 889
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: data.graphs.Array.data[1].nodes.Array.data[11].position.y
-      value: 536
+      value: 711
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: data.graphs.Array.data[1].nodes.Array.data[12].position.x
-      value: 1003
-      objectReference: {fileID: 0}
-    - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
-      propertyPath: data.graphs.Array.data[1].nodes.Array.data[12].position.y
-      value: 561
-      objectReference: {fileID: 0}
-    - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
-      propertyPath: data.graphs.Array.data[1].nodes.Array.data[13].position.x
       value: 1273
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
-      propertyPath: data.graphs.Array.data[1].nodes.Array.data[13].position.y
+      propertyPath: data.graphs.Array.data[1].nodes.Array.data[12].position.y
       value: 544
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
-      propertyPath: data.graphs.Array.data[1].nodes.Array.data[14].position.x
+      propertyPath: data.graphs.Array.data[1].nodes.Array.data[13].position.x
       value: 495
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
-      propertyPath: data.graphs.Array.data[1].nodes.Array.data[14].position.y
+      propertyPath: data.graphs.Array.data[1].nodes.Array.data[13].position.y
       value: 881
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
-      propertyPath: data.graphs.Array.data[1].nodes.Array.data[15].position.x
+      propertyPath: data.graphs.Array.data[1].nodes.Array.data[14].position.x
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
-      propertyPath: data.graphs.Array.data[1].nodes.Array.data[15].position.y
+      propertyPath: data.graphs.Array.data[1].nodes.Array.data[14].position.y
       value: 695
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
-      propertyPath: data.graphs.Array.data[1].nodes.Array.data[16].position.x
+      propertyPath: data.graphs.Array.data[1].nodes.Array.data[15].position.x
       value: 356
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
-      propertyPath: data.graphs.Array.data[1].nodes.Array.data[16].position.y
+      propertyPath: data.graphs.Array.data[1].nodes.Array.data[15].position.y
       value: 552
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
-      propertyPath: data.graphs.Array.data[1].nodes.Array.data[17].position.x
+      propertyPath: data.graphs.Array.data[1].nodes.Array.data[16].position.x
       value: 595
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
-      propertyPath: data.graphs.Array.data[1].nodes.Array.data[17].position.y
+      propertyPath: data.graphs.Array.data[1].nodes.Array.data[16].position.y
       value: 715
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
-      propertyPath: data.graphs.Array.data[1].nodes.Array.data[18].position.x
+      propertyPath: data.graphs.Array.data[1].nodes.Array.data[17].position.x
       value: 305
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
-      propertyPath: data.graphs.Array.data[1].nodes.Array.data[18].position.y
+      propertyPath: data.graphs.Array.data[1].nodes.Array.data[17].position.y
       value: 722
+      objectReference: {fileID: 0}
+    - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
+      propertyPath: data.graphs.Array.data[1].nodes.Array.data[18].position.x
+      value: 889
+      objectReference: {fileID: 0}
+    - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
+      propertyPath: data.graphs.Array.data[1].nodes.Array.data[18].position.y
+      value: 549
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: managedReferences[8148621491124830275].init.componentName
@@ -3110,6 +3154,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: managedReferences[8148621541506547722].unpause.methodName
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
+      propertyPath: managedReferences[8148621559079370752].stop.componentName
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
+      propertyPath: managedReferences[8148621559079370752].unpause.methodName
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
+      propertyPath: managedReferences[8148621559079370754].init.componentName
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
+      propertyPath: managedReferences[8148621559079370754].unpause.methodName
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
@@ -3178,6 +3238,26 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: managedReferences[8148621541506547722].start.componentName
+      value: PoliceBehaviour
+      objectReference: {fileID: 0}
+    - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
+      propertyPath: managedReferences[8148621559079370752].pause.componentName
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
+      propertyPath: managedReferences[8148621559079370752].start.componentName
+      value: PoliceBehaviour
+      objectReference: {fileID: 0}
+    - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
+      propertyPath: managedReferences[8148621559079370754].check.componentName
+      value: PoliceBehaviour
+      objectReference: {fileID: 0}
+    - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
+      propertyPath: managedReferences[8148621559079370754].pause.componentName
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
+      propertyPath: managedReferences[8148621559079370754].reset.componentName
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
@@ -3229,6 +3309,10 @@ PrefabInstance:
       value: PoliceBehaviour
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
+      propertyPath: managedReferences[8148621559079370752].update.componentName
+      value: PoliceBehaviour
+      objectReference: {fileID: 0}
+    - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: managedReferences[8148621491124830275].unpause.componentName
       value: 
       objectReference: {fileID: 0}
@@ -3250,6 +3334,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: managedReferences[8148621541506547722].unpause.componentName
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
+      propertyPath: managedReferences[8148621559079370752].unpause.componentName
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
+      propertyPath: managedReferences[8148621559079370754].unpause.componentName
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
@@ -3306,7 +3398,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: data.graphs.Array.data[1].nodes.Array.data[9].childIds.Array.size
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: data.graphs.Array.data[0].nodes.Array.data[0].parentIds.Array.size
@@ -3342,7 +3434,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: data.graphs.Array.data[1].nodes.Array.data[13].childIds.Array.size
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: data.graphs.Array.data[1].nodes.Array.data[14].childIds.Array.size
@@ -3350,7 +3442,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: data.graphs.Array.data[1].nodes.Array.data[15].childIds.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: data.graphs.Array.data[1].nodes.Array.data[16].childIds.Array.size
@@ -3358,7 +3450,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: data.graphs.Array.data[1].nodes.Array.data[17].childIds.Array.size
-      value: 2
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
+      propertyPath: data.graphs.Array.data[1].nodes.Array.data[18].childIds.Array.size
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: data.graphs.Array.data[1].nodes.Array.data[1].parentIds.Array.size
@@ -3534,7 +3630,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: data.graphs.Array.data[1].nodes.Array.data[15].references.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: data.graphs.Array.data[1].nodes.Array.data[16].references.Array.size
@@ -3542,7 +3638,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: data.graphs.Array.data[1].nodes.Array.data[17].references.Array.size
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: data.graphs.Array.data[1].nodes.Array.data[18].references.Array.size
@@ -3602,11 +3698,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: data.graphs.Array.data[1].nodes.Array.data[9].childIds.Array.data[0]
-      value: eb153273-0504-4238-a802-1456396b4aee
+      value: 0199be31-4c00-4097-a36c-d0fc0d862b80
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: data.graphs.Array.data[1].nodes.Array.data[9].childIds.Array.data[1]
-      value: 3c21c10e-74f4-4438-8019-4467e7e027a2
+      value: e1140d89-95e5-48ee-b108-cdc36512549a
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: data.graphs.Array.data[1].nodes.Array.data[9].childIds.Array.data[2]
@@ -3678,7 +3774,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: data.graphs.Array.data[1].nodes.Array.data[13].childIds.Array.data[0]
-      value: eb153273-0504-4238-a802-1456396b4aee
+      value: 7b8c3b66-1d9c-4d12-bc9a-2c63b7e9d152
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: data.graphs.Array.data[1].nodes.Array.data[13].childIds.Array.data[1]
@@ -3690,19 +3786,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: data.graphs.Array.data[1].nodes.Array.data[14].childIds.Array.data[0]
-      value: 7b8c3b66-1d9c-4d12-bc9a-2c63b7e9d152
-      objectReference: {fileID: 0}
-    - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
-      propertyPath: data.graphs.Array.data[1].nodes.Array.data[15].childIds.Array.data[0]
       value: 05d128f6-1530-49f1-a6e7-51c413a20960
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
-      propertyPath: data.graphs.Array.data[1].nodes.Array.data[16].childIds.Array.data[0]
+      propertyPath: data.graphs.Array.data[1].nodes.Array.data[15].childIds.Array.data[0]
       value: d8fcb52e-1bce-449e-ae46-a29343b0e00b
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
-      propertyPath: data.graphs.Array.data[1].nodes.Array.data[16].childIds.Array.data[1]
+      propertyPath: data.graphs.Array.data[1].nodes.Array.data[15].childIds.Array.data[1]
       value: 15463449-7e4d-4297-9c19-0cab86fa53ae
+      objectReference: {fileID: 0}
+    - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
+      propertyPath: data.graphs.Array.data[1].nodes.Array.data[16].childIds.Array.data[0]
+      value: 2475ebe7-9f7a-4b71-bb2d-926da2532a28
+      objectReference: {fileID: 0}
+    - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
+      propertyPath: data.graphs.Array.data[1].nodes.Array.data[16].childIds.Array.data[1]
+      value: 2965a337-6514-43cd-b6ee-1e567ceecc31
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: data.graphs.Array.data[1].nodes.Array.data[17].childIds.Array.data[0]
@@ -3711,6 +3811,10 @@ PrefabInstance:
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: data.graphs.Array.data[1].nodes.Array.data[17].childIds.Array.data[1]
       value: 2965a337-6514-43cd-b6ee-1e567ceecc31
+      objectReference: {fileID: 0}
+    - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
+      propertyPath: data.graphs.Array.data[1].nodes.Array.data[18].childIds.Array.data[0]
+      value: 3c21c10e-74f4-4438-8019-4467e7e027a2
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: data.graphs.Array.data[1].nodes.Array.data[1].parentIds.Array.data[0]
@@ -3754,7 +3858,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: data.graphs.Array.data[1].nodes.Array.data[11].parentIds.Array.data[0]
-      value: e03c6ac6-dc4c-48ee-979a-e865d89e5478
+      value: 0199be31-4c00-4097-a36c-d0fc0d862b80
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: data.graphs.Array.data[1].nodes.Array.data[12].parentIds.Array.data[0]
@@ -3762,19 +3866,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: data.graphs.Array.data[1].nodes.Array.data[13].parentIds.Array.data[0]
-      value: e03c6ac6-dc4c-48ee-979a-e865d89e5478
-      objectReference: {fileID: 0}
-    - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
-      propertyPath: data.graphs.Array.data[1].nodes.Array.data[14].parentIds.Array.data[0]
       value: 15463449-7e4d-4297-9c19-0cab86fa53ae
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
-      propertyPath: data.graphs.Array.data[1].nodes.Array.data[15].parentIds.Array.data[0]
+      propertyPath: data.graphs.Array.data[1].nodes.Array.data[14].parentIds.Array.data[0]
       value: 497726e6-c61a-4cac-95a1-6d69ae86a4bd
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
-      propertyPath: data.graphs.Array.data[1].nodes.Array.data[16].parentIds.Array.data[0]
+      propertyPath: data.graphs.Array.data[1].nodes.Array.data[15].parentIds.Array.data[0]
       value: 481e5286-b9d1-47b1-b2e9-2449eacd1d3c
+      objectReference: {fileID: 0}
+    - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
+      propertyPath: data.graphs.Array.data[1].nodes.Array.data[16].parentIds.Array.data[0]
+      value: 18cba734-d611-4953-ab67-cecfd82085a5
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: data.graphs.Array.data[1].nodes.Array.data[17].parentIds.Array.data[0]
@@ -3782,7 +3886,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: data.graphs.Array.data[1].nodes.Array.data[18].parentIds.Array.data[0]
-      value: 18cba734-d611-4953-ab67-cecfd82085a5
+      value: e03c6ac6-dc4c-48ee-979a-e865d89e5478
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: data.graphs.Array.data[0].nodes.Array.data[4].references.Array.data[0].value
@@ -3826,7 +3930,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: data.graphs.Array.data[1].nodes.Array.data[6].references.Array.data[0].value
-      value: 8148621491124830268
+      value: 8148621559079370752
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: data.graphs.Array.data[1].nodes.Array.data[7].references.Array.data[0].value
@@ -3846,19 +3950,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: data.graphs.Array.data[1].nodes.Array.data[11].references.Array.data[0].value
-      value: 8148621491124830271
-      objectReference: {fileID: 0}
-    - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
-      propertyPath: data.graphs.Array.data[1].nodes.Array.data[12].references.Array.data[0].value
       value: 8148621491124830272
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
-      propertyPath: data.graphs.Array.data[1].nodes.Array.data[13].references.Array.data[0].value
+      propertyPath: data.graphs.Array.data[1].nodes.Array.data[12].references.Array.data[0].value
       value: 8148621491124830273
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
-      propertyPath: data.graphs.Array.data[1].nodes.Array.data[14].references.Array.data[0].value
+      propertyPath: data.graphs.Array.data[1].nodes.Array.data[13].references.Array.data[0].value
       value: 8148621491124830275
+      objectReference: {fileID: 0}
+    - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
+      propertyPath: data.graphs.Array.data[1].nodes.Array.data[14].references.Array.data[0].value
+      value: 8148621541506547716
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: data.graphs.Array.data[1].nodes.Array.data[15].references.Array.data[0].value
@@ -3870,11 +3974,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: data.graphs.Array.data[1].nodes.Array.data[17].references.Array.data[0].value
-      value: -2
+      value: 8148621541506547722
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: data.graphs.Array.data[1].nodes.Array.data[18].references.Array.data[0].value
-      value: 8148621541506547722
+      value: 8148621559079370754
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: data.graphs.Array.data[0].nodes.Array.data[4].references.Array.data[0].fieldName
@@ -4031,11 +4135,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: data.graphs.Array.data[1].nodes.Array.data[13].references.Array.data[0].fieldName
-      value: Action
+      value: Perception
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: data.graphs.Array.data[1].nodes.Array.data[13].references.Array.data[0].fieldType
-      value: BehaviourAPI.Core.Actions.Action, BehaviourAPI.Core, Version=0.0.0.0,
+      value: BehaviourAPI.Core.Perceptions.Perception, BehaviourAPI.Core, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
@@ -4076,11 +4180,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: data.graphs.Array.data[1].nodes.Array.data[18].references.Array.data[0].fieldName
-      value: Action
+      value: Perception
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: data.graphs.Array.data[1].nodes.Array.data[18].references.Array.data[0].fieldType
-      value: BehaviourAPI.Core.Actions.Action, BehaviourAPI.Core, Version=0.0.0.0,
+      value: BehaviourAPI.Core.Perceptions.Perception, BehaviourAPI.Core, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
       objectReference: {fileID: 0}
     - target: {fileID: 8191866860420488155, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
