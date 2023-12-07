@@ -141,7 +141,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!64 &39905514
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -2466,6 +2466,10 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: d1f2d6e9e205dcc4d8507558f69a249f, type: 2}
+    - target: {fileID: 747004314318259624, guid: 4e60afab256ea344c88334f5ebcee71d, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 04595e65fe060b24c8587f4f6f78c22b, type: 2}
     - target: {fileID: 891211553729815967, guid: 4e60afab256ea344c88334f5ebcee71d, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -2590,6 +2594,10 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: d1f2d6e9e205dcc4d8507558f69a249f, type: 2}
+    - target: {fileID: 7897376351746083869, guid: 4e60afab256ea344c88334f5ebcee71d, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: f8932188b3ddb264f8f929c3290b5b3d, type: 2}
     - target: {fileID: 8149176850651152742, guid: 4e60afab256ea344c88334f5ebcee71d, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
