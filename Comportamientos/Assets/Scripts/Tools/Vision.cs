@@ -12,6 +12,8 @@ public class Vision : MonoBehaviour
     private void Awake()
     {
         VisibleTriggers = new List<Transform>();
+        
+
     }
 
     private void OnTriggerStay(Collider other)
@@ -96,6 +98,17 @@ public class Vision : MonoBehaviour
         return false;
     }
 
-    
+    public bool IsWatchingGhost()
+    {
+        foreach (var trigger in VisibleTriggers)
+        {
+            var ghost = trigger.GetComponent<GhostBehaviour>();
+            if (ghost != null)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 
 }

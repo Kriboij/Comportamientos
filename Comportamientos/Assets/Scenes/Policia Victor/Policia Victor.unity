@@ -226,7 +226,7 @@ Transform:
   m_GameObject: {fileID: 91772105}
   serializedVersion: 2
   m_LocalRotation: {x: -0.000000037697287, y: 0.9486833, z: -0.31622776, w: -0.00000011309187}
-  m_LocalPosition: {x: 21.200003, y: 6.036, z: 57}
+  m_LocalPosition: {x: 21.820002, y: 6.036, z: 72.23}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1188,6 +1188,442 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Body: {fileID: 1191239351}
+--- !u!1 &1403662450 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 856601670117699726, guid: b14953694d54eea4eb66f453e525024c, type: 3}
+  m_PrefabInstance: {fileID: 1673672444}
+  m_PrefabAsset: {fileID: 0}
+--- !u!195 &1403662452
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1403662450}
+  m_Enabled: 1
+  m_AgentTypeID: -1372625422
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0.2
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 1.8
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
+--- !u!4 &1403662454 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 856601670117272814, guid: b14953694d54eea4eb66f453e525024c, type: 3}
+  m_PrefabInstance: {fileID: 1673672444}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1403662455
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1403662450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 742791fac9669ad4ea9c88f9cd226812, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  executeOnLoop: 0
+  interruptOptions: 0
+  _eventHandler:
+    debugStatusChanges: 0
+    identifier: 
+  data:
+    graphs:
+    - name: Beast
+      id: 8c8fe66a-1df5-41ab-a83d-13b4aedc5c94
+      graph:
+        rid: 8146611703809310740
+      nodes:
+      - name: Hunt
+        id: 820c5d11-219c-476e-acfc-f5fef80ac314
+        position: {x: 624, y: 351}
+        node:
+          rid: 8146611703809310741
+        references:
+        - fieldName: Action
+          value:
+            rid: 8146611703809310752
+          fieldType: BehaviourAPI.Core.Actions.Action, BehaviourAPI.Core, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+        parentIds:
+        - ed0c5b08-4ed3-4291-885a-ee0cef4c6599
+        - 467be495-08c6-4277-9399-c0aaa8f27dc7
+        childIds:
+        - 11fec039-2df1-45b5-b1a7-b54704668cce
+        - ecc96ed1-be1a-4483-8f9f-445e97c3aabf
+      - name: Combat
+        id: d8fe952b-c310-4148-9e21-c927d073d709
+        position: {x: 1255, y: 335}
+        node:
+          rid: 8146611703809310742
+        references:
+        - fieldName: Action
+          value:
+            rid: 8146611703809310758
+          fieldType: BehaviourAPI.Core.Actions.Action, BehaviourAPI.Core, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+        parentIds:
+        - 11fec039-2df1-45b5-b1a7-b54704668cce
+        childIds:
+        - cb02e4ce-c7e5-415f-a7fc-e0f3a3be8bbd
+        - 467be495-08c6-4277-9399-c0aaa8f27dc7
+      - name: Flee
+        id: d6454214-cd24-4fec-9917-243641010f4b
+        position: {x: 923, y: 121}
+        node:
+          rid: 8146611703809310743
+        references:
+        - fieldName: Action
+          value:
+            rid: 8146611703809310757
+          fieldType: BehaviourAPI.Core.Actions.Action, BehaviourAPI.Core, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+        parentIds:
+        - ecc96ed1-be1a-4483-8f9f-445e97c3aabf
+        - cb02e4ce-c7e5-415f-a7fc-e0f3a3be8bbd
+        childIds:
+        - 10466d19-56e5-460c-8439-92bb77848883
+      - name: Rest
+        id: 482dee03-9ea4-4949-acdf-9f5cdcef966a
+        position: {x: 343, y: -149}
+        node:
+          rid: 8146611703809310744
+        references:
+        - fieldName: Action
+          value:
+            rid: 8146611703809310751
+          fieldType: BehaviourAPI.Core.Actions.Action, BehaviourAPI.Core, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+        parentIds:
+        - 10466d19-56e5-460c-8439-92bb77848883
+        childIds:
+        - ed0c5b08-4ed3-4291-885a-ee0cef4c6599
+      - name: HuntToCombat
+        id: 11fec039-2df1-45b5-b1a7-b54704668cce
+        position: {x: 922, y: 313}
+        node:
+          rid: 8146611703809310745
+        references:
+        - fieldName: Perception
+          value:
+            rid: 8146611703809310746
+          fieldType: BehaviourAPI.Core.Perceptions.Perception, BehaviourAPI.Core,
+            Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        - fieldName: Action
+          value:
+            rid: -2
+          fieldType: BehaviourAPI.Core.Actions.Action, BehaviourAPI.Core, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+        parentIds:
+        - 820c5d11-219c-476e-acfc-f5fef80ac314
+        childIds:
+        - d8fe952b-c310-4148-9e21-c927d073d709
+      - name: HuntToFlee
+        id: ecc96ed1-be1a-4483-8f9f-445e97c3aabf
+        position: {x: 621, y: 122}
+        node:
+          rid: 8146611703809310747
+        references:
+        - fieldName: Perception
+          value:
+            rid: 8146611703809310748
+          fieldType: BehaviourAPI.Core.Perceptions.Perception, BehaviourAPI.Core,
+            Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        - fieldName: Action
+          value:
+            rid: -2
+          fieldType: BehaviourAPI.Core.Actions.Action, BehaviourAPI.Core, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+        parentIds:
+        - 820c5d11-219c-476e-acfc-f5fef80ac314
+        childIds:
+        - d6454214-cd24-4fec-9917-243641010f4b
+      - name: FleeToRest
+        id: 10466d19-56e5-460c-8439-92bb77848883
+        position: {x: 763, y: -86}
+        node:
+          rid: 8146611703809310749
+        references:
+        - fieldName: Perception
+          value:
+            rid: 8146611703809310750
+          fieldType: BehaviourAPI.Core.Perceptions.Perception, BehaviourAPI.Core,
+            Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        - fieldName: Action
+          value:
+            rid: -2
+          fieldType: BehaviourAPI.Core.Actions.Action, BehaviourAPI.Core, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+        parentIds:
+        - d6454214-cd24-4fec-9917-243641010f4b
+        childIds:
+        - 482dee03-9ea4-4949-acdf-9f5cdcef966a
+      - name: RestToHunt
+        id: ed0c5b08-4ed3-4291-885a-ee0cef4c6599
+        position: {x: 316, y: 183}
+        node:
+          rid: 8146611703809310753
+        references:
+        - fieldName: Perception
+          value:
+            rid: 8146611703809310761
+          fieldType: BehaviourAPI.Core.Perceptions.Perception, BehaviourAPI.Core,
+            Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        - fieldName: Action
+          value:
+            rid: -2
+          fieldType: BehaviourAPI.Core.Actions.Action, BehaviourAPI.Core, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+        parentIds:
+        - 482dee03-9ea4-4949-acdf-9f5cdcef966a
+        childIds:
+        - 820c5d11-219c-476e-acfc-f5fef80ac314
+      - name: CombatToFlee
+        id: cb02e4ce-c7e5-415f-a7fc-e0f3a3be8bbd
+        position: {x: 1253, y: 132}
+        node:
+          rid: 8146611703809310755
+        references:
+        - fieldName: Perception
+          value:
+            rid: 8146611703809310756
+          fieldType: BehaviourAPI.Core.Perceptions.Perception, BehaviourAPI.Core,
+            Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        - fieldName: Action
+          value:
+            rid: -2
+          fieldType: BehaviourAPI.Core.Actions.Action, BehaviourAPI.Core, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+        parentIds:
+        - d8fe952b-c310-4148-9e21-c927d073d709
+        childIds:
+        - d6454214-cd24-4fec-9917-243641010f4b
+      - name: CombatToHunt
+        id: 467be495-08c6-4277-9399-c0aaa8f27dc7
+        position: {x: 948, y: 555}
+        node:
+          rid: 8146611703809310759
+        references:
+        - fieldName: Perception
+          value:
+            rid: 8146611703809310760
+          fieldType: BehaviourAPI.Core.Perceptions.Perception, BehaviourAPI.Core,
+            Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        - fieldName: Action
+          value:
+            rid: -2
+          fieldType: BehaviourAPI.Core.Actions.Action, BehaviourAPI.Core, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+        parentIds:
+        - d8fe952b-c310-4148-9e21-c927d073d709
+        childIds:
+        - 820c5d11-219c-476e-acfc-f5fef80ac314
+    pushPerceptions: []
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 8146611703809310740
+      type: {class: FSM, ns: BehaviourAPI.StateMachines, asm: BehaviourAPI.StateMachines}
+      data: 
+    - rid: 8146611703809310741
+      type: {class: State, ns: BehaviourAPI.StateMachines, asm: BehaviourAPI.StateMachines}
+      data: 
+    - rid: 8146611703809310742
+      type: {class: State, ns: BehaviourAPI.StateMachines, asm: BehaviourAPI.StateMachines}
+      data: 
+    - rid: 8146611703809310743
+      type: {class: State, ns: BehaviourAPI.StateMachines, asm: BehaviourAPI.StateMachines}
+      data: 
+    - rid: 8146611703809310744
+      type: {class: State, ns: BehaviourAPI.StateMachines, asm: BehaviourAPI.StateMachines}
+      data: 
+    - rid: 8146611703809310745
+      type: {class: StateTransition, ns: BehaviourAPI.StateMachines, asm: BehaviourAPI.StateMachines}
+      data:
+        StatusFlags: -1
+    - rid: 8146611703809310746
+      type: {class: CustomPerception, ns: BehaviourAPI.UnityToolkit.GUIDesigner.Framework, asm: BehaviourAPI.UnityToolkit.GUIDesigner.Framework}
+      data:
+        init:
+          componentName: 
+          methodName: 
+        check:
+          componentName: vision
+          methodName: IsWatchingHuman
+        reset:
+          componentName: 
+          methodName: 
+        pause:
+          componentName: 
+          methodName: 
+        unpause:
+          componentName: 
+          methodName: 
+    - rid: 8146611703809310747
+      type: {class: StateTransition, ns: BehaviourAPI.StateMachines, asm: BehaviourAPI.StateMachines}
+      data:
+        StatusFlags: -1
+    - rid: 8146611703809310748
+      type: {class: CustomPerception, ns: BehaviourAPI.UnityToolkit.GUIDesigner.Framework, asm: BehaviourAPI.UnityToolkit.GUIDesigner.Framework}
+      data:
+        init:
+          componentName: 
+          methodName: 
+        check:
+          componentName: vision
+          methodName: IsWatchingGhost
+        reset:
+          componentName: 
+          methodName: 
+        pause:
+          componentName: 
+          methodName: 
+        unpause:
+          componentName: 
+          methodName: 
+    - rid: 8146611703809310749
+      type: {class: StateTransition, ns: BehaviourAPI.StateMachines, asm: BehaviourAPI.StateMachines}
+      data:
+        StatusFlags: -1
+    - rid: 8146611703809310750
+      type: {class: CustomPerception, ns: BehaviourAPI.UnityToolkit.GUIDesigner.Framework, asm: BehaviourAPI.UnityToolkit.GUIDesigner.Framework}
+      data:
+        init:
+          componentName: 
+          methodName: 
+        check:
+          componentName: BeastBehaviour1
+          methodName: IsPathComplete
+        reset:
+          componentName: 
+          methodName: 
+        pause:
+          componentName: 
+          methodName: 
+        unpause:
+          componentName: 
+          methodName: 
+    - rid: 8146611703809310751
+      type: {class: SimpleAction, ns: BehaviourAPI.UnityToolkit.GUIDesigner.Framework, asm: BehaviourAPI.UnityToolkit.GUIDesigner.Framework}
+      data:
+        method:
+          componentName: BeastBehaviour1
+          methodName: Rest
+    - rid: 8146611703809310752
+      type: {class: SimpleAction, ns: BehaviourAPI.UnityToolkit.GUIDesigner.Framework, asm: BehaviourAPI.UnityToolkit.GUIDesigner.Framework}
+      data:
+        method:
+          componentName: BeastBehaviour1
+          methodName: Hunt
+    - rid: 8146611703809310753
+      type: {class: StateTransition, ns: BehaviourAPI.StateMachines, asm: BehaviourAPI.StateMachines}
+      data:
+        StatusFlags: -1
+    - rid: 8146611703809310755
+      type: {class: StateTransition, ns: BehaviourAPI.StateMachines, asm: BehaviourAPI.StateMachines}
+      data:
+        StatusFlags: -1
+    - rid: 8146611703809310756
+      type: {class: CustomPerception, ns: BehaviourAPI.UnityToolkit.GUIDesigner.Framework, asm: BehaviourAPI.UnityToolkit.GUIDesigner.Framework}
+      data:
+        init:
+          componentName: 
+          methodName: 
+        check:
+          componentName: BeastBehaviour1
+          methodName: CheckDeadPolice
+        reset:
+          componentName: 
+          methodName: 
+        pause:
+          componentName: 
+          methodName: 
+        unpause:
+          componentName: 
+          methodName: 
+    - rid: 8146611703809310757
+      type: {class: SimpleAction, ns: BehaviourAPI.UnityToolkit.GUIDesigner.Framework, asm: BehaviourAPI.UnityToolkit.GUIDesigner.Framework}
+      data:
+        method:
+          componentName: BeastBehaviour1
+          methodName: Flee
+    - rid: 8146611703809310758
+      type: {class: SimpleAction, ns: BehaviourAPI.UnityToolkit.GUIDesigner.Framework, asm: BehaviourAPI.UnityToolkit.GUIDesigner.Framework}
+      data:
+        method:
+          componentName: BeastBehaviour1
+          methodName: Combat
+    - rid: 8146611703809310759
+      type: {class: StateTransition, ns: BehaviourAPI.StateMachines, asm: BehaviourAPI.StateMachines}
+      data:
+        StatusFlags: -1
+    - rid: 8146611703809310760
+      type: {class: CustomPerception, ns: BehaviourAPI.UnityToolkit.GUIDesigner.Framework, asm: BehaviourAPI.UnityToolkit.GUIDesigner.Framework}
+      data:
+        init:
+          componentName: 
+          methodName: 
+        check:
+          componentName: BeastBehaviour1
+          methodName: CheckDeadExplorer
+        reset:
+          componentName: 
+          methodName: 
+        pause:
+          componentName: 
+          methodName: 
+        unpause:
+          componentName: 
+          methodName: 
+    - rid: 8146611703809310761
+      type: {class: CustomPerception, ns: BehaviourAPI.UnityToolkit.GUIDesigner.Framework, asm: BehaviourAPI.UnityToolkit.GUIDesigner.Framework}
+      data:
+        init:
+          componentName: 
+          methodName: 
+        check:
+          componentName: BeastBehaviour1
+          methodName: CheckHealth
+        reset:
+          componentName: 
+          methodName: 
+        pause:
+          componentName: 
+          methodName: 
+        unpause:
+          componentName: 
+          methodName: 
+--- !u!114 &1403662456
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1403662450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 586f17336e6d42e4e81a43d007c50f11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fullHealth: 1
+  regen: 20
+  fleeTime: 0
+  huntPositions: []
+  RestPositions: []
+  thinkingCloudBehaviour: {fileID: 1548398007}
+  agent: {fileID: 1403662452}
 --- !u!1 &1431222113
 GameObject:
   m_ObjectHideFlags: 0
@@ -1449,6 +1885,293 @@ MonoBehaviour:
   maxHealth: 100
   currentHealth: 100
   isAlive: 1
+--- !u!1001 &1548398005
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1403662454}
+    m_Modifications:
+    - target: {fileID: 2157906868423566378, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5604032533695204794, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7246430868342017469, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: m_Name
+      value: 'Thinking bubble '
+      objectReference: {fileID: 0}
+    - target: {fileID: 7246430868342017469, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7930735414412468364, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: m_Pivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7930735414412468364, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: m_Pivot.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7930735414412468364, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7930735414412468364, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7930735414412468364, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7930735414412468364, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7930735414412468364, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 625
+      objectReference: {fileID: 0}
+    - target: {fileID: 7930735414412468364, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 352
+      objectReference: {fileID: 0}
+    - target: {fileID: 7930735414412468364, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7930735414412468364, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7930735414412468364, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.95
+      objectReference: {fileID: 0}
+    - target: {fileID: 7930735414412468364, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.15439393
+      objectReference: {fileID: 0}
+    - target: {fileID: 7930735414412468364, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7930735414412468364, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.9880094
+      objectReference: {fileID: 0}
+    - target: {fileID: 7930735414412468364, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7930735414412468364, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7930735414412468364, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 2.676002
+      objectReference: {fileID: 0}
+    - target: {fileID: 7930735414412468364, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7930735414412468364, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -162.237
+      objectReference: {fileID: 0}
+    - target: {fileID: 7930735414412468364, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+--- !u!224 &1548398006 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 7930735414412468364, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+  m_PrefabInstance: {fileID: 1548398005}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1548398007 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4754005276562797252, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+  m_PrefabInstance: {fileID: 1548398005}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dcddfdf77fe480249873fa145df2c373, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1001 &1635220698
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1403662454}
+    m_Modifications:
+    - target: {fileID: 146175438490608412, guid: e44ec23f5bb188a408d2aa61997f906c, type: 3}
+      propertyPath: sceneMask.m_Bits
+      value: 129
+      objectReference: {fileID: 0}
+    - target: {fileID: 1984359783185709323, guid: e44ec23f5bb188a408d2aa61997f906c, type: 3}
+      propertyPath: m_Size.x
+      value: 15.739737
+      objectReference: {fileID: 0}
+    - target: {fileID: 1984359783185709323, guid: e44ec23f5bb188a408d2aa61997f906c, type: 3}
+      propertyPath: m_Size.z
+      value: 8.414192
+      objectReference: {fileID: 0}
+    - target: {fileID: 1984359783185709323, guid: e44ec23f5bb188a408d2aa61997f906c, type: 3}
+      propertyPath: m_Center.x
+      value: 0.06679201
+      objectReference: {fileID: 0}
+    - target: {fileID: 1984359783185709323, guid: e44ec23f5bb188a408d2aa61997f906c, type: 3}
+      propertyPath: m_Center.y
+      value: 0.19
+      objectReference: {fileID: 0}
+    - target: {fileID: 1984359783185709323, guid: e44ec23f5bb188a408d2aa61997f906c, type: 3}
+      propertyPath: m_Center.z
+      value: 3.934865
+      objectReference: {fileID: 0}
+    - target: {fileID: 3993417645049658242, guid: e44ec23f5bb188a408d2aa61997f906c, type: 3}
+      propertyPath: Body
+      value: 
+      objectReference: {fileID: 1403662454}
+    - target: {fileID: 6554878334282041218, guid: e44ec23f5bb188a408d2aa61997f906c, type: 3}
+      propertyPath: m_Name
+      value: Vision
+      objectReference: {fileID: 0}
+    - target: {fileID: 8890598771315835198, guid: e44ec23f5bb188a408d2aa61997f906c, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8890598771315835198, guid: e44ec23f5bb188a408d2aa61997f906c, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.0000019073486
+      objectReference: {fileID: 0}
+    - target: {fileID: 8890598771315835198, guid: e44ec23f5bb188a408d2aa61997f906c, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 8890598771315835198, guid: e44ec23f5bb188a408d2aa61997f906c, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.999987
+      objectReference: {fileID: 0}
+    - target: {fileID: 8890598771315835198, guid: e44ec23f5bb188a408d2aa61997f906c, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8890598771315835198, guid: e44ec23f5bb188a408d2aa61997f906c, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.0050985822
+      objectReference: {fileID: 0}
+    - target: {fileID: 8890598771315835198, guid: e44ec23f5bb188a408d2aa61997f906c, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8890598771315835198, guid: e44ec23f5bb188a408d2aa61997f906c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8890598771315835198, guid: e44ec23f5bb188a408d2aa61997f906c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0.584
+      objectReference: {fileID: 0}
+    - target: {fileID: 8890598771315835198, guid: e44ec23f5bb188a408d2aa61997f906c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e44ec23f5bb188a408d2aa61997f906c, type: 3}
+--- !u!4 &1635220699 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8890598771315835198, guid: e44ec23f5bb188a408d2aa61997f906c, type: 3}
+  m_PrefabInstance: {fileID: 1635220698}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1673672444
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 856601670117272814, guid: b14953694d54eea4eb66f453e525024c, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 18.466024
+      objectReference: {fileID: 0}
+    - target: {fileID: 856601670117272814, guid: b14953694d54eea4eb66f453e525024c, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.0000019073486
+      objectReference: {fileID: 0}
+    - target: {fileID: 856601670117272814, guid: b14953694d54eea4eb66f453e525024c, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 59.91449
+      objectReference: {fileID: 0}
+    - target: {fileID: 856601670117272814, guid: b14953694d54eea4eb66f453e525024c, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.8433161
+      objectReference: {fileID: 0}
+    - target: {fileID: 856601670117272814, guid: b14953694d54eea4eb66f453e525024c, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 856601670117272814, guid: b14953694d54eea4eb66f453e525024c, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.5374179
+      objectReference: {fileID: 0}
+    - target: {fileID: 856601670117272814, guid: b14953694d54eea4eb66f453e525024c, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 856601670117272814, guid: b14953694d54eea4eb66f453e525024c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 856601670117272814, guid: b14953694d54eea4eb66f453e525024c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 65.016
+      objectReference: {fileID: 0}
+    - target: {fileID: 856601670117272814, guid: b14953694d54eea4eb66f453e525024c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 856601670117699726, guid: b14953694d54eea4eb66f453e525024c, type: 3}
+      propertyPath: m_Name
+      value: TT_demo_zombie
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 856601670117272814, guid: b14953694d54eea4eb66f453e525024c, type: 3}
+      insertIndex: 0
+      addedObject: {fileID: 1548398006}
+    - targetCorrespondingSourceObject: {fileID: 856601670117272814, guid: b14953694d54eea4eb66f453e525024c, type: 3}
+      insertIndex: 1
+      addedObject: {fileID: 1635220699}
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 856601670117699726, guid: b14953694d54eea4eb66f453e525024c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1403662452}
+    - targetCorrespondingSourceObject: {fileID: 856601670117699726, guid: b14953694d54eea4eb66f453e525024c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1403662455}
+    - targetCorrespondingSourceObject: {fileID: 856601670117699726, guid: b14953694d54eea4eb66f453e525024c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1403662456}
+  m_SourcePrefab: {fileID: 100100000, guid: b14953694d54eea4eb66f453e525024c, type: 3}
 --- !u!1 &1845865797
 GameObject:
   m_ObjectHideFlags: 0
@@ -2041,7 +2764,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7454986386063945197, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 21.2
+      value: 21.82
       objectReference: {fileID: 0}
     - target: {fileID: 7454986386063945197, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: m_LocalPosition.y
@@ -2049,7 +2772,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7454986386063945197, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 49
+      value: 64.23
       objectReference: {fileID: 0}
     - target: {fileID: 7454986386063945197, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: m_LocalRotation.w
@@ -3189,11 +3912,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: data.graphs.Array.data[0].nodes.Array.data[2].position.x
-      value: -172.77072
+      value: -158
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: data.graphs.Array.data[0].nodes.Array.data[2].position.y
-      value: 307.65424
+      value: 324
       objectReference: {fileID: 0}
     - target: {fileID: 8091112879484061807, guid: 478b8270f55a7cc408d77e10091e2143, type: 3}
       propertyPath: data.graphs.Array.data[0].nodes.Array.data[3].position.x
@@ -5128,3 +5851,4 @@ SceneRoots:
   - {fileID: 711709310}
   - {fileID: 1530965102}
   - {fileID: 851516158}
+  - {fileID: 1673672444}

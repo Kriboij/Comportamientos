@@ -11,7 +11,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 
-public class BeastBehaviour : MonoBehaviour
+public class BeastBehaviour1 : MonoBehaviour
 {
     FSM fsm;
     Vision vision;
@@ -54,63 +54,22 @@ public class BeastBehaviour : MonoBehaviour
     // Start is called before the first frame update
     private void Awake()
     {
-        
         agent = GetComponent<NavMeshAgent>();
         fsm = new FSM();
-
-        //estado cazar (empieza con este)
-        FunctionalAction huntingAction = new FunctionalAction(StartHunting, Hunt, null);
-        State hunting = fsm.CreateState(huntingAction);
-        
-        //Estado de ver presa (y percepcion de ella)
-        FunctionalAction watchPreyAction = new FunctionalAction(StartWatchPrey, WatchPrey, null);
-        ConditionPerception checkPrey = new ConditionPerception(null, IsWatchingPrey, null);
-        State watchPrey = fsm.CreateState(watchPreyAction);
-        fsm.CreateTransition(hunting, watchPrey, checkPrey, statusFlags: StatusFlags.Running);
-        
-        //Estado de ver fantasma (y percepcion de él)
-        FunctionalAction watchGhostAction = new FunctionalAction(StartWatchGhost, WatchGhost, null);
-        ConditionPerception checkGhost = new ConditionPerception(null, IsWatchingGhost, null);
-        State watchGhost = fsm.CreateState(watchGhostAction);
-        fsm.CreateTransition(hunting, watchGhost, checkGhost, statusFlags: StatusFlags.Running);
-        
-        //Estado de descansar
-        FunctionalAction restAction = new FunctionalAction(StartResting, Rest, null);
-        TimerPerception restTimer = new TimerPerception(restTime);
-        State resting = fsm.CreateState(restAction);
-        
-        //Estado de huida (transicion desde ver fantasma) FALTA LA CONDICION DE HUIDA QUE SERÍA ABATIR UN POLICIA 
-        FunctionalAction fleeAction = new FunctionalAction(StartFleeing, Flee, null);
-        TimerPerception fleeTimer = new TimerPerception(fleeTime);
-        State fleeing = fsm.CreateState(fleeAction);
-        fsm.CreateTransition(watchGhost, fleeing, fleeTimer, statusFlags: StatusFlags.Running);
-
-        //Estado de combate (transicion desde ver presa)
-        FunctionalAction combatAction = new FunctionalAction(StartCombating, Combat, null);
-        TimerPerception combatTimer = new TimerPerception(combatTime);
-        State combating = fsm.CreateState(combatAction);
-        fsm.CreateTransition(watchPrey, combating, combatTimer, statusFlags: StatusFlags.Running);
-        
-
-        //FALTA TRANSICion entre rest y empezar a cazar de nuevo 
-        //Seria si aparece un enemigo en un radio cercano O pasa c ierto tiempo
-        
-        //Transición entre combatir y cazar de nuevo (con explorador)
-        ConditionPerception checkDeadPrey = new ConditionPerception(null, CheckDeadExplorer, null);
-        fsm.CreateTransition(combating, hunting, checkDeadPrey, statusFlags: StatusFlags.Running);
-        
-        //Transición entre combate y huir (cuando mata a un policia)
-        ConditionPerception checkDeadRest = new ConditionPerception(null, CheckDeadPolice, null);
-        fsm.CreateTransition(combating, fleeing, checkDeadRest, statusFlags: StatusFlags.Running);
-        
-        
-        
-        fsm.SetEntryState(hunting);
-        fsm.Start();
     }
 
     private void Update()
     {
+        //cuando no haya lo d abajo
+        Debug.Log("Path pending: " + agent.pathPending);
+        
+        
+        Debug.Log("Remaining distance: " + agent.remainingDistance);
+        Debug.Log("Stopping distance: " + agent.stoppingDistance);
+        
+        //y 
+        Debug.Log("Velocidad del agente: " + agent.velocity.sqrMagnitude);
+        Debug.Log("HasPath: " + agent.hasPath);
         fsm.Update();
     }
     
@@ -118,15 +77,17 @@ public class BeastBehaviour : MonoBehaviour
 
     void StartHunting()
     {
-        agent.isStopped = false;
+        
     }
-    public Status Hunt()
+    public void Hunt()
     {
+        agent.isStopped = false;
+        agent.SetDestination(huntPositions[0].position);
         if (IsPathComplete())
         {
+            Debug.Log("Caminou completao, siguiendo ruta");
             ChangeHuntPoint(1);
         }
-        return Status.Running;
     }
 
     #endregion
@@ -138,15 +99,15 @@ public class BeastBehaviour : MonoBehaviour
         thinkingCloudBehaviour.UpdateCloud(4);
         agent.isStopped = true;
     }
-    public Status Rest()
+    public void Rest()
     {
+        Debug.Log("ZZZZ");
         if(EvaluarMoho()){
             while (fullHealth == false)
             {
                 health += regen;
             }
         }
-        return Status.Running;
     }
     #endregion
     
@@ -158,14 +119,14 @@ public class BeastBehaviour : MonoBehaviour
         agent.isStopped = false;
     } 
     
-    public Status Flee()
+    public void Flee()
     {
+        Debug.Log("HUYENDO");
         if (IsPathComplete())
         {
             agent.SetDestination(ClosestPosition(RestPositions).position);
         }
 
-        return Status.Running;
     }
     #endregion
     
@@ -176,8 +137,10 @@ public class BeastBehaviour : MonoBehaviour
         thinkingCloudBehaviour.UpdateCloud(5);
         agent.isStopped = false;
         
-    }public Status Combat()
+    }
+    public void Combat()
     {
+        Debug.Log("COMBATIENDO");
         PoliceBehaviour police = null;
         ExplorerBehaviour explorer = null;
     
@@ -211,16 +174,15 @@ public class BeastBehaviour : MonoBehaviour
             }
         }
         
-        return Status.Running;
     }
 
     
-    bool CheckDeadPolice()
+    public bool CheckDeadPolice()
     {
        return police.currentHealth == 0;
     }
 
-    bool CheckDeadExplorer()
+    public bool CheckDeadExplorer()
     {
         return explorer.currentHealth == 0;
     }
@@ -240,12 +202,13 @@ public class BeastBehaviour : MonoBehaviour
         return Status.Running;
     }
 
-    bool IsWatchingPrey()
+    public bool IsWatchingPrey()
     {
         prey = null;
         explorer = null;
         police = null;
-        //ERROR
+        
+        Debug.Log(vision.VisibleTriggers);
         foreach (var trigger in vision.VisibleTriggers)
         {
             if (trigger != null)
@@ -282,7 +245,7 @@ public class BeastBehaviour : MonoBehaviour
         return Status.Running;
     }
 
-    bool IsWatchingGhost()
+    public bool IsWatchingGhost()
     {
         ghost = null;
         foreach (var trigger in vision.VisibleTriggers)
@@ -300,6 +263,7 @@ public class BeastBehaviour : MonoBehaviour
 
     private bool EvaluarMoho()
     {
+        Debug.Log("Evaluando moho");
         bool moho = false;
 
         foreach (var trigger in vision.VisibleTriggers)
@@ -314,8 +278,10 @@ public class BeastBehaviour : MonoBehaviour
     }
 
 
-    void checkPrey()
+    public void checkPrey()
     {
+        
+        Debug.Log("Checkeando presa ;)");
         foreach (var trigger in vision.VisibleTriggers)
         {
             if (trigger.GetComponent<PoliceBehaviour>() != null || trigger.GetComponent<ExplorerBehaviour>() != null)
@@ -327,11 +293,13 @@ public class BeastBehaviour : MonoBehaviour
     
     void ChangeHuntPoint(int change)
     {
+        
+        Debug.Log("Contando zonas d cCAZA");
         if (huntPositions.Count == 0)
         {
             return;
         }
-
+        Debug.Log("Cambiando");
         agent.SetDestination(huntPositions[currentHuntIndex].position);
         currentHuntIndex += change;
         currentHuntIndex %= huntPositions.Count;
@@ -339,6 +307,12 @@ public class BeastBehaviour : MonoBehaviour
         {
             currentHuntIndex = huntPositions.Count - 1;
         }
+    }
+
+
+    public bool CheckHealth()
+    {
+        return health == 100;
     }
     
     Transform ClosestPosition(List<Transform> positions)
@@ -358,7 +332,7 @@ public class BeastBehaviour : MonoBehaviour
         return tMin;
     }
     
-    bool IsPathComplete()
+    public bool IsPathComplete()
     {
         return (!agent.pathPending &&
             agent.remainingDistance <= agent.stoppingDistance &&
