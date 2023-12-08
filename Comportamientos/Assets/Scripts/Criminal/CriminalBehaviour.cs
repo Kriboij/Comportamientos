@@ -15,6 +15,8 @@ public class CriminalBehaviour : MonoBehaviour
     [SerializeField] Vision vision;
     FSM fsm;
 
+    PoliceBehaviour police;
+
     [SerializeField] float fleeTime;
 
     [Header("Health")]
@@ -46,21 +48,31 @@ public class CriminalBehaviour : MonoBehaviour
         FunctionalAction patrollingAction = new FunctionalAction(StartPatrolling, Patrolling, null); //Estado
         State patrolling = fsm.CreateState(patrollingAction);
 
-        FunctionalAction watchPoliceAction = new FunctionalAction(StartWatchPolice, WatchPolice, null); //Estado
-        State watchPolice = fsm.CreateState(watchPoliceAction);
+        FunctionalAction watchPoliceAction = new FunctionalAction(StartWatchPolice, WatchPolice, StopWatchPolice); //Estado
+        ProbabilisticState watchPolice = fsm.CreateProbabilisticState(watchPoliceAction);
 
-        ConditionPerception checkPolice = new ConditionPerception(null, IsWatchingPoliceman, null); //TrancisiÃ³n para la conexiÃ³n
+        ConditionPerception checkPolice = new ConditionPerception(null, vision.IsWatchingPoliceman, null); //Trancisión para la conexión
         fsm.CreateTransition(patrolling, watchPolice, checkPolice, statusFlags: StatusFlags.Running); // 1.Dde donde partimos, 2. Estado al que pasamos, 3. Condicion 1, 4. Condicion 2
 
+        //Estados probabilisticos
         FunctionalAction fleeAction = new FunctionalAction(StartFlee, Fleeing, null); //Estado
         State flee = fsm.CreateState(fleeAction);
 
+        //Estados probabilisticos
+        FunctionalAction bribeAction = new FunctionalAction(StartBribing, Bribing, null); //Estado
+        State bribe = fsm.CreateState(bribeAction);
+
         TimerPerception fleeTimer = new TimerPerception(fleeTime);
+        TimerPerception bribeTimer = new TimerPerception(fleeTime);
 
-        fsm.CreateTransition(watchPolice, flee, fleeTimer, statusFlags: StatusFlags.Running); //Transicion Ver Policia y Huir
+        var fleeTransition = fsm.CreateTransition(watchPolice, flee, fleeTimer, statusFlags: StatusFlags.Running); //Transicion Ver Policia y Huir
+        var bribeTransition = fsm.CreateTransition(watchPolice, bribe, bribeTimer, statusFlags: StatusFlags.Running); //Transicion Ver Policia y Sobornar
+
+        watchPolice.SetProbability(fleeTransition, 0.75f);
+        watchPolice.SetProbability(bribeTransition, 0.25f);
 
 
-        ConditionPerception noCheckPolice = new ConditionPerception(null,()=> { return !IsWatchingPoliceman(); }, null);
+        ConditionPerception noCheckPolice = new ConditionPerception(null,()=> { return !vision.IsWatchingPoliceman(); }, null);
         AndPerception timeAndNoWatch = new AndPerception(noCheckPolice, fleeTimer);
 
         fsm.CreateTransition(flee, patrolling, timeAndNoWatch, statusFlags: StatusFlags.Running); //Transicion huir y patrullar
@@ -100,23 +112,25 @@ public class CriminalBehaviour : MonoBehaviour
         agent.isStopped = true;
     }
 
+    void StopWatchPolice()
+    {
+        police = null;
+        foreach(var trigger in vision.VisibleTriggers)
+        {
+            police = trigger.GetComponent<PoliceBehaviour>();
+            if(police != null)
+            {
+                return;
+            }
+        }
+    }
+
     public Status WatchPolice()
     {
         return Status.Running;
     }
 
-    bool IsWatchingPoliceman()
-    {
-        foreach(var trigger in vision.VisibleTriggers)
-        {
-            var police = trigger.GetComponent<PoliceBehaviour>();
-            if(police != null)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
+    
     #endregion
 
 
@@ -131,6 +145,7 @@ public class CriminalBehaviour : MonoBehaviour
 
     public Status Fleeing()
     {
+        Debug.Log("HUYENDO");
         if(isPathComplete())
         {
             ChangePatrolPoint(-1);
@@ -139,6 +154,22 @@ public class CriminalBehaviour : MonoBehaviour
     }
     #endregion
 
+    #region 4. SOBORNAR
+
+    void StartBribing()
+    {
+        thinkingCloudBehaviour.UpdateCloud(0);
+        agent.isStopped = false;
+    }
+
+    public Status Bribing()
+    {
+        Debug.Log("SOBORNANDO");
+        agent.SetDestination(police.transform.position);
+        return Status.Running;
+    }
+
+    #endregion
     void ChangePatrolPoint(int change)
     {
         if(patrolPositions.Count == 0)
@@ -159,12 +190,6 @@ public class CriminalBehaviour : MonoBehaviour
         return (!agent.pathPending &&
             agent.remainingDistance <= agent.stoppingDistance &&
             (!agent.hasPath || agent.velocity.sqrMagnitude == 0f));
-    }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(transform.position + new Vector3(0, 1, 0), new Vector3(15, 1, 15));
     }
 
 }
