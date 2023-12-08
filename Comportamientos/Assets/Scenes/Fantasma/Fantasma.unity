@@ -158,7 +158,7 @@ Transform:
   m_GameObject: {fileID: 66539785}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 22.43, y: 1.04, z: 9.52}
+  m_LocalPosition: {x: 28.18, y: 1.04, z: 9.52}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -929,7 +929,7 @@ MonoBehaviour:
       nodes:
       - name: Patrol State
         id: aadfee27-fbd1-4ef3-82c2-4a8f288522fd
-        position: {x: 485, y: 139}
+        position: {x: 614.2535, y: 275.64664}
         node:
           rid: 3651959770005635073
         references:
@@ -940,11 +940,13 @@ MonoBehaviour:
             Culture=neutral, PublicKeyToken=null
         parentIds:
         - 316f68df-539d-4011-8093-d628b47d2bcc
+        - 1512e624-ceaf-41a6-91e4-d1a2d2b97366
         childIds:
         - 10f3fb68-934f-4920-8ef3-ad76f73e682e
+        - 8f792433-1081-4562-bdcc-a0caada66aac
       - name: Scare State
         id: 5b251438-9059-4154-95df-1c287bf5fd6e
-        position: {x: 257, y: -92}
+        position: {x: 214.21509, y: -32.932705}
         node:
           rid: 3651959770005635075
         references:
@@ -959,7 +961,7 @@ MonoBehaviour:
         - 316f68df-539d-4011-8093-d628b47d2bcc
       - name: WachingScareObject
         id: 10f3fb68-934f-4920-8ef3-ad76f73e682e
-        position: {x: 125, y: 110}
+        position: {x: 506.4517, y: -33.228363}
         node:
           rid: 3651959770005635077
         references:
@@ -979,7 +981,7 @@ MonoBehaviour:
         - 5b251438-9059-4154-95df-1c287bf5fd6e
       - name: NotWaching
         id: 316f68df-539d-4011-8093-d628b47d2bcc
-        position: {x: 595, y: -76}
+        position: {x: 288.1292, y: 249.80223}
         node:
           rid: 3651959770005635079
         references:
@@ -995,6 +997,61 @@ MonoBehaviour:
             Culture=neutral, PublicKeyToken=null
         parentIds:
         - 5b251438-9059-4154-95df-1c287bf5fd6e
+        childIds:
+        - aadfee27-fbd1-4ef3-82c2-4a8f288522fd
+      - name: 
+        id: 8f792433-1081-4562-bdcc-a0caada66aac
+        position: {x: 1018, y: 470}
+        node:
+          rid: 3651959904877150211
+        references:
+        - fieldName: Perception
+          value:
+            rid: 3651959904877150218
+          fieldType: BehaviourAPI.Core.Perceptions.Perception, BehaviourAPI.Core,
+            Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        - fieldName: Action
+          value:
+            rid: -2
+          fieldType: BehaviourAPI.Core.Actions.Action, BehaviourAPI.Core, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+        parentIds:
+        - aadfee27-fbd1-4ef3-82c2-4a8f288522fd
+        childIds:
+        - 467c3307-1de6-46f7-936b-abe9766f5f5a
+      - name: Teleport
+        id: 467c3307-1de6-46f7-936b-abe9766f5f5a
+        position: {x: 1427, y: 177}
+        node:
+          rid: 3651959904877150212
+        references:
+        - fieldName: Action
+          value:
+            rid: 3651959904877150215
+          fieldType: BehaviourAPI.Core.Actions.Action, BehaviourAPI.Core, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+        parentIds:
+        - 8f792433-1081-4562-bdcc-a0caada66aac
+        childIds:
+        - 1512e624-ceaf-41a6-91e4-d1a2d2b97366
+      - name: 
+        id: 1512e624-ceaf-41a6-91e4-d1a2d2b97366
+        position: {x: 1034, y: 56}
+        node:
+          rid: 3651959904877150216
+        references:
+        - fieldName: Perception
+          value:
+            rid: 3651959904877150217
+          fieldType: BehaviourAPI.Core.Perceptions.Perception, BehaviourAPI.Core,
+            Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        - fieldName: Action
+          value:
+            rid: -2
+          fieldType: BehaviourAPI.Core.Actions.Action, BehaviourAPI.Core, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+        parentIds:
+        - 467c3307-1de6-46f7-936b-abe9766f5f5a
         childIds:
         - aadfee27-fbd1-4ef3-82c2-4a8f288522fd
     pushPerceptions: []
@@ -1068,6 +1125,31 @@ MonoBehaviour:
         unpause:
           componentName: 
           methodName: 
+    - rid: 3651959904877150211
+      type: {class: StateTransition, ns: BehaviourAPI.StateMachines, asm: BehaviourAPI.StateMachines}
+      data:
+        StatusFlags: -1
+    - rid: 3651959904877150212
+      type: {class: State, ns: BehaviourAPI.StateMachines, asm: BehaviourAPI.StateMachines}
+      data: 
+    - rid: 3651959904877150215
+      type: {class: SimpleAction, ns: BehaviourAPI.UnityToolkit.GUIDesigner.Framework, asm: BehaviourAPI.UnityToolkit.GUIDesigner.Framework}
+      data:
+        method:
+          componentName: GhostBehaviour
+          methodName: Teleport
+    - rid: 3651959904877150216
+      type: {class: StateTransition, ns: BehaviourAPI.StateMachines, asm: BehaviourAPI.StateMachines}
+      data:
+        StatusFlags: -1
+    - rid: 3651959904877150217
+      type: {class: UnityTimePerception, ns: BehaviourAPI.UnityToolkit, asm: BehaviourAPI.UnityToolkit}
+      data:
+        TotalTime: 2
+    - rid: 3651959904877150218
+      type: {class: UnityTimePerception, ns: BehaviourAPI.UnityToolkit, asm: BehaviourAPI.UnityToolkit}
+      data:
+        TotalTime: 30
 --- !u!1 &1202091757
 GameObject:
   m_ObjectHideFlags: 0

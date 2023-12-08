@@ -25,6 +25,7 @@ public class GhostBehaviour : MonoBehaviour
 
 
 
+
     private static readonly int IdleState = Animator.StringToHash("Base Layer.idle");
     private static readonly int MoveState = Animator.StringToHash("Base Layer.move");
     private static readonly int AttackState = Animator.StringToHash("Base Layer.attack_shift");
@@ -40,6 +41,7 @@ public class GhostBehaviour : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
         vision = GetComponentInChildren<Vision>();
+        
     }
 
     #region PATROL
@@ -101,7 +103,7 @@ public class GhostBehaviour : MonoBehaviour
         if (scareCorutine != null)
         {
             StopCoroutine(scareCorutine);
-            patrolCorutine = null;
+            scareCorutine = null;
         }
         scareCorutine = StartCoroutine(ScareCorutine());
 
@@ -155,6 +157,31 @@ public class GhostBehaviour : MonoBehaviour
         return true;
     }
     #endregion
+
+
+    public void Teleport()
+    {
+
+        if (patrolCorutine != null)
+        {
+            StopCoroutine(patrolCorutine);
+            patrolCorutine = null;           
+        }
+
+
+        int random = Random.Range(0, patrolPositions.Count);
+
+        while (random == lastPosition)
+        {
+            random = Random.Range(0, patrolPositions.Count);
+        }
+
+        lastPosition = random;
+
+        transform.position = patrolPositions[random].position;
+        agent.SetDestination(transform.position);
+
+    }
 
 
 }
