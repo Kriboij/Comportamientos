@@ -171,7 +171,7 @@ MonoBehaviour:
   m_OverrideVoxelSize: 0
   m_VoxelSize: 0.16666667
   m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 23800000, guid: 9196aa25b3e391f4f8007fce9ce175c4, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: de32f0c6856a3b540a3a02c4b3945ccd, type: 2}
   m_BuildHeightMesh: 0
 --- !u!154 &133781872
 TerrainCollider:
@@ -393,7 +393,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -919,7 +919,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
