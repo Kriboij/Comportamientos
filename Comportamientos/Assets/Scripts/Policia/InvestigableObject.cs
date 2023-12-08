@@ -50,6 +50,8 @@ public class InvestigableObject : MonoBehaviour
     public void HasBeenInvestigated() 
     {
         recentlyInvestigated = true;
+        GetComponent<Collider>().enabled = false;
+        GetComponent<VisionTrigger>().enabled = false;
 
         if (cooldown != null) 
         {
@@ -63,6 +65,8 @@ public class InvestigableObject : MonoBehaviour
         {
             yield return new WaitForSeconds(investigationCooldownSeconds);
             recentlyInvestigated = false;
+            GetComponent<Collider>().enabled = true;
+            GetComponent<VisionTrigger>().enabled = true;
         }
     }
 }
