@@ -133,8 +133,10 @@ public class GhostBehaviour : MonoBehaviour
             {
                 entity = entityAux;
                 return true;
+                
             }
-            
+            Debug.Log("Viendo");
+
         }
         return false;
     }
@@ -144,13 +146,13 @@ public class GhostBehaviour : MonoBehaviour
         foreach (var trigger in vision.VisibleTriggers)
         {
             var entityAux = trigger.GetComponent<ScareObject>();
-            if (entityAux == null)
+            if (entityAux != null)
             {
-                return true;
+                return false;
             }
             
         }
-        return false;
+        return true;
     }
     #endregion
 
