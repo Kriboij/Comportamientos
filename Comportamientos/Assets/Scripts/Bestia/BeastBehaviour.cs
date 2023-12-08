@@ -89,8 +89,8 @@ public class BeastBehaviour : MonoBehaviour
         //FALTA TRANSICion entre rest y empezar a cazar de nuevo y transicion entre combate y huir (cuando mata a un policia)
         
         //Transición entre combatir y cazar de nuevo (con explorador)
-        ConditionPerception checkDeadPrey = new ConditionPerception(null, CheckDeathExplorer, null);
-        fsm.CreateTransition(combating, hunting, checkDeadPrey, statusFlags: StatusFlags.Running);
+        //ConditionPerception checkDeadPrey = new ConditionPerception(null, CheckDeathExplorer, null);
+        //fsm.CreateTransition(combating, hunting, checkDeadPrey, statusFlags: StatusFlags.Running);
         
         //
         
@@ -219,7 +219,7 @@ public class BeastBehaviour : MonoBehaviour
     {
         if (prey.GetComponent<ExplorerBehaviour>() != null)
         {
-            return prey.GetComponent<ExplorerBehaviour>().currentHealth == 0;
+            return prey.GetComponent<ExplorerBehaviour>().health == 0;
         }
 
         return false;

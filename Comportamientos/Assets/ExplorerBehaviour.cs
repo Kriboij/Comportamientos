@@ -27,7 +27,7 @@ enum ExplorerStates
 public class ExplorerBehaviour : MonoBehaviour
 {
     [Header("Health")]
-    [SerializeField] private int health = 50;
+    [SerializeField] public int health = 50;
 
     [Header("Exploring")]
     [SerializeField] private List<Transform> explorePositions;
