@@ -8,6 +8,7 @@ using BehaviourAPI.Core;
 using System.Reflection;
 using BehaviourAPI.UnityToolkit.GUIDesigner.Runtime;
 using BehaviourAPI.StateMachines;
+using Unity.VisualScripting;
 
 enum PoliceStates 
 {
@@ -21,12 +22,8 @@ enum PoliceStates
 //TODO change police vision
 //TODO Finish BT 
 
-public class PoliceBehaviour : MonoBehaviour
+public class PoliceBehaviour : AttackableEntity
 {
-    [Header("Health")]
-    [SerializeField]
-    private int maxHealth = 100;
-    public int currentHealth = 100;
     [SerializeField]
     private int timeToHealSeconds = 10;
 
@@ -70,10 +67,11 @@ public class PoliceBehaviour : MonoBehaviour
     private PoliceStates state = PoliceStates.Patrol;
 
 
-    private InvestigableObject investigableObject = null;
+    public InvestigableObject investigableObject = null;
     private AttackableEntity attackableEntity = null;
     private bool enemyNotOnSight;
     private Tween enemyLostTween = null;
+    private bool inCombat = false;
 
     // Start is called before the first frame update
     private void Awake()
@@ -85,14 +83,17 @@ public class PoliceBehaviour : MonoBehaviour
     #region Patrol
     public void Patrol()
     {
+        enemyNotOnSight = true;
         state = PoliceStates.Patrol;
         thinkingCloudBehaviour.UpdateCloud(0);
         animator.SetBool("Investigate", false);
+        animator.SetTrigger("Patrol");
 
         if (currentCorutine != null)
         {
             StopCoroutine(currentCorutine);
             currentCorutine = null;
+            agent.SetDestination(transform.position);
         }
         currentCorutine = StartCoroutine(PatrolCorutine());
 
@@ -138,13 +139,13 @@ public class PoliceBehaviour : MonoBehaviour
             yield return new WaitUntil(() => { return isPathComplete(); }); //Wait for arrival at pos
             //Launch animation or sth and later return to patrol?
             transform.DOLookAt(investigableObject.transform.position, 0.5f, AxisConstraint.Y).OnComplete(() => { animator.SetBool("Investigate",true);});
-            
-            DOVirtual.DelayedCall(investigableObject.investigateTime, () => {
-                Debug.Log("Finished investigating: " + investigableObject);
-                investigableObject?.HasBeenInvestigated();
-                investigableObject = null;
-                animator.SetBool("Investigate", false);
-            });
+
+            yield return new WaitForSeconds(investigableObject.investigateTime);
+            Debug.Log("Finished investigating: " + investigableObject);
+            investigableObject?.HasBeenInvestigated();
+            vision.VisibleTriggers.Remove(investigableObject.transform);
+            investigableObject = null;
+            animator.SetBool("Investigate", false);
         }
     }
     #endregion
@@ -221,9 +222,10 @@ public class PoliceBehaviour : MonoBehaviour
 
     #region Chase
 
-    public Status Chase() 
+    public void Chase() 
     {
-        Status status = Status.Paused;
+        inCombat = true;
+        animator.SetInteger("Fear", paranoia);
         if (currentCorutine != null)
         {
             StopCoroutine(currentCorutine);
@@ -235,14 +237,16 @@ public class PoliceBehaviour : MonoBehaviour
 
         IEnumerator ChaseCorutine()
         {
-            //TODO adjust stoppingDistance based on attack type
-            agent.stoppingDistance = 5;
-            agent.SetDestination(attackableEntity.transform.position);
-            status = Status.Running;
-            yield return new WaitUntil(() => { return isPathComplete(); });
-            status = Status.Success;
+            if (attackableEntity != null)
+            {
+                Debug.Log("Chase");
+                //TODO adjust stoppingDistance based on attack type
+                agent.stoppingDistance = 5f;
+                agent.SetDestination(attackableEntity.transform.position);
+                animator.SetTrigger("Chase");
+                yield return new WaitUntil(() => { return isPathComplete(); });
+            }
         }
-        return status;
     }
 
     #endregion
@@ -252,31 +256,112 @@ public class PoliceBehaviour : MonoBehaviour
 
     public void Hit() 
     {
-    
+        inCombat = true;
+        if (currentCorutine != null)
+        {
+            StopCoroutine(currentCorutine);
+            currentCorutine = null;
+            agent.SetDestination(transform.position);
+        }
+        agent.stoppingDistance = 2;
+        currentCorutine = StartCoroutine(HitCorutine());
 
-    
+        IEnumerator HitCorutine()
+        {
+            //TODO adjust stoppingDistance based on attack type
+            while (true)
+            {
+                
+                if (attackableEntity != null && attackableEntity.isAlive)
+                {
+                    agent.SetDestination(attackableEntity.transform.position);
+                    yield return new WaitUntil(() => { return isPathComplete(); });
+                    //Hit animation and damage
+                    
+                    transform.LookAt(attackableEntity.transform.position);
+                    animator.SetTrigger("Hit");
+                    attackableEntity.ReceiveAttack(20);
+                    yield return new WaitForSeconds(2);
+                }
+                else
+                {
+                    attackableEntity = null;
+                    inCombat= false;
+                    break;
+                }
+            }
+        }
+
     }
 
     public void Shoot() 
     {
-    
+        inCombat = true;
+        if (currentCorutine != null)
+        {
+            StopCoroutine(currentCorutine);
+            currentCorutine = null;
+            agent.SetDestination(transform.position);
+        }
 
-    
+        agent.stoppingDistance = 3;
+        currentCorutine = StartCoroutine(ShootCorutine());
+
+        IEnumerator ShootCorutine()
+        {
+            //TODO adjust stoppingDistance based on attack type
+            while (true)
+            {
+                
+                if (attackableEntity != null && attackableEntity.isAlive)
+                {
+                    agent.SetDestination(attackableEntity.transform.position);
+                    yield return new WaitUntil(() => { return isPathComplete(); });
+                    //Shoot animation and damage
+                    animator.SetTrigger("Shoot");
+                    attackableEntity.ReceiveAttack(50);
+                    yield return new WaitForSeconds(2);
+                }
+                else 
+                { 
+                    attackableEntity = null;
+                    inCombat= false;
+                    break;
+                } 
+            }
+        }
+
     }
+
+
+    public override void ReceiveAttack(int damage)
+    {
+        base.ReceiveAttack(damage);
+        animator.SetInteger("Health",currentHealth);
+    }
+
 
     #endregion
 
     #region Perceptions
     public bool CheckInvestigate()
     {
+        InvestigableObject temp;
         foreach (var trigger in vision.VisibleTriggers) 
         {
-            investigableObject = trigger.GetComponent<InvestigableObject>();
-            if (investigableObject != null) 
+            if (trigger != null)
             {
-                if (investigableObject.ShouldInvestigate(paranoia)) 
+                investigableObject = trigger.GetComponent<InvestigableObject>();
+                if (investigableObject != null)
                 {
-                    return true;
+                    if (investigableObject.ShouldInvestigate(paranoia))
+                    {
+                        return true;
+                    }
+                    else 
+                    {
+                        investigableObject = null;
+                    }
                 }
             }
         }
@@ -287,35 +372,70 @@ public class PoliceBehaviour : MonoBehaviour
     {
         foreach (var trigger in vision.VisibleTriggers)
         {
-            attackableEntity = trigger.GetComponent<AttackableEntity>();
-            if (attackableEntity != null)
+            if (trigger != null)
             {
-                Debug.Log("Enemigo pillado");
-                enemyNotOnSight = false;
-                return true;
+                attackableEntity = trigger.GetComponent<Enemy>();
+                if (attackableEntity != null)
+                {
+                    Debug.Log("Enemigo pillado");
+                    enemyNotOnSight = false;
+                    return true;
+                }
+
             }
         }
+        enemyNotOnSight = true;
         return false;
+    }
+
+    public Status DetectEnemyStatus()
+    {
+        foreach (var trigger in vision.VisibleTriggers)
+        {
+            attackableEntity = trigger.GetComponent<Enemy>();
+            if (attackableEntity != null)
+            {
+                Debug.Log("Enemigo pillado success =======");
+                enemyNotOnSight = false;
+                return Status.Success;
+            }
+        }
+        enemyNotOnSight = true;
+        return Status.Failure;
     }
 
     public bool EnemyLost()
     {
+        /*Debug.Log("Checking for enemylost");
         foreach (var trigger in vision.VisibleTriggers)
         {
-            attackableEntity = trigger.GetComponent<AttackableEntity>();
-            if (attackableEntity != null)
+            if (trigger != null)
             {
-                //Enemy still on sight
-                enemyNotOnSight=false;
-                return false;
+                attackableEntity = trigger.GetComponent<Enemy>();
+                if (attackableEntity != null)
+                {
+                    //Enemy still on sight
+                    enemyNotOnSight = false;
+                    return false;
+                }
             }
         }
         //Enemy wasnt found after 2 seconds return true
         if (enemyLostTween!=null) 
         {
-            enemyLostTween = DOVirtual.DelayedCall(2f, () => { if (!enemyNotOnSight) { enemyNotOnSight = true; enemyLostTween = null; } });
+            Debug.Log("Launched Tween ===================");
+            enemyLostTween = DOVirtual.DelayedCall(2f, () => { if (!enemyNotOnSight || attackableEntity==null) { enemyNotOnSight = true; enemyLostTween = null; } });
         }
+        Debug.Log(enemyNotOnSight);*/
         return enemyNotOnSight;
+    }
+
+    public Status EndBT() 
+    {
+        enemyNotOnSight = true;
+        inCombat = false;
+        vision.VisibleTriggers.Clear();
+        return Status.Success;
     }
 
 
@@ -341,15 +461,29 @@ public class PoliceBehaviour : MonoBehaviour
         return Status.Failure;
     }
 
-    public Status checkDanger() 
+    public Status CheckDanger() 
     {
         //Returns True if low on danger
         if (paranoia < 70)
         {
             return Status.Success;
         }
-        return Status.Failure;
+        else
+        {
+            return Status.Failure;
+        }
     }
+
+    public Status CheckInCombat() 
+    {
+        if (!inCombat) 
+        {
+            Debug.Log("Finished Combat");
+            return Status.Failure;
+        }
+        return Status.Running;
+    }
+
 
     #endregion
 
