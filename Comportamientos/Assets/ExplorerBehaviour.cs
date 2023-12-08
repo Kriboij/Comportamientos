@@ -352,8 +352,14 @@ public class ExplorerBehaviour : MonoBehaviour
         {
             if (a == objective) // ||a.GetComponent<BeastBehaviour>() || a.GetComponent<WallController>()
             {
-                Debug.Log("He visualizado lo que he");
-                return true;
+                if (a.GetComponent<WallController>())
+                {
+                    if (!a.GetComponent<WallController>().IsPainted())
+                    {
+                        objective = a;
+                        return true;
+                    }
+                }
             }
         }
         return false;

@@ -13,11 +13,10 @@ public class Vision : MonoBehaviour
     {
         VisibleTriggers = new List<Transform>();
     }
-    /*
+
     private void OnTriggerStay(Collider other)
     {
         VisionTrigger visionTrigger = other.GetComponent<VisionTrigger>();
-
 
         if (visionTrigger != null)
         {
@@ -25,14 +24,19 @@ public class Vision : MonoBehaviour
             float raycastRange = direction.magnitude;
             if (Physics.Raycast(transform.position, direction.normalized, out var hit, raycastRange,sceneMask))
             {
-                VisibleTriggers.Remove(visionTrigger.Body);
+                if(hit.collider.gameObject == visionTrigger.gameObject)
+                {   
+                    if (!VisibleTriggers.Contains(visionTrigger.Body))
+                    {
+                        VisibleTriggers.Add(visionTrigger.Body);
+                    }
+                }    
+                
             }
             else
             {
-                if (!VisibleTriggers.Contains(visionTrigger.Body))
-                {
-                    VisibleTriggers.Add(visionTrigger.Body);
-                }
+                
+                VisibleTriggers.Remove(visionTrigger.Body);
             }
 
 
@@ -49,14 +53,49 @@ public class Vision : MonoBehaviour
             VisibleTriggers.Remove(visionTrigger.Body);
         }
     }
-    */
-    private void OnTriggerEnter(Collider other)
+
+
+    //COMPROBACIONES
+
+    public bool IsWatchingPoliceman()
     {
-        VisibleTriggers.Add(other.transform);
+        foreach (var trigger in VisibleTriggers)
+        {
+            var police = trigger.GetComponent<PoliceBehaviour>();
+            if (police != null)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
-    private void OnTriggerExit(Collider other)
+    public bool IsWatchingCriminal()
     {
-        VisibleTriggers.Remove(other.transform);
+        foreach (var trigger in VisibleTriggers)
+        {
+            var criminal = trigger.GetComponent<CriminalBehaviour>();
+            if (criminal != null)
+            {
+                return true;
+            }
+        }
+        return false;
     }
+
+    public bool IsWatchingHuman()
+    {
+        if (IsWatchingPoliceman())
+        {
+            return true;
+        }
+        if (IsWatchingCriminal())
+        {
+            return true;
+        }
+        return false;
+    }
+
+    
+
 }

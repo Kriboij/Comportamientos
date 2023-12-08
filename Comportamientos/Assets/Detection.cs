@@ -16,6 +16,19 @@ public class Detection : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        Vector3 direction = other.transform.position - transform.position;
+        float raycastRange = direction.magnitude;
+        if (Physics.Raycast(transform.position, direction.normalized, out var hit, raycastRange,sceneMask))
+        {
+            if(hit.collider.gameObject == other.gameObject)
+            {   
+                if (!DetectableTriggers.Contains(other.transform))
+                {
+                    DetectableTriggers.Add(other.transform);
+                }
+            }    
+                
+        }
         DetectableTriggers.Add(other.transform);
     }
 
