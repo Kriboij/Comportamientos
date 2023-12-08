@@ -8,8 +8,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
 using BehaviourAPI.UtilitySystems;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using State = BehaviourAPI.StateMachines.State;
 
 enum ExplorerStates 
 {
@@ -63,6 +65,7 @@ public class ExplorerBehaviour : MonoBehaviour
 
     private VariableFactor anxiety;
     private VariableFactor fear;
+    private bool _stoppedFaint;
 
     // Start is called before the first frame update
     private void Awake()
@@ -71,52 +74,37 @@ public class ExplorerBehaviour : MonoBehaviour
         _animator = GetComponent<Animator>();
         _vision = GetComponentInChildren<Vision>();
         _detection = GetComponentInChildren<Detection>();
-        _distance = CalculateDistance();
         
         _fsm = new FSM();
-        _us = new UtilitySystem();
-        
-
-        #region CREACION SISTEMA DE UTILIDAD
-
-        anxiety = _us.CreateVariable(() => 5f/_distance, 0f, 1f);
-        fear = _us.CreateVariable(() => 1f/_distance, 0f, 1f);
-
-        ExponentialCurveFactor fearCurve = _us.CreateCurve<ExponentialCurveFactor>(fear);
-        fearCurve.Exponent = 50f;
-        fearCurve.DespX = 0;
-
-        SigmoidCurveFactor anxietyCurve = _us.CreateCurve<SigmoidCurveFactor>(anxiety);
-        anxietyCurve.GrownRate = 40f;
-        anxietyCurve.Midpoint = 0.5f;
-        
-        FunctionalAction faintAction = new FunctionalAction(StartFainting, Fainting, null);
-        UtilityAction faintUtilityAction = _us.CreateAction(fearCurve, faintAction, finishOnComplete:true);
-        
-        FunctionalAction escapeAction = new FunctionalAction(StartEscaping, Escaping, null);
-        UtilityAction escapeUtilityAction = _us.CreateAction(anxiety, escapeAction, finishOnComplete:true);
-
-        #endregion
-        
         
         #region CREACION ESTADOS
 
-        FunctionalAction exploringAction = new FunctionalAction(StartExploring, Exploring, null); //Estado
+        FunctionalAction exploringAction = new FunctionalAction(StartExploring, Exploring, null); //Estado Explorar
         State exploring = _fsm.CreateState(exploringAction);
 
-        FunctionalAction watchingAction = new FunctionalAction(StartWatching, Watching, null); //Estado
+        FunctionalAction watchingAction = new FunctionalAction(StartWatching, Watching, null); //Estado Mirar
         State watching = _fsm.CreateState(watchingAction);
         
-        FunctionalAction advancingAction = new FunctionalAction(StartAdvancing, Advancing, null); //Estado
+        FunctionalAction advancingAction = new FunctionalAction(StartAdvancing, Advancing, null); //Estado Avanzar
         State advancing = _fsm.CreateState(advancingAction);
         
-        FunctionalAction paintingAction = new FunctionalAction(StartPainting, Painting, null); //Estado
+        FunctionalAction paintingAction = new FunctionalAction(StartPainting, Painting, null); //Estado Pintar
         State painting = _fsm.CreateState(paintingAction);
+
+        FunctionalAction escapingAction = new FunctionalAction(StartEscaping, Escaping, null); //Estado Escapar
+        State escaping = _fsm.CreateState(escapingAction);
+        
+        FunctionalAction faintingAction = new FunctionalAction(StartFainting, Fainting, null); //Estado Desmayarse
+        State fainting = _fsm.CreateState(faintingAction);
         
         #endregion 
 
         
         #region CREACION PERCECPCIONES ESTADOS
+
+        ConditionPerception escapeDistance = new ConditionPerception(null, IsAtEscapeDistance, null);
+        
+        ConditionPerception faintDistance = new ConditionPerception(null, IsAtFaintDistance, null);
         
         ConditionPerception detectObjective = new ConditionPerception(null, IsDetectingObjective, null);
         
@@ -129,6 +117,10 @@ public class ExplorerBehaviour : MonoBehaviour
         ConditionPerception emptyWall = new ConditionPerception(null, IsEmptyWall, null);
         
         ConditionPerception paintedWall = new ConditionPerception(null, IsPaintedWall, null);
+        
+        ConditionPerception stopEscaping = new ConditionPerception(null, StopEscape, null);
+        
+        ConditionPerception stopFainting = new ConditionPerception(null, StopFaint, null);
         
         AndPerception canPaint = new AndPerception(emptyWall, onWall);
         
@@ -151,41 +143,37 @@ public class ExplorerBehaviour : MonoBehaviour
         
         _fsm.CreateTransition(advancing, exploring, stopAdvance, statusFlags: StatusFlags.Running);
         
+        _fsm.CreateTransition(exploring, escaping, escapeDistance, statusFlags: StatusFlags.Running);
+        
+        _fsm.CreateTransition(watching, escaping, escapeDistance, statusFlags: StatusFlags.Running);
+        
+        _fsm.CreateTransition(advancing, escaping, escapeDistance, statusFlags: StatusFlags.Running);
+        
+        _fsm.CreateTransition(painting, escaping, escapeDistance, statusFlags: StatusFlags.Running);
+        
+        _fsm.CreateTransition(exploring, fainting, faintDistance, statusFlags: StatusFlags.Running);
+        
+        _fsm.CreateTransition(watching, fainting, faintDistance, statusFlags: StatusFlags.Running);
+        
+        _fsm.CreateTransition(advancing, fainting, faintDistance, statusFlags: StatusFlags.Running);
+        
+        _fsm.CreateTransition(painting, fainting, faintDistance, statusFlags: StatusFlags.Running);
+        
+        _fsm.CreateTransition(escaping, fainting, faintDistance, statusFlags: StatusFlags.Running);
+
+        _fsm.CreateTransition(escaping, exploring, stopEscaping, statusFlags: StatusFlags.Running);
+        
+        _fsm.CreateTransition(fainting, exploring, stopFainting, statusFlags: StatusFlags.Running);
         #endregion
 
         
         _fsm.SetEntryState(exploring);
         _fsm.Start();
-        _us.Start();
     }
 
     void Update()
     {
-        _distance = CalculateDistance();
-        _us.Update();
         _fsm.Update();
-    }
-
-    private float CalculateDistance()
-    {
-        float[] distances = new float[4];
-        
-        var policePos = FindObjectOfType<PoliceBehaviour>().transform.position;
-        //var criminalPos = FindObjectOfType<CriminalBehaviour>().transform.position;
-        //var beastPos = FindObjectOfType<BeastBehaviour>().transform.position;
-        //var ghostPos = FindObjectOfType<GhostBehaviour>().transform.position;
-
-        Vector3 policeVector = policePos;
-        //Vector3 criminalVector = new Vector3(criminalPos.x, criminalPos.y, criminalPos.z);
-        //Vector3 beastVector = new Vector3(beastPos.x, beastPos.y, beastPos.z);
-        //Vector3 ghostVector = new Vector3(ghostPos.x, ghostPos.y, ghostPos.z);
-        
-        distances[0] = Vector3.Distance (transform.position, policeVector);
-        //distances[1] = Vector3.Distance (position, criminalVector);
-        //distances[2] = Vector3.Distance (position, beastVector);
-        //distances[3] = Vector3.Distance (position, ghostVector);
-
-        return Mathf.Max(distances);
     }
     
     void ChangePatrolPoint(int change)
@@ -292,12 +280,9 @@ public class ExplorerBehaviour : MonoBehaviour
         return Status.Running;
     }
     
-    #endregion
-    
-
-    #region METODOS SISTEMA DE UTILIDAD
     void StartFainting()
     {
+        _states = ExplorerStates.Fainted;
         Debug.Log("Me desmayo");
         thinkingCloudBehaviour.UpdateCloud(0);
         agent.isStopped = true;
@@ -312,11 +297,13 @@ public class ExplorerBehaviour : MonoBehaviour
     private IEnumerator Faint()
     {
         yield return new WaitForSeconds(faintingTime);
+        _stoppedFaint = true;
         agent.isStopped = false;
     }
     
     void StartEscaping()
     {
+        _states = ExplorerStates.Escaping;
         Debug.Log("Empiezo a escapar");
         thinkingCloudBehaviour.UpdateCloud(0);
         agent.isStopped = false;
@@ -324,13 +311,10 @@ public class ExplorerBehaviour : MonoBehaviour
 
     public Status Escaping()
     {
-        Debug.Log("Estoy escapando");
         agent.SetDestination(escapePoint.position);
         return Status.Running;
     }
-    
-    #endregion IMPLEMENTACION
-    
+    #endregion
     
     #region COMPROBACIONES
     
@@ -406,6 +390,77 @@ public class ExplorerBehaviour : MonoBehaviour
         return (!agent.pathPending &&
                 agent.remainingDistance <= agent.stoppingDistance &&
                 (!agent.hasPath || agent.velocity.sqrMagnitude == 0f));
+    }
+
+    bool IsAtFaintDistance()
+    {
+        var dangerObjects = FindObjectsOfType<DangerObject>();
+        foreach (var a in dangerObjects)
+        {
+            if (a.GetDistance() < 2)
+            {
+                if (_vision.VisibleTriggers.Contains(a.transform))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    bool StopFaint()
+    {
+        var dangerObjects = FindObjectsOfType<DangerObject>();
+        foreach (var a in dangerObjects)
+        {
+            if (a.GetDistance() < 5)
+            {
+                if (_vision.VisibleTriggers.Contains(a.transform))
+                {
+                    return false;
+                }
+            }
+        }
+
+        if (_stoppedFaint)
+        {
+            _stoppedFaint = false;
+            return true;
+        }
+        return false;
+    }
+
+    bool IsAtEscapeDistance()
+    {
+        var dangerObjects = FindObjectsOfType<DangerObject>();
+        foreach (var a in dangerObjects)
+        {
+            if (a.GetDistance() < 10)
+            {
+                if (_vision.VisibleTriggers.Contains(a.transform))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+
+    }
+    
+    bool StopEscape()
+    {
+        var dangerObjects = FindObjectsOfType<DangerObject>();
+        foreach (var a in dangerObjects)
+        {
+            if (a.GetDistance() > 15)
+            {
+                if (_vision.VisibleTriggers.Contains(a.transform))
+                {
+                    return true;
+                }
+            }
+        }
+        return IsPathComplete();
     }
     
     #endregion

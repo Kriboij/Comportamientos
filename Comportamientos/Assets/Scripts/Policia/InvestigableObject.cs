@@ -4,24 +4,18 @@ using UnityEngine;
 
 public class InvestigableObject : MonoBehaviour
 {
-    [Header("Investigation cooldown")]
     public bool recentlyInvestigated = false;
     public float investigationCooldownSeconds = 10f;
 
-    [Header("Chance to investigate in panic")]
-    public float curiosity = 1; //Probability multipliyer
-    public float investigateThreshold = 50; //Required amount to bypass cooldown
+    public float curiosity = 1;
+    public float investigateThreshold = 50;
 
-    [Header("General chance to investigate")]
-    [Range(0,100)]
-    public int investigateChance = 100;
+    public int investigateChance = 10;
 
-    [Header("Investigation time")]
     [SerializeField]
-    public int investigateTime = 2; //Required time to investigate
+    public int investigateTime = 2;
 
-    [Header("Investigate Position")]
-    public Transform investigatePosition; //Where to stand while investigating
+    public Transform investigatePosition;
 
     private Coroutine cooldown =null;
 
@@ -37,7 +31,7 @@ public class InvestigableObject : MonoBehaviour
         float investigateLevel = curiosity * paranoia;
         if (!recentlyInvestigated || investigateLevel > investigateThreshold)
         {
-            int random = Random.Range(0, 100);
+            int random = Random.Range(0, 10);
             Debug.Log("random: " + random);
             if (random < investigateChance || investigateLevel > investigateThreshold)
             {
