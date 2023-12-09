@@ -56,11 +56,24 @@ public class Vision : MonoBehaviour
         }
     }
 
+    void CleanTriggers()
+    {
+        for (int i = 0; i < VisibleTriggers.Count; i++)
+        {
+            if (VisibleTriggers[i] == null)
+            {
+                VisibleTriggers.RemoveAt(i);
+                i--;
+            }
+        }
+    }
 
     //COMPROBACIONES
 
     public bool IsWatchingPoliceman()
     {
+        CleanTriggers();
+
         foreach (var trigger in VisibleTriggers)
         {
             var police = trigger.GetComponent<PoliceBehaviour>();
@@ -74,6 +87,9 @@ public class Vision : MonoBehaviour
 
     public bool IsWatchingCriminal()
     {
+
+        CleanTriggers();
+
         foreach (var trigger in VisibleTriggers)
         {
             var criminal = trigger.GetComponent<CriminalBehaviour>();
@@ -87,6 +103,8 @@ public class Vision : MonoBehaviour
 
     public bool IsWatchingHuman()
     {
+
+
         if (IsWatchingPoliceman())
         {
             return true;
@@ -95,11 +113,17 @@ public class Vision : MonoBehaviour
         {
             return true;
         }
+        if (IsWatchingExplorer())
+        {
+            return true;
+        }
         return false;
     }
 
     public bool IsWatchingGhost()
     {
+        CleanTriggers();
+
         foreach (var trigger in VisibleTriggers)
         {
             var ghost = trigger.GetComponent<GhostBehaviour>();
@@ -111,4 +135,19 @@ public class Vision : MonoBehaviour
         return false;
     }
 
+    public bool IsWatchingExplorer()
+    {
+
+        CleanTriggers();
+
+        foreach (var trigger in VisibleTriggers)
+        {
+            var explorer = trigger.GetComponent<ExplorerBehaviour>();
+            if (explorer != null)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 }
