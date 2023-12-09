@@ -154,6 +154,7 @@ public class PoliceBehaviour : AttackableEntity
 
     public void Heal() 
     {
+        thinkingCloudBehaviour.UpdateCloud(6);
         if (currentCorutine != null)
         {
             StopCoroutine(currentCorutine);
@@ -172,6 +173,7 @@ public class PoliceBehaviour : AttackableEntity
 
     public void Reinforcements() 
     {
+        thinkingCloudBehaviour.UpdateCloud(7);
         if (currentCorutine != null)
         {
             StopCoroutine(currentCorutine);
@@ -200,6 +202,7 @@ public class PoliceBehaviour : AttackableEntity
 
     public void Flee() 
     {
+        thinkingCloudBehaviour.UpdateCloud(2);
         if (currentCorutine != null)
         {
             StopCoroutine(currentCorutine);
@@ -224,6 +227,7 @@ public class PoliceBehaviour : AttackableEntity
 
     public void Chase() 
     {
+        thinkingCloudBehaviour.UpdateCloud(3);
         inCombat = true;
         animator.SetInteger("Fear", paranoia);
         if (currentCorutine != null)
@@ -256,6 +260,7 @@ public class PoliceBehaviour : AttackableEntity
 
     public void Hit() 
     {
+        thinkingCloudBehaviour.UpdateCloud(4);
         inCombat = true;
         if (currentCorutine != null)
         {
@@ -280,6 +285,7 @@ public class PoliceBehaviour : AttackableEntity
                     
                     transform.LookAt(attackableEntity.transform.position);
                     animator.SetTrigger("Hit");
+                    thinkingCloudBehaviour.UpdateCloud(4);
                     attackableEntity.ReceiveAttack(20);
                     yield return new WaitForSeconds(2);
                 }
@@ -296,6 +302,7 @@ public class PoliceBehaviour : AttackableEntity
 
     public void Shoot() 
     {
+        thinkingCloudBehaviour.UpdateCloud(5);
         inCombat = true;
         if (currentCorutine != null)
         {
@@ -406,27 +413,6 @@ public class PoliceBehaviour : AttackableEntity
 
     public bool EnemyLost()
     {
-        /*Debug.Log("Checking for enemylost");
-        foreach (var trigger in vision.VisibleTriggers)
-        {
-            if (trigger != null)
-            {
-                attackableEntity = trigger.GetComponent<Enemy>();
-                if (attackableEntity != null)
-                {
-                    //Enemy still on sight
-                    enemyNotOnSight = false;
-                    return false;
-                }
-            }
-        }
-        //Enemy wasnt found after 2 seconds return true
-        if (enemyLostTween!=null) 
-        {
-            Debug.Log("Launched Tween ===================");
-            enemyLostTween = DOVirtual.DelayedCall(2f, () => { if (!enemyNotOnSight || attackableEntity==null) { enemyNotOnSight = true; enemyLostTween = null; } });
-        }
-        Debug.Log(enemyNotOnSight);*/
         return enemyNotOnSight;
     }
 
@@ -490,7 +476,7 @@ public class PoliceBehaviour : AttackableEntity
 
     #region Other
 
-    bool isPathComplete()
+    public bool isPathComplete()
     {
         return (!agent.pathPending &&
             agent.remainingDistance <= agent.stoppingDistance &&

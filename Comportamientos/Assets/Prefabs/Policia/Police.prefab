@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6728004440680663196}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Bip001 L Foot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -41,7 +41,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6634170002683723995}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Bip001 R Calf
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -73,7 +73,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8757300146679353733}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: HEAD_CONTAINER
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -107,7 +107,7 @@ GameObject:
   - component: {fileID: 6176008174110504252}
   - component: {fileID: 8573912595338613485}
   - component: {fileID: 5557146107945452667}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: head_46_police_A
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -188,7 +188,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3347828666924026408}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Bip001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -221,7 +221,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8943018085604824964}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Bip001 L UpperArm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -253,7 +253,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1364184715639192511}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Bip001 R Clavicle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -285,7 +285,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6113025597095982768}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Bip001 R Hand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -317,7 +317,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 521041327971649842}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: R_hand_container
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -353,9 +353,7 @@ GameObject:
   - component: {fileID: 6717426290210984017}
   - component: {fileID: 5002409856515761587}
   - component: {fileID: 8091112879484061807}
-  - component: {fileID: 7407785389446255209}
-  - component: {fileID: 9040380153509945643}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Police
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -378,6 +376,7 @@ Transform:
   - {fileID: 3347828666924026408}
   - {fileID: 1537596483646089029}
   - {fileID: 1984927078082796482}
+  - {fileID: 8019403554162020369}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
 --- !u!95 &9094209062600743600
@@ -390,7 +389,7 @@ Animator:
   m_GameObject: {fileID: 3214455660108776758}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: fdfb5e1c4a1b339489c0eddebb1ab872, type: 3}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 887429ddfc13e724bbcb49ec1a28d895, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -415,7 +414,7 @@ NavMeshAgent:
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 2
+  m_StoppingDistance: 0.2
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -435,17 +434,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a98592a5735517b4595cbc2b6460bec6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 100
+  maxHealth: 100
+  currentHealth: 100
+  isAlive: 1
+  timeToHealSeconds: 10
   patrolPositions:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   paranoia: 0
-  investigableObject: {fileID: 0}
+  numbeOfReinforcements: 0
+  timeToCall: 0
+  timeToSpawn: 0
+  reinforcementsSpawnPos: {fileID: 0}
+  FleePos: {fileID: 0}
   thinkingCloudBehaviour: {fileID: 3782425425500440970}
-  agent: {fileID: 0}
+  vision: {fileID: 1597709933603041843}
   state: 0
+  investigableObject: {fileID: 0}
 --- !u!114 &8091112879484061807
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -458,21 +465,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7033c32493b38240a6a2c47736ac9c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  executeOnLoop: 1
+  executeOnLoop: 0
   interruptOptions: 0
   _eventHandler:
     debugStatusChanges: 0
     identifier: 
   data:
     graphs:
-    - name: Police FSM
+    - name: Police lvl1 FSM
       id: 6003b60d-4af5-4645-ac7a-2cfe2b5b3fcf
       graph:
         rid: 3043071748899864576
       nodes:
       - name: Patrol State
         id: 4ccf626c-75e4-447b-afcb-4d79aa3b2ba7
-        position: {x: 1600.4767, y: -57.38092}
+        position: {x: 176.27556, y: 442.469}
         node:
           rid: 3043071748899864577
         references:
@@ -483,11 +490,15 @@ MonoBehaviour:
             Culture=neutral, PublicKeyToken=null
         parentIds:
         - 22016ee2-fe9a-40f7-9b04-3b29e7f438fe
+        - ab5aabf6-6c37-47e9-bc50-0ef5487b74ec
+        - 6567d7e6-13db-4ae9-b7fe-9318e0d2f624
         childIds:
         - b039be7d-ea93-4214-979b-8984952db50d
+        - 116cff80-89a6-4546-b7a3-e758fb097f38
+        - 429d451f-88f3-4b44-9fc6-889c9fc7024c
       - name: Investigate State
         id: a4d0feb6-e14d-46b4-ad30-2271a4780b3f
-        position: {x: 1226.0938, y: -214.95139}
+        position: {x: -165.2412, y: 592.776}
         node:
           rid: 3043071751487750144
         references:
@@ -500,9 +511,10 @@ MonoBehaviour:
         - b039be7d-ea93-4214-979b-8984952db50d
         childIds:
         - 22016ee2-fe9a-40f7-9b04-3b29e7f438fe
+        - 33afc357-ea76-43b5-99c3-c58ff2062a3a
       - name: PatrolToInvestigate
         id: b039be7d-ea93-4214-979b-8984952db50d
-        position: {x: 1334.9929, y: 51.35614}
+        position: {x: -172.77072, y: 307.65424}
         node:
           rid: 3043071751487750146
         references:
@@ -522,7 +534,7 @@ MonoBehaviour:
         - a4d0feb6-e14d-46b4-ad30-2271a4780b3f
       - name: InvestigationToPatrol
         id: 22016ee2-fe9a-40f7-9b04-3b29e7f438fe
-        position: {x: 1521, y: -333}
+        position: {x: -79.208275, y: 775.7779}
         node:
           rid: 8148621444984340484
         references:
@@ -540,6 +552,428 @@ MonoBehaviour:
         - a4d0feb6-e14d-46b4-ad30-2271a4780b3f
         childIds:
         - 4ccf626c-75e4-447b-afcb-4d79aa3b2ba7
+      - name: Flee State
+        id: 836cb524-e62b-487d-b696-fa670f6398f0
+        position: {x: 2662.4795, y: -732.20337}
+        node:
+          rid: 8148621491124830233
+        references:
+        - fieldName: Action
+          value:
+            rid: 8148621491124830265
+          fieldType: BehaviourAPI.Core.Actions.Action, BehaviourAPI.Core, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+        parentIds: []
+        childIds: []
+      - name: Combat BT State
+        id: 06940670-bfe6-4b83-81b1-9362a065fe7d
+        position: {x: 542.9304, y: 455.99545}
+        node:
+          rid: 8148621491124830234
+        references:
+        - fieldName: Action
+          value:
+            rid: 8148621491124830235
+          fieldType: BehaviourAPI.Core.Actions.Action, BehaviourAPI.Core, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+        parentIds:
+        - 33afc357-ea76-43b5-99c3-c58ff2062a3a
+        - 116cff80-89a6-4546-b7a3-e758fb097f38
+        childIds:
+        - ab5aabf6-6c37-47e9-bc50-0ef5487b74ec
+      - name: Found enemy
+        id: 33afc357-ea76-43b5-99c3-c58ff2062a3a
+        position: {x: 220.76567, y: 691.66095}
+        node:
+          rid: 7328930099488358400
+        references:
+        - fieldName: Perception
+          value:
+            rid: 8148621541506547712
+          fieldType: BehaviourAPI.Core.Perceptions.Perception, BehaviourAPI.Core,
+            Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        - fieldName: Action
+          value:
+            rid: -2
+          fieldType: BehaviourAPI.Core.Actions.Action, BehaviourAPI.Core, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+        parentIds:
+        - a4d0feb6-e14d-46b4-ad30-2271a4780b3f
+        childIds:
+        - 06940670-bfe6-4b83-81b1-9362a065fe7d
+      - name: Enemy lost exit
+        id: ab5aabf6-6c37-47e9-bc50-0ef5487b74ec
+        position: {x: 559, y: 669}
+        node:
+          rid: 7328930099488358401
+        references:
+        - fieldName: Perception
+          value:
+            rid: 8148621541506547714
+          fieldType: BehaviourAPI.Core.Perceptions.Perception, BehaviourAPI.Core,
+            Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        - fieldName: Action
+          value:
+            rid: -2
+          fieldType: BehaviourAPI.Core.Actions.Action, BehaviourAPI.Core, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+        parentIds:
+        - 06940670-bfe6-4b83-81b1-9362a065fe7d
+        childIds:
+        - 4ccf626c-75e4-447b-afcb-4d79aa3b2ba7
+      - name: Found enemy 2
+        id: 116cff80-89a6-4546-b7a3-e758fb097f38
+        position: {x: 443.13388, y: 187.65225}
+        node:
+          rid: 7328930099488358403
+        references:
+        - fieldName: Perception
+          value:
+            rid: 8148621541506547713
+          fieldType: BehaviourAPI.Core.Perceptions.Perception, BehaviourAPI.Core,
+            Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        - fieldName: Action
+          value:
+            rid: -2
+          fieldType: BehaviourAPI.Core.Actions.Action, BehaviourAPI.Core, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+        parentIds:
+        - 4ccf626c-75e4-447b-afcb-4d79aa3b2ba7
+        childIds:
+        - 06940670-bfe6-4b83-81b1-9362a065fe7d
+      - name: ScaredCheck
+        id: 429d451f-88f3-4b44-9fc6-889c9fc7024c
+        position: {x: -26, y: 120}
+        node:
+          rid: 8148621613969440768
+        references:
+        - fieldName: Perception
+          value:
+            rid: -2
+          fieldType: BehaviourAPI.Core.Perceptions.Perception, BehaviourAPI.Core,
+            Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        - fieldName: Action
+          value:
+            rid: -2
+          fieldType: BehaviourAPI.Core.Actions.Action, BehaviourAPI.Core, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+        parentIds:
+        - 4ccf626c-75e4-447b-afcb-4d79aa3b2ba7
+        childIds:
+        - 0b4dcdcc-4fea-4244-94ef-775ea483a8d2
+      - name: Scared
+        id: 0b4dcdcc-4fea-4244-94ef-775ea483a8d2
+        position: {x: -18, y: -81}
+        node:
+          rid: 8148621613969440769
+        references:
+        - fieldName: Action
+          value:
+            rid: 8148621613969440770
+          fieldType: BehaviourAPI.Core.Actions.Action, BehaviourAPI.Core, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+        parentIds:
+        - 429d451f-88f3-4b44-9fc6-889c9fc7024c
+        childIds:
+        - 6567d7e6-13db-4ae9-b7fe-9318e0d2f624
+      - name: Path Complete
+        id: 6567d7e6-13db-4ae9-b7fe-9318e0d2f624
+        position: {x: 252, y: 39}
+        node:
+          rid: 8148621613969440771
+        references:
+        - fieldName: Perception
+          value:
+            rid: 8148621613969440772
+          fieldType: BehaviourAPI.Core.Perceptions.Perception, BehaviourAPI.Core,
+            Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        - fieldName: Action
+          value:
+            rid: -2
+          fieldType: BehaviourAPI.Core.Actions.Action, BehaviourAPI.Core, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+        parentIds:
+        - 0b4dcdcc-4fea-4244-94ef-775ea483a8d2
+        childIds:
+        - 4ccf626c-75e4-447b-afcb-4d79aa3b2ba7
+    - name: Police lvl2 BT
+      id: 2f0a2014-d1b0-4766-ba8b-42e8f8ca01d9
+      graph:
+        rid: 8148621491124830208
+      nodes:
+      - name: Loop
+        id: 3d7ef687-57c0-4f7c-ab06-fa3dc8197c82
+        position: {x: 592, y: -1}
+        node:
+          rid: 8148621581890093084
+        references: []
+        parentIds: []
+        childIds:
+        - f09e389e-34c1-4b78-b585-38df85f55249
+      - name: Battle Selector
+        id: f09e389e-34c1-4b78-b585-38df85f55249
+        position: {x: 586, y: 116}
+        node:
+          rid: 8148621491124830211
+        references: []
+        parentIds:
+        - 3d7ef687-57c0-4f7c-ab06-fa3dc8197c82
+        childIds:
+        - 81685f96-d2dd-469e-91cf-7e6383542826
+        - e2b3df13-2a30-4770-a288-3eea9247f1dc
+      - name: Attack sequence
+        id: 81685f96-d2dd-469e-91cf-7e6383542826
+        position: {x: 309, y: 201}
+        node:
+          rid: 8148621491124830212
+        references: []
+        parentIds:
+        - f09e389e-34c1-4b78-b585-38df85f55249
+        childIds:
+        - 1fcc6d0f-9fad-466e-ba8d-a9370e709607
+        - 481e5286-b9d1-47b1-b2e9-2449eacd1d3c
+      - name: Not Attack Selector
+        id: e2b3df13-2a30-4770-a288-3eea9247f1dc
+        position: {x: 890, y: 205}
+        node:
+          rid: 8148621491124830214
+        references: []
+        parentIds:
+        - f09e389e-34c1-4b78-b585-38df85f55249
+        childIds:
+        - e03c6ac6-dc4c-48ee-979a-e865d89e5478
+        - 57cedbb0-0e06-4b00-806b-a8220fd6bf9f
+      - name: Detectar Presencia
+        id: 1fcc6d0f-9fad-466e-ba8d-a9370e709607
+        position: {x: -2, y: 334}
+        node:
+          rid: 8148621491124830215
+        references:
+        - fieldName: Action
+          value:
+            rid: 8148621581890093083
+          fieldType: BehaviourAPI.Core.Actions.Action, BehaviourAPI.Core, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+        parentIds:
+        - 81685f96-d2dd-469e-91cf-7e6383542826
+        childIds: []
+      - name: Action selector
+        id: 481e5286-b9d1-47b1-b2e9-2449eacd1d3c
+        position: {x: 325, y: 380}
+        node:
+          rid: 8148621491124830216
+        references: []
+        parentIds:
+        - 81685f96-d2dd-469e-91cf-7e6383542826
+        childIds:
+        - 497726e6-c61a-4cac-95a1-6d69ae86a4bd
+        - 18cba734-d611-4953-ab67-cecfd82085a5
+      - name: Flee sequence
+        id: 497726e6-c61a-4cac-95a1-6d69ae86a4bd
+        position: {x: -18, y: 515}
+        node:
+          rid: 8148621491124830217
+        references: []
+        parentIds:
+        - 481e5286-b9d1-47b1-b2e9-2449eacd1d3c
+        childIds:
+        - d23b2843-ca6d-4847-b054-f097f83ccf3a
+        - 05d128f6-1530-49f1-a6e7-51c413a20960
+      - name: Huir
+        id: 05d128f6-1530-49f1-a6e7-51c413a20960
+        position: {x: 46, y: 679}
+        node:
+          rid: 8148621491124830220
+        references:
+        - fieldName: Action
+          value:
+            rid: 8148621559079370752
+          fieldType: BehaviourAPI.Core.Actions.Action, BehaviourAPI.Core, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+        parentIds:
+        - 497726e6-c61a-4cac-95a1-6d69ae86a4bd
+        childIds: []
+      - name: Golpear
+        id: 7b8c3b66-1d9c-4d12-bc9a-2c63b7e9d152
+        position: {x: 758, y: 1137}
+        node:
+          rid: 8148621491124830224
+        references:
+        - fieldName: Action
+          value:
+            rid: 8148621581890093056
+          fieldType: BehaviourAPI.Core.Actions.Action, BehaviourAPI.Core, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+        parentIds:
+        - 62f2b128-7f9e-4505-9980-823f96f925cc
+        childIds: []
+      - name: Disparar
+        id: 2965a337-6514-43cd-b6ee-1e567ceecc31
+        position: {x: 1089, y: 980}
+        node:
+          rid: 8148621491124830225
+        references:
+        - fieldName: Action
+          value:
+            rid: 8148621581890093057
+          fieldType: BehaviourAPI.Core.Actions.Action, BehaviourAPI.Core, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+        parentIds:
+        - 15463449-7e4d-4297-9c19-0cab86fa53ae
+        childIds: []
+      - name: Healing sequence
+        id: e03c6ac6-dc4c-48ee-979a-e865d89e5478
+        position: {x: 746, y: 340}
+        node:
+          rid: 8148621491124830226
+        references: []
+        parentIds:
+        - e2b3df13-2a30-4770-a288-3eea9247f1dc
+        childIds:
+        - b4d7be0e-420c-42af-bea2-5818e9008d23
+        - 3c21c10e-74f4-4438-8019-4467e7e027a2
+        - e1140d89-95e5-48ee-b108-cdc36512549a
+      - name: Patrullar
+        id: 57cedbb0-0e06-4b00-806b-a8220fd6bf9f
+        position: {x: 1441, y: 352}
+        node:
+          rid: 8148621491124830227
+        references:
+        - fieldName: Action
+          value:
+            rid: 8148621581890093079
+          fieldType: BehaviourAPI.Core.Actions.Action, BehaviourAPI.Core, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+        parentIds:
+        - e2b3df13-2a30-4770-a288-3eea9247f1dc
+        childIds: []
+      - name: Curarse
+        id: 3c21c10e-74f4-4438-8019-4467e7e027a2
+        position: {x: 1048, y: 544}
+        node:
+          rid: 8148621491124830229
+        references:
+        - fieldName: Action
+          value:
+            rid: 8148621491124830272
+          fieldType: BehaviourAPI.Core.Actions.Action, BehaviourAPI.Core, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+        parentIds:
+        - e03c6ac6-dc4c-48ee-979a-e865d89e5478
+        childIds: []
+      - name: Pedir Refuerzos
+        id: e1140d89-95e5-48ee-b108-cdc36512549a
+        position: {x: 1294, y: 528}
+        node:
+          rid: 8148621491124830230
+        references:
+        - fieldName: Action
+          value:
+            rid: 8148621491124830273
+          fieldType: BehaviourAPI.Core.Actions.Action, BehaviourAPI.Core, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+        parentIds:
+        - e03c6ac6-dc4c-48ee-979a-e865d89e5478
+        childIds: []
+      - name: Attack sequence
+        id: 18cba734-d611-4953-ab67-cecfd82085a5
+        position: {x: 401, y: 619}
+        node:
+          rid: 8148621541506547718
+        references: []
+        parentIds:
+        - 481e5286-b9d1-47b1-b2e9-2449eacd1d3c
+        childIds:
+        - b4db86fb-63bb-483e-b62f-89e2ae375372
+        - 15463449-7e4d-4297-9c19-0cab86fa53ae
+      - name: Choose attack type
+        id: 15463449-7e4d-4297-9c19-0cab86fa53ae
+        position: {x: 865, y: 768}
+        node:
+          rid: 8148621541506547719
+        references: []
+        parentIds:
+        - 18cba734-d611-4953-ab67-cecfd82085a5
+        childIds:
+        - 62f2b128-7f9e-4505-9980-823f96f925cc
+        - 2965a337-6514-43cd-b6ee-1e567ceecc31
+      - name: Evaluar Estado
+        id: d23b2843-ca6d-4847-b054-f097f83ccf3a
+        position: {x: -248, y: 663}
+        node:
+          rid: 8148621581890093059
+        references:
+        - fieldName: Action
+          value:
+            rid: 8148621581890093065
+          fieldType: BehaviourAPI.Core.Actions.Action, BehaviourAPI.Core, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+        parentIds:
+        - 497726e6-c61a-4cac-95a1-6d69ae86a4bd
+        childIds: []
+      - name: Evaluar Amenaza
+        id: c245f81a-1e08-4ba1-b37d-9b2b76d4f431
+        position: {x: 507, y: 1114}
+        node:
+          rid: 8148621581890093062
+        references:
+        - fieldName: Action
+          value:
+            rid: 8148621581890093066
+          fieldType: BehaviourAPI.Core.Actions.Action, BehaviourAPI.Core, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+        parentIds:
+        - 62f2b128-7f9e-4505-9980-823f96f925cc
+        childIds: []
+      - name: Hit Sequence
+        id: 62f2b128-7f9e-4505-9980-823f96f925cc
+        position: {x: 663, y: 970}
+        node:
+          rid: 8148621581890093064
+        references: []
+        parentIds:
+        - 15463449-7e4d-4297-9c19-0cab86fa53ae
+        childIds:
+        - c245f81a-1e08-4ba1-b37d-9b2b76d4f431
+        - 7b8c3b66-1d9c-4d12-bc9a-2c63b7e9d152
+      - name: Evaluar Estado
+        id: b4d7be0e-420c-42af-bea2-5818e9008d23
+        position: {x: 770, y: 531}
+        node:
+          rid: 8148621581890093067
+        references:
+        - fieldName: Action
+          value:
+            rid: 8148621581890093068
+          fieldType: BehaviourAPI.Core.Actions.Action, BehaviourAPI.Core, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+        parentIds:
+        - e03c6ac6-dc4c-48ee-979a-e865d89e5478
+        childIds: []
+      - name: Chase Sequence
+        id: b4db86fb-63bb-483e-b62f-89e2ae375372
+        position: {x: 316, y: 795}
+        node:
+          rid: 8148621581890093069
+        references: []
+        parentIds:
+        - 18cba734-d611-4953-ab67-cecfd82085a5
+        childIds:
+        - 5cc2c6ed-db26-46aa-9657-05a12161c79f
+      - name: Chase
+        id: 5cc2c6ed-db26-46aa-9657-05a12161c79f
+        position: {x: 302, y: 953}
+        node:
+          rid: 8148621581890093070
+        references:
+        - fieldName: Action
+          value:
+            rid: 8148621581890093075
+          fieldType: BehaviourAPI.Core.Actions.Action, BehaviourAPI.Core, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+        parentIds:
+        - b4db86fb-63bb-483e-b62f-89e2ae375372
+        childIds: []
     pushPerceptions: []
   references:
     version: 2
@@ -589,6 +1023,18 @@ MonoBehaviour:
         unpause:
           componentName: 
           methodName: 
+    - rid: 7328930099488358400
+      type: {class: StateTransition, ns: BehaviourAPI.StateMachines, asm: BehaviourAPI.StateMachines}
+      data:
+        StatusFlags: -1
+    - rid: 7328930099488358401
+      type: {class: StateTransition, ns: BehaviourAPI.StateMachines, asm: BehaviourAPI.StateMachines}
+      data:
+        StatusFlags: -1
+    - rid: 7328930099488358403
+      type: {class: StateTransition, ns: BehaviourAPI.StateMachines, asm: BehaviourAPI.StateMachines}
+      data:
+        StatusFlags: -1
     - rid: 8148621444984340484
       type: {class: StateTransition, ns: BehaviourAPI.StateMachines, asm: BehaviourAPI.StateMachines}
       data:
@@ -611,54 +1057,368 @@ MonoBehaviour:
         unpause:
           componentName: 
           methodName: 
---- !u!54 &7407785389446255209
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3214455660108776758}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
---- !u!65 &9040380153509945643
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3214455660108776758}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 15, y: 1, z: 15}
-  m_Center: {x: 0, y: 1, z: 0}
+    - rid: 8148621491124830208
+      type: {class: BehaviourTree, ns: BehaviourAPI.BehaviourTrees, asm: BehaviourAPI.BehaviourTrees}
+      data: 
+    - rid: 8148621491124830211
+      type: {class: SelectorNode, ns: BehaviourAPI.BehaviourTrees, asm: BehaviourAPI.BehaviourTrees}
+      data:
+        IsRandomized: 0
+    - rid: 8148621491124830212
+      type: {class: SequencerNode, ns: BehaviourAPI.BehaviourTrees, asm: BehaviourAPI.BehaviourTrees}
+      data:
+        IsRandomized: 0
+    - rid: 8148621491124830214
+      type: {class: SelectorNode, ns: BehaviourAPI.BehaviourTrees, asm: BehaviourAPI.BehaviourTrees}
+      data:
+        IsRandomized: 0
+    - rid: 8148621491124830215
+      type: {class: LeafNode, ns: BehaviourAPI.BehaviourTrees, asm: BehaviourAPI.BehaviourTrees}
+      data: 
+    - rid: 8148621491124830216
+      type: {class: SelectorNode, ns: BehaviourAPI.BehaviourTrees, asm: BehaviourAPI.BehaviourTrees}
+      data:
+        IsRandomized: 0
+    - rid: 8148621491124830217
+      type: {class: SequencerNode, ns: BehaviourAPI.BehaviourTrees, asm: BehaviourAPI.BehaviourTrees}
+      data:
+        IsRandomized: 0
+    - rid: 8148621491124830220
+      type: {class: LeafNode, ns: BehaviourAPI.BehaviourTrees, asm: BehaviourAPI.BehaviourTrees}
+      data: 
+    - rid: 8148621491124830224
+      type: {class: LeafNode, ns: BehaviourAPI.BehaviourTrees, asm: BehaviourAPI.BehaviourTrees}
+      data: 
+    - rid: 8148621491124830225
+      type: {class: LeafNode, ns: BehaviourAPI.BehaviourTrees, asm: BehaviourAPI.BehaviourTrees}
+      data: 
+    - rid: 8148621491124830226
+      type: {class: SequencerNode, ns: BehaviourAPI.BehaviourTrees, asm: BehaviourAPI.BehaviourTrees}
+      data:
+        IsRandomized: 0
+    - rid: 8148621491124830227
+      type: {class: LeafNode, ns: BehaviourAPI.BehaviourTrees, asm: BehaviourAPI.BehaviourTrees}
+      data: 
+    - rid: 8148621491124830229
+      type: {class: LeafNode, ns: BehaviourAPI.BehaviourTrees, asm: BehaviourAPI.BehaviourTrees}
+      data: 
+    - rid: 8148621491124830230
+      type: {class: LeafNode, ns: BehaviourAPI.BehaviourTrees, asm: BehaviourAPI.BehaviourTrees}
+      data: 
+    - rid: 8148621491124830233
+      type: {class: State, ns: BehaviourAPI.StateMachines, asm: BehaviourAPI.StateMachines}
+      data: 
+    - rid: 8148621491124830234
+      type: {class: State, ns: BehaviourAPI.StateMachines, asm: BehaviourAPI.StateMachines}
+      data: 
+    - rid: 8148621491124830235
+      type: {class: SubgraphAction, ns: BehaviourAPI.UnityToolkit.GUIDesigner.Framework, asm: BehaviourAPI.UnityToolkit.GUIDesigner.Framework}
+      data:
+        ExecuteOnLoop: 0
+        InterruptOptions: 2
+        subgraphId: 2f0a2014-d1b0-4766-ba8b-42e8f8ca01d9
+    - rid: 8148621491124830265
+      type: {class: SimpleAction, ns: BehaviourAPI.UnityToolkit.GUIDesigner.Framework, asm: BehaviourAPI.UnityToolkit.GUIDesigner.Framework}
+      data:
+        method:
+          componentName: PoliceBehaviour
+          methodName: Heal
+    - rid: 8148621491124830272
+      type: {class: SimpleAction, ns: BehaviourAPI.UnityToolkit.GUIDesigner.Framework, asm: BehaviourAPI.UnityToolkit.GUIDesigner.Framework}
+      data:
+        method:
+          componentName: PoliceBehaviour
+          methodName: Heal
+    - rid: 8148621491124830273
+      type: {class: SimpleAction, ns: BehaviourAPI.UnityToolkit.GUIDesigner.Framework, asm: BehaviourAPI.UnityToolkit.GUIDesigner.Framework}
+      data:
+        method:
+          componentName: PoliceBehaviour
+          methodName: Heal
+    - rid: 8148621541506547712
+      type: {class: CustomPerception, ns: BehaviourAPI.UnityToolkit.GUIDesigner.Framework, asm: BehaviourAPI.UnityToolkit.GUIDesigner.Framework}
+      data:
+        init:
+          componentName: 
+          methodName: 
+        check:
+          componentName: PoliceBehaviour
+          methodName: DetectEnemy
+        reset:
+          componentName: 
+          methodName: 
+        pause:
+          componentName: 
+          methodName: 
+        unpause:
+          componentName: 
+          methodName: 
+    - rid: 8148621541506547713
+      type: {class: CustomPerception, ns: BehaviourAPI.UnityToolkit.GUIDesigner.Framework, asm: BehaviourAPI.UnityToolkit.GUIDesigner.Framework}
+      data:
+        init:
+          componentName: 
+          methodName: 
+        check:
+          componentName: PoliceBehaviour
+          methodName: DetectEnemy
+        reset:
+          componentName: 
+          methodName: 
+        pause:
+          componentName: 
+          methodName: 
+        unpause:
+          componentName: 
+          methodName: 
+    - rid: 8148621541506547714
+      type: {class: CustomPerception, ns: BehaviourAPI.UnityToolkit.GUIDesigner.Framework, asm: BehaviourAPI.UnityToolkit.GUIDesigner.Framework}
+      data:
+        init:
+          componentName: 
+          methodName: 
+        check:
+          componentName: PoliceBehaviour
+          methodName: EnemyLost
+        reset:
+          componentName: 
+          methodName: 
+        pause:
+          componentName: 
+          methodName: 
+        unpause:
+          componentName: 
+          methodName: 
+    - rid: 8148621541506547718
+      type: {class: SequencerNode, ns: BehaviourAPI.BehaviourTrees, asm: BehaviourAPI.BehaviourTrees}
+      data:
+        IsRandomized: 0
+    - rid: 8148621541506547719
+      type: {class: SelectorNode, ns: BehaviourAPI.BehaviourTrees, asm: BehaviourAPI.BehaviourTrees}
+      data:
+        IsRandomized: 0
+    - rid: 8148621559079370752
+      type: {class: CustomAction, ns: BehaviourAPI.UnityToolkit.GUIDesigner.Framework, asm: BehaviourAPI.UnityToolkit.GUIDesigner.Framework}
+      data:
+        start:
+          componentName: PoliceBehaviour
+          methodName: Flee
+        update:
+          componentName: PoliceBehaviour
+          methodName: PathStatus
+        stop:
+          componentName: 
+          methodName: 
+        pause:
+          componentName: 
+          methodName: 
+        unpause:
+          componentName: 
+          methodName: 
+    - rid: 8148621581890093056
+      type: {class: CustomAction, ns: BehaviourAPI.UnityToolkit.GUIDesigner.Framework, asm: BehaviourAPI.UnityToolkit.GUIDesigner.Framework}
+      data:
+        start:
+          componentName: PoliceBehaviour
+          methodName: Hit
+        update:
+          componentName: PoliceBehaviour
+          methodName: CheckInCombat
+        stop:
+          componentName: 
+          methodName: 
+        pause:
+          componentName: 
+          methodName: 
+        unpause:
+          componentName: 
+          methodName: 
+    - rid: 8148621581890093057
+      type: {class: CustomAction, ns: BehaviourAPI.UnityToolkit.GUIDesigner.Framework, asm: BehaviourAPI.UnityToolkit.GUIDesigner.Framework}
+      data:
+        start:
+          componentName: PoliceBehaviour
+          methodName: Shoot
+        update:
+          componentName: PoliceBehaviour
+          methodName: CheckInCombat
+        stop:
+          componentName: 
+          methodName: 
+        pause:
+          componentName: 
+          methodName: 
+        unpause:
+          componentName: 
+          methodName: 
+    - rid: 8148621581890093059
+      type: {class: LeafNode, ns: BehaviourAPI.BehaviourTrees, asm: BehaviourAPI.BehaviourTrees}
+      data: 
+    - rid: 8148621581890093062
+      type: {class: LeafNode, ns: BehaviourAPI.BehaviourTrees, asm: BehaviourAPI.BehaviourTrees}
+      data: 
+    - rid: 8148621581890093064
+      type: {class: SequencerNode, ns: BehaviourAPI.BehaviourTrees, asm: BehaviourAPI.BehaviourTrees}
+      data:
+        IsRandomized: 0
+    - rid: 8148621581890093065
+      type: {class: CustomAction, ns: BehaviourAPI.UnityToolkit.GUIDesigner.Framework, asm: BehaviourAPI.UnityToolkit.GUIDesigner.Framework}
+      data:
+        start:
+          componentName: 
+          methodName: 
+        update:
+          componentName: PoliceBehaviour
+          methodName: CheckHealth
+        stop:
+          componentName: 
+          methodName: 
+        pause:
+          componentName: 
+          methodName: 
+        unpause:
+          componentName: 
+          methodName: 
+    - rid: 8148621581890093066
+      type: {class: CustomAction, ns: BehaviourAPI.UnityToolkit.GUIDesigner.Framework, asm: BehaviourAPI.UnityToolkit.GUIDesigner.Framework}
+      data:
+        start:
+          componentName: 
+          methodName: 
+        update:
+          componentName: PoliceBehaviour
+          methodName: CheckDanger
+        stop:
+          componentName: 
+          methodName: 
+        pause:
+          componentName: 
+          methodName: 
+        unpause:
+          componentName: 
+          methodName: 
+    - rid: 8148621581890093067
+      type: {class: LeafNode, ns: BehaviourAPI.BehaviourTrees, asm: BehaviourAPI.BehaviourTrees}
+      data: 
+    - rid: 8148621581890093068
+      type: {class: CustomAction, ns: BehaviourAPI.UnityToolkit.GUIDesigner.Framework, asm: BehaviourAPI.UnityToolkit.GUIDesigner.Framework}
+      data:
+        start:
+          componentName: 
+          methodName: 
+        update:
+          componentName: PoliceBehaviour
+          methodName: CheckHealth
+        stop:
+          componentName: 
+          methodName: 
+        pause:
+          componentName: 
+          methodName: 
+        unpause:
+          componentName: 
+          methodName: 
+    - rid: 8148621581890093069
+      type: {class: SequencerNode, ns: BehaviourAPI.BehaviourTrees, asm: BehaviourAPI.BehaviourTrees}
+      data:
+        IsRandomized: 0
+    - rid: 8148621581890093070
+      type: {class: LeafNode, ns: BehaviourAPI.BehaviourTrees, asm: BehaviourAPI.BehaviourTrees}
+      data: 
+    - rid: 8148621581890093075
+      type: {class: CustomAction, ns: BehaviourAPI.UnityToolkit.GUIDesigner.Framework, asm: BehaviourAPI.UnityToolkit.GUIDesigner.Framework}
+      data:
+        start:
+          componentName: PoliceBehaviour
+          methodName: Chase
+        update:
+          componentName: PoliceBehaviour
+          methodName: PathStatus
+        stop:
+          componentName: 
+          methodName: 
+        pause:
+          componentName: 
+          methodName: 
+        unpause:
+          componentName: 
+          methodName: 
+    - rid: 8148621581890093079
+      type: {class: CustomAction, ns: BehaviourAPI.UnityToolkit.GUIDesigner.Framework, asm: BehaviourAPI.UnityToolkit.GUIDesigner.Framework}
+      data:
+        start:
+          componentName: 
+          methodName: 
+        update:
+          componentName: PoliceBehaviour
+          methodName: EndBT
+        stop:
+          componentName: 
+          methodName: 
+        pause:
+          componentName: 
+          methodName: 
+        unpause:
+          componentName: 
+          methodName: 
+    - rid: 8148621581890093083
+      type: {class: CustomAction, ns: BehaviourAPI.UnityToolkit.GUIDesigner.Framework, asm: BehaviourAPI.UnityToolkit.GUIDesigner.Framework}
+      data:
+        start:
+          componentName: 
+          methodName: 
+        update:
+          componentName: PoliceBehaviour
+          methodName: DetectEnemyStatus
+        stop:
+          componentName: 
+          methodName: 
+        pause:
+          componentName: 
+          methodName: 
+        unpause:
+          componentName: 
+          methodName: 
+    - rid: 8148621581890093084
+      type: {class: LoopUntilNode, ns: BehaviourAPI.BehaviourTrees, asm: BehaviourAPI.BehaviourTrees}
+      data:
+        TargetStatus: 2
+        MaxIterations: 1
+    - rid: 8148621613969440768
+      type: {class: StateTransition, ns: BehaviourAPI.StateMachines, asm: BehaviourAPI.StateMachines}
+      data:
+        StatusFlags: 0
+    - rid: 8148621613969440769
+      type: {class: State, ns: BehaviourAPI.StateMachines, asm: BehaviourAPI.StateMachines}
+      data: 
+    - rid: 8148621613969440770
+      type: {class: SimpleAction, ns: BehaviourAPI.UnityToolkit.GUIDesigner.Framework, asm: BehaviourAPI.UnityToolkit.GUIDesigner.Framework}
+      data:
+        method:
+          componentName: PoliceBehaviour
+          methodName: Flee
+    - rid: 8148621613969440771
+      type: {class: StateTransition, ns: BehaviourAPI.StateMachines, asm: BehaviourAPI.StateMachines}
+      data:
+        StatusFlags: -1
+    - rid: 8148621613969440772
+      type: {class: CustomPerception, ns: BehaviourAPI.UnityToolkit.GUIDesigner.Framework, asm: BehaviourAPI.UnityToolkit.GUIDesigner.Framework}
+      data:
+        init:
+          componentName: 
+          methodName: 
+        check:
+          componentName: PoliceBehaviour
+          methodName: isPathComplete
+        reset:
+          componentName: 
+          methodName: 
+        pause:
+          componentName: 
+          methodName: 
+        unpause:
+          componentName: 
+          methodName: 
 --- !u!1 &3927364329047651755
 GameObject:
   m_ObjectHideFlags: 0
@@ -668,7 +1428,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2424408910351228432}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Bip001 R Forearm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -700,7 +1460,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3814114514290095967}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Bip001 L Forearm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -732,7 +1492,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8091012525828435251}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Bip001 Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -765,7 +1525,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5691308678853465386}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Bip001 R Toe0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -797,7 +1557,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 153970604372101320}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Bip001 Pelvis
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -831,7 +1591,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4313731321168850211}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Bip001 L Hand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -862,7 +1622,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5189522297315373067}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Bip001 R Foot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -895,7 +1655,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1537596483646089029}
   - component: {fileID: 803080876668186453}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Body_40_police_A
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -994,7 +1754,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8761291353192161781}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Bip001 Neck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1026,7 +1786,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5281895869144330473}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Bip001 L Toe0Nub
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1057,7 +1817,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6257137923155883908}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Bip001 L Calf
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1089,7 +1849,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5602742191076102860}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Bip001 Footsteps
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1120,7 +1880,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6070518510612391915}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Bip001 L Thigh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1152,7 +1912,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 256612243210015484}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Bip001 L Toe0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1186,7 +1946,7 @@ GameObject:
   - component: {fileID: 8561665453728311151}
   - component: {fileID: 7821518653712752513}
   - component: {fileID: 83315351790759754}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: w_handgun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1267,7 +2027,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4689555099261329783}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Bip001 R Thigh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1299,7 +2059,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1826689642422002505}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Bip001 R Toe0Nub
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1330,7 +2090,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7828207560982240840}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Bip001 L Clavicle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1362,7 +2122,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5951670644777430910}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Bip001 HeadNub
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1393,7 +2153,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6457050827286738955}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Bip001 R UpperArm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1425,7 +2185,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7366623805805387383}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Bip001 Spine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1450,6 +2210,107 @@ Transform:
   - {fileID: 1364184715639192511}
   m_Father: {fileID: 153970604372101320}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1453366842249384239
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 7454986386063945197}
+    m_Modifications:
+    - target: {fileID: 146175438490608412, guid: e44ec23f5bb188a408d2aa61997f906c, type: 3}
+      propertyPath: sceneMask.m_Bits
+      value: 129
+      objectReference: {fileID: 0}
+    - target: {fileID: 1984359783185709323, guid: e44ec23f5bb188a408d2aa61997f906c, type: 3}
+      propertyPath: m_Size.x
+      value: 15.739737
+      objectReference: {fileID: 0}
+    - target: {fileID: 1984359783185709323, guid: e44ec23f5bb188a408d2aa61997f906c, type: 3}
+      propertyPath: m_Size.z
+      value: 8.414192
+      objectReference: {fileID: 0}
+    - target: {fileID: 1984359783185709323, guid: e44ec23f5bb188a408d2aa61997f906c, type: 3}
+      propertyPath: m_Center.x
+      value: 0.06679201
+      objectReference: {fileID: 0}
+    - target: {fileID: 1984359783185709323, guid: e44ec23f5bb188a408d2aa61997f906c, type: 3}
+      propertyPath: m_Center.y
+      value: 0.19
+      objectReference: {fileID: 0}
+    - target: {fileID: 1984359783185709323, guid: e44ec23f5bb188a408d2aa61997f906c, type: 3}
+      propertyPath: m_Center.z
+      value: 3.934865
+      objectReference: {fileID: 0}
+    - target: {fileID: 3993417645049658242, guid: e44ec23f5bb188a408d2aa61997f906c, type: 3}
+      propertyPath: Body
+      value: 
+      objectReference: {fileID: 7454986386063945197}
+    - target: {fileID: 6554878334282041218, guid: e44ec23f5bb188a408d2aa61997f906c, type: 3}
+      propertyPath: m_Name
+      value: Vision
+      objectReference: {fileID: 0}
+    - target: {fileID: 8890598771315835198, guid: e44ec23f5bb188a408d2aa61997f906c, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8890598771315835198, guid: e44ec23f5bb188a408d2aa61997f906c, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.26
+      objectReference: {fileID: 0}
+    - target: {fileID: 8890598771315835198, guid: e44ec23f5bb188a408d2aa61997f906c, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8890598771315835198, guid: e44ec23f5bb188a408d2aa61997f906c, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8890598771315835198, guid: e44ec23f5bb188a408d2aa61997f906c, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8890598771315835198, guid: e44ec23f5bb188a408d2aa61997f906c, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8890598771315835198, guid: e44ec23f5bb188a408d2aa61997f906c, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8890598771315835198, guid: e44ec23f5bb188a408d2aa61997f906c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8890598771315835198, guid: e44ec23f5bb188a408d2aa61997f906c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8890598771315835198, guid: e44ec23f5bb188a408d2aa61997f906c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e44ec23f5bb188a408d2aa61997f906c, type: 3}
+--- !u!114 &1597709933603041843 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 146175438490608412, guid: e44ec23f5bb188a408d2aa61997f906c, type: 3}
+  m_PrefabInstance: {fileID: 1453366842249384239}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aaaf0fd4f11be2a49a87f29447e42d2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &8019403554162020369 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8890598771315835198, guid: e44ec23f5bb188a408d2aa61997f906c, type: 3}
+  m_PrefabInstance: {fileID: 1453366842249384239}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8467965209280494414
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1458,9 +2319,57 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7454986386063945197}
     m_Modifications:
+    - target: {fileID: 2157906868423566378, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4754005276562797252, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: images.Array.size
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4754005276562797252, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: images.Array.data[0]
+      value: 
+      objectReference: {fileID: 21300000, guid: 03ad448ff1a9c7140a3de7191520602d, type: 3}
+    - target: {fileID: 4754005276562797252, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: images.Array.data[1]
+      value: 
+      objectReference: {fileID: 21300000, guid: 37f7f15b8e82f3648b625cb57dc404e5, type: 3}
+    - target: {fileID: 4754005276562797252, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: images.Array.data[2]
+      value: 
+      objectReference: {fileID: 21300000, guid: ad1315c0c7347744e94c42cdb3a264d5, type: 3}
+    - target: {fileID: 4754005276562797252, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: images.Array.data[3]
+      value: 
+      objectReference: {fileID: 21300000, guid: 5e4d623f2d67adc43bef18fc94a2dba5, type: 3}
+    - target: {fileID: 4754005276562797252, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: images.Array.data[4]
+      value: 
+      objectReference: {fileID: 21300000, guid: 1da01740d15145b4db74707edb0346ef, type: 3}
+    - target: {fileID: 4754005276562797252, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: images.Array.data[5]
+      value: 
+      objectReference: {fileID: 21300000, guid: bdedeb446b762354bb7d86cc5d5d1a1c, type: 3}
+    - target: {fileID: 4754005276562797252, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: images.Array.data[6]
+      value: 
+      objectReference: {fileID: 21300000, guid: 373f1996c48bc54459479e1c73c149e8, type: 3}
+    - target: {fileID: 4754005276562797252, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: images.Array.data[7]
+      value: 
+      objectReference: {fileID: 21300000, guid: db718925485f68549a1552fad6826d78, type: 3}
+    - target: {fileID: 5604032533695204794, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 7246430868342017469, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
       propertyPath: m_Name
       value: Thinking bubble
+      objectReference: {fileID: 0}
+    - target: {fileID: 7246430868342017469, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7930735414412468364, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
       propertyPath: m_Pivot.x
