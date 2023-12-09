@@ -10,359 +10,232 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 
+enum BeastStates 
+{
+    Hunt,
+    Eating
+}
 
 public class BeastBehaviour : MonoBehaviour
 {
-    FSM fsm;
-    Vision vision;
-    
-    
+    [SerializeField]
+    private Vision vision;
+
+    private int timeToHealSeconds = 20;
+
     [Header("Health")] 
     [SerializeField] 
-    private bool fullHealth = true;
-    private int health = 100;
-    public int regen = 20;
+    private int currentHealth = 100;
+    public int maxHealth = 100;
 
-    [Header("Timer Perception")] 
-    [SerializeField] 
-    private float fleeTime;
-    private float combatTime;
-    private float restTime;
+    [Header("Flee")]
+    [SerializeField]
+    private Transform fleePos;
     
     [Header("Hunt")]
     [SerializeField]
     private List<Transform> huntPositions;
     private int currentHuntIndex = 0;
-    private Transform prey;
-
-    [Header("Rest")] 
-    [SerializeField] 
-    private List<Transform> RestPositions;
-    
+    private Coroutine currentCorutine = null;
     
     [Header("Thinking bubble")]
     [SerializeField]
     ThinkingCloudBehaviour thinkingCloudBehaviour;
     
-    //behaviours
-    private PoliceBehaviour police;
-    private ExplorerBehaviour explorer;
-    private GhostBehaviour ghost;
+    [SerializeField]
+    private BeastStates state = BeastStates.Hunt;
 
-    public NavMeshAgent agent;
+    private Animator animator;
+    private bool enemyNotOnSight;
+    private AttackableEntity attackableEntity = null;
+    private bool inCombat = false;
+    private NavMeshAgent agent;
     
     // Start is called before the first frame update
     private void Awake()
     {
-        
+        Debug.Log("me despierto zzz");
         agent = GetComponent<NavMeshAgent>();
-        fsm = new FSM();
-
-        //estado cazar (empieza con este)
-        FunctionalAction huntingAction = new FunctionalAction(StartHunting, Hunt, null);
-        State hunting = fsm.CreateState(huntingAction);
-        
-        //Estado de ver presa (y percepcion de ella)
-        FunctionalAction watchPreyAction = new FunctionalAction(StartWatchPrey, WatchPrey, null);
-        ConditionPerception checkPrey = new ConditionPerception(null, IsWatchingPrey, null);
-        State watchPrey = fsm.CreateState(watchPreyAction);
-        fsm.CreateTransition(hunting, watchPrey, checkPrey, statusFlags: StatusFlags.Running);
-        
-        //Estado de ver fantasma (y percepcion de él)
-        FunctionalAction watchGhostAction = new FunctionalAction(StartWatchGhost, WatchGhost, null);
-        ConditionPerception checkGhost = new ConditionPerception(null, IsWatchingGhost, null);
-        State watchGhost = fsm.CreateState(watchGhostAction);
-        fsm.CreateTransition(hunting, watchGhost, checkGhost, statusFlags: StatusFlags.Running);
-        
-        //Estado de descansar
-        FunctionalAction restAction = new FunctionalAction(StartResting, Rest, null);
-        TimerPerception restTimer = new TimerPerception(restTime);
-        State resting = fsm.CreateState(restAction);
-        
-        //Estado de huida (transicion desde ver fantasma) FALTA LA CONDICION DE HUIDA QUE SERÍA ABATIR UN POLICIA 
-        FunctionalAction fleeAction = new FunctionalAction(StartFleeing, Flee, null);
-        TimerPerception fleeTimer = new TimerPerception(fleeTime);
-        State fleeing = fsm.CreateState(fleeAction);
-        fsm.CreateTransition(watchGhost, fleeing, fleeTimer, statusFlags: StatusFlags.Running);
-
-        //Estado de combate (transicion desde ver presa)
-        FunctionalAction combatAction = new FunctionalAction(StartCombating, Combat, null);
-        TimerPerception combatTimer = new TimerPerception(combatTime);
-        State combating = fsm.CreateState(combatAction);
-        fsm.CreateTransition(watchPrey, combating, combatTimer, statusFlags: StatusFlags.Running);
-        
-
-        //FALTA TRANSICion entre rest y empezar a cazar de nuevo 
-        //Seria si aparece un enemigo en un radio cercano O pasa c ierto tiempo
-        
-        //Transición entre combatir y cazar de nuevo (con explorador)
-        ConditionPerception checkDeadPrey = new ConditionPerception(null, CheckDeadExplorer, null);
-        fsm.CreateTransition(combating, hunting, checkDeadPrey, statusFlags: StatusFlags.Running);
-        
-        //Transición entre combate y huir (cuando mata a un policia)
-        ConditionPerception checkDeadRest = new ConditionPerception(null, CheckDeadPolice, null);
-        fsm.CreateTransition(combating, fleeing, checkDeadRest, statusFlags: StatusFlags.Running);
-        
-        
-        
-        fsm.SetEntryState(hunting);
-        fsm.Start();
-    }
-
-    private void Update()
-    {
-        fsm.Update();
+        animator = GetComponent<Animator>();
     }
     
     #region 1. HuntState
 
-    void StartHunting()
+    public void Hunt()
     {
-        agent.isStopped = false;
-    }
-    public Status Hunt()
-    {
-        if (IsPathComplete())
+        Debug.Log("Estoy cazando");
+        enemyNotOnSight = true;
+        
+        thinkingCloudBehaviour.UpdateCloud(1  );
+
+        if (currentCorutine != null)
         {
-            ChangeHuntPoint(1);
+            StopCoroutine(currentCorutine);
+            currentCorutine = null;
+            agent.SetDestination(transform.position);
         }
-        return Status.Running;
+
+        currentCorutine = StartCoroutine(PatrolCorutine());
+
+        IEnumerator PatrolCorutine()
+        {
+            while (true)
+            {
+                agent.stoppingDistance = 0.2f;
+                agent.SetDestination(huntPositions[currentHuntIndex].position);
+                yield return new WaitUntil(() => { return IsPathComplete(); });
+                currentHuntIndex++;
+                currentHuntIndex %= huntPositions.Count;
+            }
+        }
     }
 
     #endregion
     
     #region 2. RestState
 
-    void StartResting()
+    public void Rest() 
     {
-        thinkingCloudBehaviour.UpdateCloud(4);
-        agent.isStopped = true;
-    }
-    public Status Rest()
-    {
-        if(EvaluarMoho()){
-            while (fullHealth == false)
-            {
-                health += regen;
-            }
+        thinkingCloudBehaviour.UpdateCloud(3);
+        if (currentCorutine != null)
+        {
+            StopCoroutine(currentCorutine);
+            currentCorutine = null;
+            agent.SetDestination(transform.position);
         }
-        return Status.Running;
+
+        currentCorutine = StartCoroutine(RestCorutine());
+
+        IEnumerator RestCorutine() 
+        {
+            
+            animator.SetTrigger("Idle");
+            yield return new WaitForSeconds(timeToHealSeconds);
+            currentHealth = maxHealth;
+        }
     }
     #endregion
     
     #region 3. FleeState
+    
+    public void Flee() 
+    {
+        animator.SetTrigger("Run");
+        thinkingCloudBehaviour.UpdateCloud(2);
+        Debug.Log("Fleeing");
+        if (currentCorutine != null)
+        {
+            StopCoroutine(currentCorutine);
+            currentCorutine = null;
+            agent.SetDestination(transform.position);
+        }
 
-    void StartFleeing()
+        currentCorutine = StartCoroutine(FleeingCorutine());
+
+        IEnumerator FleeingCorutine()
+        {
+                agent.stoppingDistance = 0.2f;
+                agent.SetDestination(fleePos.position);
+                yield return new WaitUntil(() => { return IsPathComplete(); });
+            
+        }
+    }
+
+    #endregion
+
+    #region 4. FightState
+
+    public void Fight() 
     {
         thinkingCloudBehaviour.UpdateCloud(2);
-        agent.isStopped = false;
-    } 
-    
-    public Status Flee()
-    {
-        if (IsPathComplete())
+        inCombat = true;
+        if (currentCorutine != null)
         {
-            agent.SetDestination(ClosestPosition(RestPositions).position);
+            StopCoroutine(currentCorutine);
+            currentCorutine = null;
+            agent.SetDestination(transform.position);
         }
+        agent.stoppingDistance = 2;
+        currentCorutine = StartCoroutine(HitCorutine());
 
-        return Status.Running;
-    }
-    #endregion
-    
-    #region 4. CombatState
-
-    void StartCombating()
-    {
-        thinkingCloudBehaviour.UpdateCloud(5);
-        agent.isStopped = false;
-        
-    }public Status Combat()
-    {
-        PoliceBehaviour police = null;
-        ExplorerBehaviour explorer = null;
-    
-        foreach (var trigger in vision.VisibleTriggers)
+        IEnumerator HitCorutine()
         {
-            if (trigger.CompareTag("Police"))
+            //TODO adjust stoppingDistance based on attack type
+            while (true)
             {
-                police = trigger.GetComponent<PoliceBehaviour>();
-            }
-            else if (trigger.CompareTag("Explorer"))
-            {
-                explorer = trigger.GetComponent<ExplorerBehaviour>();
-            }
-        }
-
-        if (explorer != null)
-        {
-            agent.SetDestination(explorer.transform.position);
-            if (IsPathComplete())
-            {
-                //Hace daño
-                //explorer.TakeDamage(beastDamageAmount);
+                
+                if (attackableEntity != null && attackableEntity.isAlive)
+                {
+                    agent.SetDestination(attackableEntity.transform.position);
+                    yield return new WaitUntil(() => { return IsPathComplete(); });
+                    //Hit animation and damage
+                    
+                    animator.SetTrigger("Hit Attack");
+                    
+                    transform.LookAt(attackableEntity.transform.position);
+                    Debug.Log("Gorilla paunch!");
+                    thinkingCloudBehaviour.UpdateCloud(4);
+                    attackableEntity.ReceiveAttack(50);
+                    yield return new WaitForSeconds(2);
+                }
+                else
+                {
+                    Debug.Log("Ñam");
+                    attackableEntity = null;
+                    inCombat= false;
+                    break;
+                }
             }
         }
-        else if (police != null)
-        {
-            agent.SetDestination(police.transform.position);
-            if (IsPathComplete())
-            {
-                //police.TakeDamage(beastDamageAmount);
-            }
-        }
-        
-        return Status.Running;
-    }
 
-    
-    bool CheckDeadPolice()
-    {
-       return police.currentHealth == 0;
-    }
-
-    bool CheckDeadExplorer()
-    {
-        return explorer.currentHealth == 0;
     }
 
     #endregion
 
-    #region 5. WatchPrey
+    
+    #region Perception
 
-    void StartWatchPrey()
+    
+    public bool DetectEnemy()
     {
-        thinkingCloudBehaviour.UpdateCloud(1);
-        agent.isStopped = true;
-    }
-
-    public Status WatchPrey()
-    {
-        return Status.Running;
-    }
-
-    bool IsWatchingPrey()
-    {
-        prey = null;
-        explorer = null;
-        police = null;
-        //ERROR
         foreach (var trigger in vision.VisibleTriggers)
         {
             if (trigger != null)
             {
-                if (prey == trigger.GetComponent<PoliceBehaviour>())
+                attackableEntity = trigger.GetComponent<PreyEntity>();
+                if (attackableEntity != null)
                 {
-                    prey = trigger;
-                    police = trigger.GetComponent<PoliceBehaviour>();
+                    Debug.Log("Presa Localizada");
+                    enemyNotOnSight = false;
+                    return true;
                 }
-                else if (prey == trigger.GetComponent<ExplorerBehaviour>())
-                {
-                    prey = trigger;
-                    explorer = trigger.GetComponent<ExplorerBehaviour>();
-                }
-                
-                return true;
-                
+
             }
         }
+        enemyNotOnSight = true;
         return false;
     }
-    #endregion 
     
-    #region 6. WatchGhost
-
-    void StartWatchGhost()
+    
+    public bool FinishedCombat()
     {
-        thinkingCloudBehaviour.UpdateCloud(1);
-        agent.isStopped = true;
+        return !inCombat;
     }
-
-    public Status WatchGhost()
-    {
-        return Status.Running;
-    }
-
-    bool IsWatchingGhost()
-    {
-        ghost = null;
-        foreach (var trigger in vision.VisibleTriggers)
-        {
-            ghost = trigger.GetComponent<GhostBehaviour>();
-            if (ghost != null)
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
+    
     #endregion
-
-    private bool EvaluarMoho()
-    {
-        bool moho = false;
-
-        foreach (var trigger in vision.VisibleTriggers)
-        {
-            if (trigger.CompareTag("moho"))
-            {
-                moho = true;
-            }
-        }
-
-        return moho;
-    }
-
-
-    void checkPrey()
-    {
-        foreach (var trigger in vision.VisibleTriggers)
-        {
-            if (trigger.GetComponent<PoliceBehaviour>() != null || trigger.GetComponent<ExplorerBehaviour>() != null)
-            {
-                prey = trigger;
-            }
-        }
-    }
     
-    void ChangeHuntPoint(int change)
-    {
-        if (huntPositions.Count == 0)
-        {
-            return;
-        }
 
-        agent.SetDestination(huntPositions[currentHuntIndex].position);
-        currentHuntIndex += change;
-        currentHuntIndex %= huntPositions.Count;
-        if (currentHuntIndex < 0)
-        {
-            currentHuntIndex = huntPositions.Count - 1;
-        }
-    }
-    
-    Transform ClosestPosition(List<Transform> positions)
+
+    public bool CheckFullHealth()
     {
-        Transform tMin = null;
-        float minDist = Mathf.Infinity;
-        Vector3 currentPos = transform.position;
-        foreach (Transform t in positions)
-        {
-            float dist = Vector3.Distance(t.position, currentPos);
-            if (dist < minDist)
-            {
-                tMin = t;
-                minDist = dist;
-            }
-        }
-        return tMin;
+        return currentHealth == 100;
     }
-    
-    bool IsPathComplete()
+
+    public bool IsPathComplete()
     {
         return (!agent.pathPending &&
-            agent.remainingDistance <= agent.stoppingDistance &&
-            (!agent.hasPath || agent.velocity.sqrMagnitude == 0f));
+                agent.remainingDistance <= agent.stoppingDistance &&
+                (!agent.hasPath || agent.velocity.sqrMagnitude == 0f));
     }
     private void OnDrawGizmos()
     {
