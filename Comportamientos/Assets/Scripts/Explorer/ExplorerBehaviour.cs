@@ -16,11 +16,10 @@ using State = BehaviourAPI.StateMachines.State;
 enum ExplorerStates 
 {
         Exploring,
-        Painting,
+        Observing,
         Watching,
         Advancing,
         Escaping,
-        Hiding,
         Fainted,
 }
 
@@ -67,6 +66,7 @@ public class ExplorerBehaviour : MonoBehaviour
     private VariableFactor fear;
     private bool _stoppedFaint;
     private bool _isScared;
+    private bool _isHit;
 
     // Start is called before the first frame update
     private void Awake()
@@ -213,10 +213,18 @@ public class ExplorerBehaviour : MonoBehaviour
         {
             if (_states != ExplorerStates.Exploring)
             {
+                if (agent.destination == explorePositions[explorePositions.Count - 1].position)
+                {
+                    Destroy(this.gameObject);
+                }
                 ChangePatrolPoint(0);
             }
             else
             {
+                if (agent.destination == explorePositions[explorePositions.Count - 1].position)
+                {
+                    Destroy(this.gameObject);
+                }
                 ChangePatrolPoint(1);
             }
         }
@@ -226,8 +234,8 @@ public class ExplorerBehaviour : MonoBehaviour
     
     void StartObserving()
     {
-        _states = ExplorerStates.Painting;
-        Debug.Log("Estoy pintando");
+        _states = ExplorerStates.Observing;
+        Debug.Log("Estoy observando");
         thinkingCloudBehaviour.UpdateCloud(0);
         agent.isStopped = true;
     }
@@ -331,7 +339,7 @@ public class ExplorerBehaviour : MonoBehaviour
             {
                 if (a.GetComponent<InterestPointController>())
                 {
-                    if (!a.GetComponent<InterestPointController>().IsObnserved())
+                    if (objective == a)
                     {
                         objective = a;
                         return true;
@@ -350,7 +358,6 @@ public class ExplorerBehaviour : MonoBehaviour
             {
                 if (!a.GetComponent<InterestPointController>().IsObnserved())
                 {
-                    objective = a;
                     return true;
                 }
             }
@@ -401,6 +408,12 @@ public class ExplorerBehaviour : MonoBehaviour
                 }
             }
         }
+
+        if (_isHit)
+        {
+            _isHit = false;
+            return true;
+        }
         return false;
 
     }
@@ -439,6 +452,16 @@ public class ExplorerBehaviour : MonoBehaviour
     public void Scare()
     {
         _isScared = true;
+    }
+
+    public void RemoveHealth(int i, Transform a)
+    {
+        _isHit = true;
+        health -= i;
+        if (health <= 0)
+        {
+            Destroy(this.gameObject);
+        }
     }
 }
 

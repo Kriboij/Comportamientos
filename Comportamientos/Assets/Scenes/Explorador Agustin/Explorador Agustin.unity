@@ -1462,6 +1462,30 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1831343713709839283, guid: cf10582d7b7eb034f847510dd556b274, type: 3}
+      propertyPath: images.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1831343713709839283, guid: cf10582d7b7eb034f847510dd556b274, type: 3}
+      propertyPath: images.Array.data[0]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1831343713709839283, guid: cf10582d7b7eb034f847510dd556b274, type: 3}
+      propertyPath: images.Array.data[1]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1831343713709839283, guid: cf10582d7b7eb034f847510dd556b274, type: 3}
+      propertyPath: images.Array.data[2]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1831343713709839283, guid: cf10582d7b7eb034f847510dd556b274, type: 3}
+      propertyPath: images.Array.data[3]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1831343713709839283, guid: cf10582d7b7eb034f847510dd556b274, type: 3}
+      propertyPath: images.Array.data[4]
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 2860105487330844685, guid: cf10582d7b7eb034f847510dd556b274, type: 3}
       propertyPath: sceneMask.m_Bits
       value: 1
