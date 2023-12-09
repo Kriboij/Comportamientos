@@ -156,6 +156,7 @@ public class PoliceBehaviour : AttackableEntity
     public void Heal() 
     {
         thinkingCloudBehaviour.UpdateCloud(6);
+        animator.SetTrigger("Heal");
         if (currentCorutine != null)
         {
             StopCoroutine(currentCorutine);
@@ -175,6 +176,7 @@ public class PoliceBehaviour : AttackableEntity
     public void Reinforcements() 
     {
         thinkingCloudBehaviour.UpdateCloud(7);
+        animator.SetTrigger("Call");
         if (currentCorutine != null)
         {
             StopCoroutine(currentCorutine);
