@@ -9,6 +9,8 @@ using System.Reflection;
 using BehaviourAPI.UnityToolkit.GUIDesigner.Runtime;
 using BehaviourAPI.StateMachines;
 using Unity.VisualScripting;
+using System.Linq;
+using System;
 
 enum PoliceStates 
 {
@@ -141,7 +143,6 @@ public class PoliceBehaviour : AttackableEntity
             transform.DOLookAt(investigableObject.transform.position, 0.5f, AxisConstraint.Y).OnComplete(() => { animator.SetBool("Investigate",true);});
 
             yield return new WaitForSeconds(investigableObject.investigateTime);
-            Debug.Log("Finished investigating: " + investigableObject);
             investigableObject?.HasBeenInvestigated();
             vision.VisibleTriggers.Remove(investigableObject.transform);
             investigableObject = null;
@@ -190,11 +191,15 @@ public class PoliceBehaviour : AttackableEntity
             yield return new WaitForSeconds(timeToSpawn);
             for (int i = 0; i < numbeOfReinforcements; i++) 
             {
-                PoliceBehaviour instance = Instantiate(this,reinforcementsSpawnPos);
+                PoliceBehaviour instance = Instantiate(this,reinforcementsSpawnPos.position,reinforcementsSpawnPos.rotation);
                 //TODO Asign instance same data as current police also make a method to shuffle instance patrol positions so that they dont go always together
+                instance.patrolPositions = instance.patrolPositions.OrderBy( i => Guid.NewGuid()).ToList();
             }
         }
     }
+
+
+
 
     #endregion
 
@@ -243,7 +248,6 @@ public class PoliceBehaviour : AttackableEntity
         {
             if (attackableEntity != null)
             {
-                Debug.Log("Chase");
                 //TODO adjust stoppingDistance based on attack type
                 agent.stoppingDistance = 5f;
                 agent.SetDestination(attackableEntity.transform.position);
@@ -384,7 +388,6 @@ public class PoliceBehaviour : AttackableEntity
                 attackableEntity = trigger.GetComponent<Enemy>();
                 if (attackableEntity != null)
                 {
-                    Debug.Log("Enemigo pillado");
                     enemyNotOnSight = false;
                     return true;
                 }
@@ -402,7 +405,6 @@ public class PoliceBehaviour : AttackableEntity
             attackableEntity = trigger.GetComponent<Enemy>();
             if (attackableEntity != null)
             {
-                Debug.Log("Enemigo pillado success =======");
                 enemyNotOnSight = false;
                 return Status.Success;
             }
@@ -439,9 +441,11 @@ public class PoliceBehaviour : AttackableEntity
 
     public Status CheckHealth() 
     {
+        Debug.Log("Health: " + currentHealth);
         //Returns True if low on health
         if (currentHealth < 20) 
         {
+            Debug.Log("Success");
             return Status.Success;
         }
         return Status.Failure;
@@ -464,7 +468,6 @@ public class PoliceBehaviour : AttackableEntity
     {
         if (!inCombat) 
         {
-            Debug.Log("Finished Combat");
             return Status.Failure;
         }
         return Status.Running;
@@ -490,6 +493,17 @@ public class PoliceBehaviour : AttackableEntity
             (!agent.hasPath || agent.velocity.sqrMagnitude == 0f))
         {
             return Status.Success;
+        }
+        return Status.Running;
+    }
+
+    public Status FleePathStatus()
+    {
+        if (!agent.pathPending &&
+            agent.remainingDistance <= agent.stoppingDistance &&
+            (!agent.hasPath || agent.velocity.sqrMagnitude == 0f))
+        {
+            return Status.Failure;
         }
         return Status.Running;
     }
