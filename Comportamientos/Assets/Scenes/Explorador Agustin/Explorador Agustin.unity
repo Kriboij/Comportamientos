@@ -345,7 +345,7 @@ GameObject:
   - component: {fileID: 426989821}
   - component: {fileID: 426989825}
   m_Layer: 0
-  m_Name: Investigable (1)
+  m_Name: Interest2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -832,7 +832,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1274425925}
   m_Layer: 0
-  m_Name: Investigables (1)
+  m_Name: InterestObjects
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -871,7 +871,7 @@ GameObject:
   - component: {fileID: 1304555318}
   - component: {fileID: 1304555322}
   m_Layer: 0
-  m_Name: Investigable
+  m_Name: Interest1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1337,7 +1337,7 @@ GameObject:
   - component: {fileID: 2108682907}
   - component: {fileID: 2108682911}
   m_Layer: 0
-  m_Name: Investigable (2)
+  m_Name: Interest3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1385,7 +1385,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -1462,34 +1462,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1831343713709839283, guid: cf10582d7b7eb034f847510dd556b274, type: 3}
-      propertyPath: images.Array.size
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1831343713709839283, guid: cf10582d7b7eb034f847510dd556b274, type: 3}
-      propertyPath: images.Array.data[0]
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 1831343713709839283, guid: cf10582d7b7eb034f847510dd556b274, type: 3}
-      propertyPath: images.Array.data[1]
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 1831343713709839283, guid: cf10582d7b7eb034f847510dd556b274, type: 3}
-      propertyPath: images.Array.data[2]
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 1831343713709839283, guid: cf10582d7b7eb034f847510dd556b274, type: 3}
-      propertyPath: images.Array.data[3]
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 1831343713709839283, guid: cf10582d7b7eb034f847510dd556b274, type: 3}
-      propertyPath: images.Array.data[4]
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 2860105487330844685, guid: cf10582d7b7eb034f847510dd556b274, type: 3}
-      propertyPath: sceneMask.m_Bits
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 3870167937885881396, guid: cf10582d7b7eb034f847510dd556b274, type: 3}
       propertyPath: m_LocalPosition.x
       value: 58.6
@@ -1534,26 +1506,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Explorer
       objectReference: {fileID: 0}
-    - target: {fileID: 5865112761853003946, guid: cf10582d7b7eb034f847510dd556b274, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6103699376078470518, guid: cf10582d7b7eb034f847510dd556b274, type: 3}
-      propertyPath: rotation
-      value: 30
-      objectReference: {fileID: 0}
     - target: {fileID: 6103699376078470518, guid: cf10582d7b7eb034f847510dd556b274, type: 3}
       propertyPath: escapePoint
       value: 
       objectReference: {fileID: 668729588}
-    - target: {fileID: 6103699376078470518, guid: cf10582d7b7eb034f847510dd556b274, type: 3}
-      propertyPath: faintingTime
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 6103699376078470518, guid: cf10582d7b7eb034f847510dd556b274, type: 3}
-      propertyPath: paintingTime
-      value: 5
-      objectReference: {fileID: 0}
     - target: {fileID: 6103699376078470518, guid: cf10582d7b7eb034f847510dd556b274, type: 3}
       propertyPath: explorePositions.Array.data[0]
       value: 
@@ -1570,10 +1526,6 @@ PrefabInstance:
       propertyPath: explorePositions.Array.data[3]
       value: 
       objectReference: {fileID: 982213566}
-    - target: {fileID: 8143372356890002239, guid: cf10582d7b7eb034f847510dd556b274, type: 3}
-      propertyPath: m_IsKinematic
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

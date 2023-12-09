@@ -213,10 +213,6 @@ public class ExplorerBehaviour : MonoBehaviour
         {
             if (_states != ExplorerStates.Exploring)
             {
-                if (agent.destination == explorePositions[explorePositions.Count - 1].position)
-                {
-                    Destroy(this.gameObject);
-                }
                 ChangePatrolPoint(0);
             }
             else
@@ -226,6 +222,10 @@ public class ExplorerBehaviour : MonoBehaviour
                     Destroy(this.gameObject);
                 }
                 ChangePatrolPoint(1);
+            }
+            if (agent.destination == explorePositions[explorePositions.Count - 1].position)
+            {
+                Destroy(this.gameObject);
             }
         }
         _states = ExplorerStates.Exploring;
@@ -358,6 +358,7 @@ public class ExplorerBehaviour : MonoBehaviour
             {
                 if (!a.GetComponent<InterestPointController>().IsObnserved())
                 {
+                    objective = a;
                     return true;
                 }
             }
