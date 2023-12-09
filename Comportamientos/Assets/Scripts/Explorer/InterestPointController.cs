@@ -9,17 +9,17 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class WallController : MonoBehaviour
+public class InterestPointController : MonoBehaviour
 {
-    private bool painted = false;
+    private bool observed = false;
 
-    public bool IsPainted()
+    public bool IsObnserved()
     {
-        return painted;
+        return observed;
     }
     
-    public void Paint()
+    public void Observe()
     {
-        painted = true;
+        observed = true;
     }
 }

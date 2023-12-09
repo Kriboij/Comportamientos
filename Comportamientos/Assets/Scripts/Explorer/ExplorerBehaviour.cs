@@ -66,6 +66,7 @@ public class ExplorerBehaviour : MonoBehaviour
     private VariableFactor anxiety;
     private VariableFactor fear;
     private bool _stoppedFaint;
+    private bool _isScared;
 
     // Start is called before the first frame update
     private void Awake()
@@ -88,8 +89,8 @@ public class ExplorerBehaviour : MonoBehaviour
         FunctionalAction advancingAction = new FunctionalAction(StartAdvancing, Advancing, null); //Estado Avanzar
         State advancing = _fsm.CreateState(advancingAction);
         
-        FunctionalAction paintingAction = new FunctionalAction(StartPainting, Painting, null); //Estado Pintar
-        State painting = _fsm.CreateState(paintingAction);
+        FunctionalAction observingAction = new FunctionalAction(StartObserving, Observing, null); //Estado Pintar
+        State observing = _fsm.CreateState(observingAction);
 
         FunctionalAction escapingAction = new FunctionalAction(StartEscaping, Escaping, null); //Estado Escapar
         State escaping = _fsm.CreateState(escapingAction);
@@ -104,29 +105,21 @@ public class ExplorerBehaviour : MonoBehaviour
 
         ConditionPerception escapeDistance = new ConditionPerception(null, IsAtEscapeDistance, null);
         
-        ConditionPerception faintDistance = new ConditionPerception(null, IsAtFaintDistance, null);
-        
         ConditionPerception detectObjective = new ConditionPerception(null, IsDetectingObjective, null);
         
         ConditionPerception watchObjective = new ConditionPerception(null, IsWatchingObjective, null);
         
-        ConditionPerception onObjective = new ConditionPerception(null, IsOnEmpty, null);
+        ConditionPerception onObjective = new ConditionPerception(null, IsPathComplete, null);
         
-        ConditionPerception onWall = new ConditionPerception(null, IsOnWall, null);
+        ConditionPerception finishObserve = new ConditionPerception(null, IsObserved, null);
         
-        ConditionPerception emptyWall = new ConditionPerception(null, IsEmptyWall, null);
+        ConditionPerception isScared = new ConditionPerception(null, IsScared, null);
         
-        ConditionPerception paintedWall = new ConditionPerception(null, IsPaintedWall, null);
-        
-        ConditionPerception stopEscaping = new ConditionPerception(null, StopEscape, null);
+        ConditionPerception stopEscaping = new ConditionPerception(null, IsPathComplete, null);
         
         ConditionPerception stopFainting = new ConditionPerception(null, StopFaint, null);
         
-        AndPerception canPaint = new AndPerception(emptyWall, onWall);
         
-        AndPerception stopPaint = new AndPerception(paintedWall, onWall);
-        
-        OrPerception stopAdvance = new OrPerception(onObjective, stopPaint);
 
         #endregion
 
@@ -137,11 +130,9 @@ public class ExplorerBehaviour : MonoBehaviour
         
         _fsm.CreateTransition(watching, advancing, watchObjective, statusFlags: StatusFlags.Running);
         
-        _fsm.CreateTransition(advancing, painting, canPaint, statusFlags: StatusFlags.Running);
+        _fsm.CreateTransition(advancing, observing, onObjective, statusFlags: StatusFlags.Running);
         
-        _fsm.CreateTransition(painting, exploring, stopPaint, statusFlags: StatusFlags.Running);
-        
-        _fsm.CreateTransition(advancing, exploring, stopAdvance, statusFlags: StatusFlags.Running);
+        _fsm.CreateTransition(observing, exploring, finishObserve, statusFlags: StatusFlags.Running);
         
         _fsm.CreateTransition(exploring, escaping, escapeDistance, statusFlags: StatusFlags.Running);
         
@@ -149,17 +140,17 @@ public class ExplorerBehaviour : MonoBehaviour
         
         _fsm.CreateTransition(advancing, escaping, escapeDistance, statusFlags: StatusFlags.Running);
         
-        _fsm.CreateTransition(painting, escaping, escapeDistance, statusFlags: StatusFlags.Running);
+        _fsm.CreateTransition(observing, escaping, escapeDistance, statusFlags: StatusFlags.Running);
         
-        _fsm.CreateTransition(exploring, fainting, faintDistance, statusFlags: StatusFlags.Running);
+        _fsm.CreateTransition(exploring, fainting, isScared, statusFlags: StatusFlags.Running);
         
-        _fsm.CreateTransition(watching, fainting, faintDistance, statusFlags: StatusFlags.Running);
+        _fsm.CreateTransition(watching, fainting, isScared, statusFlags: StatusFlags.Running);
         
-        _fsm.CreateTransition(advancing, fainting, faintDistance, statusFlags: StatusFlags.Running);
+        _fsm.CreateTransition(advancing, fainting, isScared, statusFlags: StatusFlags.Running);
         
-        _fsm.CreateTransition(painting, fainting, faintDistance, statusFlags: StatusFlags.Running);
+        _fsm.CreateTransition(observing, fainting, isScared, statusFlags: StatusFlags.Running);
         
-        _fsm.CreateTransition(escaping, fainting, faintDistance, statusFlags: StatusFlags.Running);
+        _fsm.CreateTransition(escaping, fainting, isScared, statusFlags: StatusFlags.Running);
 
         _fsm.CreateTransition(escaping, exploring, stopEscaping, statusFlags: StatusFlags.Running);
         
@@ -233,7 +224,7 @@ public class ExplorerBehaviour : MonoBehaviour
         return Status.Running;
     }
     
-    void StartPainting()
+    void StartObserving()
     {
         _states = ExplorerStates.Painting;
         Debug.Log("Estoy pintando");
@@ -241,12 +232,12 @@ public class ExplorerBehaviour : MonoBehaviour
         agent.isStopped = true;
     }
 
-    public Status Painting()
+    public Status Observing()
     {
-        var wallController = objective.GetComponent<WallController>();
+        var wallController = objective.GetComponent<InterestPointController>();
         if (wallController != null)
         {
-            DOVirtual.DelayedCall(paintingTime, () => wallController.Paint());
+            DOVirtual.DelayedCall(paintingTime, () => wallController.Observe());
         }
         return Status.Running;
     }
@@ -318,26 +309,12 @@ public class ExplorerBehaviour : MonoBehaviour
     
     #region COMPROBACIONES
     
-    bool IsEmptyWall()
+    bool IsObserved()
     {
-        var wallController = objective.GetComponent<WallController>();
-        if(wallController!=null)
-        {
-            if (!wallController.IsPainted())
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-    
-    bool IsPaintedWall()
-    {
-        var wallController = objective.GetComponent<WallController>();
+        var wallController = objective.GetComponent<InterestPointController>();
         if (wallController!=null)
         {
-            if (wallController.IsPainted())
+            if (wallController.IsObnserved())
             {
                 return true;
             }
@@ -352,9 +329,9 @@ public class ExplorerBehaviour : MonoBehaviour
         {
             if (a == objective) // ||a.GetComponent<BeastBehaviour>() || a.GetComponent<WallController>()
             {
-                if (a.GetComponent<WallController>())
+                if (a.GetComponent<InterestPointController>())
                 {
-                    if (!a.GetComponent<WallController>().IsPainted())
+                    if (!a.GetComponent<InterestPointController>().IsObnserved())
                     {
                         objective = a;
                         return true;
@@ -369,9 +346,9 @@ public class ExplorerBehaviour : MonoBehaviour
     {
         foreach(var a in _detection.DetectableTriggers)
         {
-            if (a.GetComponent<WallController>())
+            if (a.GetComponent<InterestPointController>())
             {
-                if (!a.GetComponent<WallController>().IsPainted())
+                if (!a.GetComponent<InterestPointController>().IsObnserved())
                 {
                     objective = a;
                     return true;
@@ -380,16 +357,6 @@ public class ExplorerBehaviour : MonoBehaviour
         }
         return false;
     }
-
-    bool IsOnEmpty()
-    {
-        return IsPathComplete() && !objective.GetComponent<WallController>();
-    }
-    
-    bool IsOnWall()
-    {
-        return IsPathComplete() && objective.GetComponent<WallController>();
-    }
     
     bool IsPathComplete()
     {
@@ -397,22 +364,7 @@ public class ExplorerBehaviour : MonoBehaviour
                 agent.remainingDistance <= agent.stoppingDistance &&
                 (!agent.hasPath || agent.velocity.sqrMagnitude == 0f));
     }
-
-    bool IsAtFaintDistance()
-    {
-        var dangerObjects = FindObjectsOfType<DangerObject>();
-        foreach (var a in dangerObjects)
-        {
-            if (a.GetDistance() < 2)
-            {
-                if (_vision.VisibleTriggers.Contains(a.transform))
-                {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
+    
 
     bool StopFaint()
     {
@@ -468,9 +420,25 @@ public class ExplorerBehaviour : MonoBehaviour
         }
         return IsPathComplete();
     }
+
+    bool IsScared()
+    {
+        if (_isScared)
+        {
+            _isScared = false;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
     
     #endregion
-    
-    
+
+    public void Scare()
+    {
+        _isScared = true;
+    }
 }
 
