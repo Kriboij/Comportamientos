@@ -251,6 +251,11 @@ MonoBehaviour:
   m_CameraActivatedEvent:
     m_PersistentCalls:
       m_Calls: []
+--- !u!1 &148109206 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8084756980357672008, guid: c783887f0142f634d87c2e3a0dec9c06, type: 3}
+  m_PrefabInstance: {fileID: 6272599829750653316}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &166117728
 GameObject:
   m_ObjectHideFlags: 0
@@ -1026,7 +1031,7 @@ MonoBehaviour:
   m_LayerMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_UseGeometry: 0
+  m_UseGeometry: 1
   m_DefaultArea: 0
   m_GenerateLinks: 0
   m_IgnoreNavMeshAgent: 1
@@ -1314,6 +1319,55 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1403662456}
   m_SourcePrefab: {fileID: 100100000, guid: b14953694d54eea4eb66f453e525024c, type: 3}
+--- !u!1 &1822348554
+GameObject:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1822348556}
+  - component: {fileID: 1822348555}
+  m_Layer: 0
+  m_Name: Unity-RecorderBindings
+  m_TagString: EditorOnly
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1822348555
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1822348554}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a24bc7e8573847adbdf1198360b3c794, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_References:
+    m_Keys:
+    - f25dc8dd3e1b90a4388b70e48e16f5f3
+    m_Values:
+    - {fileID: 148109206}
+--- !u!4 &1822348556
+Transform:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1822348554}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2088578041
 GameObject:
   m_ObjectHideFlags: 3
@@ -1417,9 +1471,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1856319248223947981, guid: c783887f0142f634d87c2e3a0dec9c06, type: 3}
+      propertyPath: paranoia
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 1856319248223947981, guid: c783887f0142f634d87c2e3a0dec9c06, type: 3}
+      propertyPath: currentHealth
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 3245470596559846080, guid: c783887f0142f634d87c2e3a0dec9c06, type: 3}
       propertyPath: m_Name
       value: AllPoliceAssets
+      objectReference: {fileID: 0}
+    - target: {fileID: 3568077632025990294, guid: c783887f0142f634d87c2e3a0dec9c06, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.97
       objectReference: {fileID: 0}
     - target: {fileID: 4995356934348660997, guid: c783887f0142f634d87c2e3a0dec9c06, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1481,3 +1547,4 @@ SceneRoots:
   - {fileID: 711709310}
   - {fileID: 1673672444}
   - {fileID: 6272599829750653316}
+  - {fileID: 1822348556}

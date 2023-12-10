@@ -47,6 +47,7 @@ public class GhostBehaviour : MonoBehaviour
     #region PATROL
     public void Patrol()
     {
+        thinkingCloudBehaviour.UpdateCloud(0);
 
         if (patrolCorutine != null)
         {
@@ -67,6 +68,7 @@ public class GhostBehaviour : MonoBehaviour
                 yield return new WaitUntil(() => { return isPathComplete(); });
                 yield return new WaitForSeconds(1);
 
+                
                 //animator.CrossFade(MoveState, 1f, 0, 0);
             }
         }
@@ -100,6 +102,7 @@ public class GhostBehaviour : MonoBehaviour
     #region SCARE
     public void Scare()
     {
+        thinkingCloudBehaviour.UpdateCloud(1);
         if (scareCorutine != null)
         {
             StopCoroutine(scareCorutine);
@@ -161,6 +164,7 @@ public class GhostBehaviour : MonoBehaviour
 
     public void Teleport()
     {
+        thinkingCloudBehaviour.UpdateCloud(2);
 
         if (patrolCorutine != null)
         {

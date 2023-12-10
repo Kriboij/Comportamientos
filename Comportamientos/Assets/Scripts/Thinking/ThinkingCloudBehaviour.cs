@@ -14,11 +14,12 @@ public class ThinkingCloudBehaviour : MonoBehaviour
     void Start()
     {
         image.sprite = images[0];
-        cam = Camera.main.transform;
+        cam = Camera.current.transform;
     }
 
     private void Update()
     {
+        cam = Camera.current.transform;
         transform.LookAt(cam);
     }
 
