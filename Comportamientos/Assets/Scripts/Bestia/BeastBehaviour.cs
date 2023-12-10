@@ -45,7 +45,16 @@ public class BeastBehaviour : MonoBehaviour
     //Bools
     private bool inCombat = false;
     private bool enemyNotOnSight;
-    
+    private GameObject objective;
+
+    private void Update()
+    {
+        if (inCombat)
+        {
+            agent.SetDestination(objective.transform.position);
+            animator.SetBool("Run", true);
+        }
+    }
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -164,13 +173,17 @@ public class BeastBehaviour : MonoBehaviour
             {
                 if (attackableEntity != null && attackableEntity.isAlive)
                 {
-                    agent.SetDestination(attackableEntity.transform.position);
+                    objective = attackableEntity.gameObject;
                     yield return new WaitUntil(() => { return IsPathComplete(); });
-                    animator.SetBool("Hit Attack", true);
-                    transform.LookAt(attackableEntity.transform.position);
-                    thinkingCloudBehaviour.UpdateCloud(4);
-                    attackableEntity.ReceiveAttack(50);
-                    yield return new WaitForSeconds(2);
+                    if (Vector3.Distance(attackableEntity.transform.position, this.transform.position) < 5)
+                    {
+                        animator.SetBool("Hit Attack", true);
+                        transform.LookAt(attackableEntity.transform.position);
+                        thinkingCloudBehaviour.UpdateCloud(4);
+                        attackableEntity.ReceiveAttack(50);
+                        yield return new WaitForSeconds(2);
+                    }
+                    
                 }
                 else
                 {

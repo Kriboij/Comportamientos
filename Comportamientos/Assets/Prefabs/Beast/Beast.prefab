@@ -451,6 +451,89 @@ Transform:
   - {fileID: 2399010053492923805}
   m_Father: {fileID: 8418761939991159473}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3991263501979842334
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7158102264773312774}
+  - component: {fileID: 934988897492925556}
+  m_Layer: 0
+  m_Name: 'Main Camera '
+  m_TagString: MainCamera
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7158102264773312774
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3991263501979842334}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.061065197, z: -0, w: 0.9981338}
+  m_LocalPosition: {x: -0.25, y: 1.25, z: -2.38}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2468976863056850852}
+  m_LocalEulerAnglesHint: {x: 0, y: 7.002, z: 0}
+--- !u!20 &934988897492925556
+Camera:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3991263501979842334}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_ClearFlags: 1
+  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_projectionMatrixMode: 1
+  m_GateFitMode: 2
+  m_FOVAxisMode: 0
+  m_Iso: 200
+  m_ShutterSpeed: 0.005
+  m_Aperture: 16
+  m_FocusDistance: 10
+  m_FocalLength: 50
+  m_BladeCount: 5
+  m_Curvature: {x: 2, y: 11}
+  m_BarrelClipping: 0.25
+  m_Anamorphism: 0
+  m_SensorSize: {x: 36, y: 24}
+  m_LensShift: {x: 0, y: 0}
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: 0.3
+  far clip plane: 1000
+  field of view: 60
+  orthographic: 0
+  orthographic size: 5
+  m_Depth: -1
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 0
+  m_TargetEye: 3
+  m_HDR: 1
+  m_AllowMSAA: 1
+  m_AllowDynamicResolution: 0
+  m_ForceIntoRT: 0
+  m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: 0.022
 --- !u!1 &4013799906001550215
 GameObject:
   m_ObjectHideFlags: 0
@@ -686,13 +769,14 @@ GameObject:
   - component: {fileID: 6542661430739608410}
   - component: {fileID: 6660708176475096526}
   - component: {fileID: 5782261556103850385}
+  - component: {fileID: 1618482776783861350}
   m_Layer: 0
   m_Name: Beast
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2468976863056850852
 Transform:
   m_ObjectHideFlags: 0
@@ -701,11 +785,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6183639407736456763}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.5374179, z: -0, w: 0.8433161}
+  m_LocalRotation: {x: 0, y: 0.53741735, z: 0, w: 0.8433165}
   m_LocalPosition: {x: 18.466024, y: -0.0000019073486, z: 59.91449}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 7158102264773312774}
   - {fileID: 6117986458863354076}
   - {fileID: 3146138784576327298}
   - {fileID: 5467031765991466130}
@@ -909,7 +994,7 @@ MonoBehaviour:
         references:
         - fieldName: Perception
           value:
-            rid: -2
+            rid: 1981348785425743872
           fieldType: BehaviourAPI.Core.Perceptions.Perception, BehaviourAPI.Core,
             Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
         - fieldName: Action
@@ -947,6 +1032,24 @@ MonoBehaviour:
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
+    - rid: 1981348785425743872
+      type: {class: CustomPerception, ns: BehaviourAPI.UnityToolkit.GUIDesigner.Framework, asm: BehaviourAPI.UnityToolkit.GUIDesigner.Framework}
+      data:
+        init:
+          componentName: 
+          methodName: 
+        check:
+          componentName: BeastBehaviour
+          methodName: GetScared
+        reset:
+          componentName: 
+          methodName: 
+        pause:
+          componentName: 
+          methodName: 
+        unpause:
+          componentName: 
+          methodName: 
     - rid: 5440873024055934976
       type: {class: State, ns: BehaviourAPI.StateMachines, asm: BehaviourAPI.StateMachines}
       data: 
@@ -1046,7 +1149,7 @@ MonoBehaviour:
     - rid: 5440873024055934992
       type: {class: StateTransition, ns: BehaviourAPI.StateMachines, asm: BehaviourAPI.StateMachines}
       data:
-        StatusFlags: 0
+        StatusFlags: -1
     - rid: 5440873024055934995
       type: {class: SimpleAction, ns: BehaviourAPI.UnityToolkit.GUIDesigner.Framework, asm: BehaviourAPI.UnityToolkit.GUIDesigner.Framework}
       data:
@@ -1056,7 +1159,7 @@ MonoBehaviour:
     - rid: 5440873024055934996
       type: {class: StateTransition, ns: BehaviourAPI.StateMachines, asm: BehaviourAPI.StateMachines}
       data:
-        StatusFlags: 0
+        StatusFlags: -1
     - rid: 5440873024055934997
       type: {class: CustomPerception, ns: BehaviourAPI.UnityToolkit.GUIDesigner.Framework, asm: BehaviourAPI.UnityToolkit.GUIDesigner.Framework}
       data:
@@ -1098,7 +1201,21 @@ MonoBehaviour:
   huntPositions:
   - {fileID: 0}
   - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   thinkingCloudBehaviour: {fileID: 8867951665899278996}
+--- !u!114 &1618482776783861350
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6183639407736456763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e5f5540d312bde4aaf997083e11bb58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6927763813664068207
 GameObject:
   m_ObjectHideFlags: 0
@@ -1657,6 +1774,10 @@ PrefabInstance:
     - target: {fileID: 6554878334282041218, guid: e44ec23f5bb188a408d2aa61997f906c, type: 3}
       propertyPath: m_Name
       value: Vision
+      objectReference: {fileID: 0}
+    - target: {fileID: 6554878334282041218, guid: e44ec23f5bb188a408d2aa61997f906c, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 8890598771315835198, guid: e44ec23f5bb188a408d2aa61997f906c, type: 3}
       propertyPath: m_LocalPosition.x

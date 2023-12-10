@@ -114,13 +114,11 @@ public class GhostBehaviour : MonoBehaviour
 
         IEnumerator ScareCorutine()
         {
-            while (true)
-            {
-                entity.Escape();
-                yield return new WaitForSeconds(1);
+            Debug.Log("LLAMOS A ESCAPE");
+            entity.Escape();
+            yield return new WaitForSeconds(1);
 
-                //animator.CrossFade(MoveState, 1f, 0, 0);
-            }
+            //animator.CrossFade(MoveState, 1f, 0, 0);
         }
         animator.CrossFade(AttackState, 0.1f, 0, 0);
 

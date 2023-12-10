@@ -23,7 +23,7 @@ enum ExplorerStates
         Fainted,
 }
 
-public class ExplorerBehaviour : MonoBehaviour
+public class ExplorerBehaviour : MonoBehaviour, ScareObject
 {
     [Header("Health")]
     [SerializeField] public int health = 50;
@@ -170,6 +170,13 @@ public class ExplorerBehaviour : MonoBehaviour
         {
             _animator.SetFloat("Velocity", 0);
         }
+
+        if (!GetComponent<PreyEntity>().isAlive)
+        {
+            _animator.SetBool("isFall", true);
+            agent.speed = 0;
+            DOVirtual.DelayedCall(3, ()=>Destroy(this.gameObject));
+        }
     }
     
     void ChangePatrolPoint(int change)
@@ -288,6 +295,7 @@ public class ExplorerBehaviour : MonoBehaviour
     void StartFainting()
     {
         _states = ExplorerStates.Fainted;
+        GetComponentInChildren<Vision>().enabled = false;
         Debug.Log("Me desmayo");
         thinkingCloudBehaviour.UpdateCloud(3);
         agent.isStopped = true;
@@ -304,6 +312,7 @@ public class ExplorerBehaviour : MonoBehaviour
         _animator.SetBool("isFall", true);
         yield return new WaitForSeconds(faintingTime);
         _animator.SetBool("isFall", false);
+        GetComponentInChildren<Vision>().enabled = true;
         _stoppedFaint = true;
         agent.isStopped = false;
     }
@@ -448,6 +457,7 @@ public class ExplorerBehaviour : MonoBehaviour
     {
         if (_isScared)
         {
+            Debug.Log("BU");
             _isScared = false;
             return true;
         }
@@ -459,20 +469,10 @@ public class ExplorerBehaviour : MonoBehaviour
     
     #endregion
 
-    public void Scare()
+    public void Escape()
     {
         _isScared = true;
     }
-
-    public void RemoveHealth(int i, Transform a)
-    {
-        _isHit = true;
-        health -= i;
-        if (health <= 0)
-        {
-            _animator.SetBool("isFall", true);
-            DOVirtual.DelayedCall(3, ()=>Destroy(this.gameObject));
-        }
-    }
+    
 }
 

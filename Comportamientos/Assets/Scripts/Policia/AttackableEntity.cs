@@ -29,8 +29,8 @@ public abstract class AttackableEntity : MonoBehaviour
         if (currentHealth <= 0)
         {
             isAlive = false;
-            gameObject.GetComponent<VisionTrigger>().enabled=false;
-            gameObject.GetComponent<Collider>().enabled=false;
+            //gameObject.GetComponentInChildren<VisionTrigger>().enabled=false;
+            //gameObject.GetComponent<Collider>().enabled=false;
             DOVirtual.DelayedCall(5f, () => { Destroy(gameObject); DOTween.Complete(this); });
         }
     }

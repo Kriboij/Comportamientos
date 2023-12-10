@@ -464,13 +464,14 @@ GameObject:
   - component: {fileID: 858214253061971339}
   - component: {fileID: 4228462441880761402}
   - component: {fileID: 6103699376078470518}
+  - component: {fileID: 11719534701877023}
   m_Layer: 6
   m_Name: Explorer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3870167937885881396
 Transform:
   m_ObjectHideFlags: 0
@@ -609,6 +610,22 @@ MonoBehaviour:
   thinkingCloudBehaviour: {fileID: 1831343713709839283}
   objective: {fileID: 0}
   agent: {fileID: 0}
+--- !u!114 &11719534701877023
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4094225952327244793}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cf2d5759cffca7479212f0801a6949b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  currentHealth: 100
+  isAlive: 1
+  Police: 0
 --- !u!1 &4182818299025419330
 GameObject:
   m_ObjectHideFlags: 0
@@ -1599,7 +1616,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8890598771315835198, guid: e44ec23f5bb188a408d2aa61997f906c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.08
+      value: 0.42
       objectReference: {fileID: 0}
     - target: {fileID: 8890598771315835198, guid: e44ec23f5bb188a408d2aa61997f906c, type: 3}
       propertyPath: m_LocalPosition.z
