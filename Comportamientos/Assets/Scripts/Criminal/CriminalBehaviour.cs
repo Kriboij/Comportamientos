@@ -2,10 +2,7 @@ using BehaviourAPI.Core;
 using BehaviourAPI.Core.Actions;
 using BehaviourAPI.Core.Perceptions;
 using BehaviourAPI.StateMachines;
-using DG.Tweening;
-using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -14,8 +11,11 @@ public class CriminalBehaviour : MonoBehaviour
 
     [SerializeField] Vision vision;
     FSM fsm;
+    ExplorerBehaviour explorer;
 
     [SerializeField] float fleeTime;
+    [SerializeField] float killTime;
+    [SerializeField] float distanciaMuerteExplroador;
 
     [Header("Health")]
     [SerializeField]
@@ -31,6 +31,10 @@ public class CriminalBehaviour : MonoBehaviour
     [SerializeField]
     ThinkingCloudBehaviour thinkingCloudBehaviour;
 
+    [SerializeField] float patrollSpeed;
+    [SerializeField] float killSpeed;
+    [SerializeField] float fleeSpeed;
+
     private NavMeshAgent agent;
     private Animator animator;
 
@@ -43,14 +47,19 @@ public class CriminalBehaviour : MonoBehaviour
 
         fsm = new FSM();
 
+        //Patrullar a mirar al policia
+
         FunctionalAction patrollingAction = new FunctionalAction(StartPatrolling, Patrolling, null); //Estado
         State patrolling = fsm.CreateState(patrollingAction);
 
         FunctionalAction watchPoliceAction = new FunctionalAction(StartWatchPolice, WatchPolice, null); //Estado
         State watchPolice = fsm.CreateState(watchPoliceAction);
 
-        ConditionPerception checkPolice = new ConditionPerception(null, IsWatchingPoliceman, null); //Trancisión para la conexión
+        ConditionPerception checkPolice = new ConditionPerception(null, vision.IsWatchingPoliceman, null); //Trancisión para la conexión
         fsm.CreateTransition(patrolling, watchPolice, checkPolice, statusFlags: StatusFlags.Running); // 1.Dde donde partimos, 2. Estado al que pasamos, 3. Condicion 1, 4. Condicion 2
+
+
+        //Huir
 
         FunctionalAction fleeAction = new FunctionalAction(StartFlee, Fleeing, null); //Estado
         State flee = fsm.CreateState(fleeAction);
@@ -60,10 +69,34 @@ public class CriminalBehaviour : MonoBehaviour
         fsm.CreateTransition(watchPolice, flee, fleeTimer, statusFlags: StatusFlags.Running); //Transicion Ver Policia y Huir
 
 
-        ConditionPerception noCheckPolice = new ConditionPerception(null,()=> { return !IsWatchingPoliceman(); }, null);
+        //De huir a patrullar
+
+        ConditionPerception noCheckPolice = new ConditionPerception(null,()=> { return !vision.IsWatchingPoliceman(); }, null);
         AndPerception timeAndNoWatch = new AndPerception(noCheckPolice, fleeTimer);
 
         fsm.CreateTransition(flee, patrolling, timeAndNoWatch, statusFlags: StatusFlags.Running); //Transicion huir y patrullar
+
+        //De patrullar a Mirar al explrador
+
+        FunctionalAction watchExplorerAction = new FunctionalAction(StartWatchExplorer, WatchExplorer, null); //Estado
+        State watchExplorer = fsm.CreateState(watchExplorerAction);
+
+        ConditionPerception checkExplorer = new ConditionPerception(null, vision.IsWatchingExplorer, null);
+        fsm.CreateTransition(patrolling, watchExplorer, checkExplorer, statusFlags: StatusFlags.Running);
+
+        //De mirar al explorador a matar
+
+        FunctionalAction killAction = new FunctionalAction(StartKill, Killing, null); //Estado
+        State kill = fsm.CreateState(killAction);
+
+        TimerPerception killTimer = new TimerPerception(fleeTime);
+
+        fsm.CreateTransition(watchExplorer, kill, killTimer, statusFlags: StatusFlags.Running); //Transicion Ver Policia y Huir
+
+        //De matar a patrullar
+
+        ConditionPerception noCheckExplorer = new ConditionPerception(null, () => { return explorer == null; }, null);
+        fsm.CreateTransition(kill, patrolling, noCheckExplorer, statusFlags: StatusFlags.Success); //Transicion huir y patrullar
 
         fsm.SetEntryState(patrolling);
         fsm.Start();
@@ -79,6 +112,8 @@ public class CriminalBehaviour : MonoBehaviour
     {
         thinkingCloudBehaviour.UpdateCloud(0);
         agent.isStopped = false;
+        agent.speed = patrollSpeed;
+        animator.SetTrigger("Patrulla");
     }
 
     public Status Patrolling()
@@ -93,7 +128,7 @@ public class CriminalBehaviour : MonoBehaviour
     #endregion
 
 
-    #region 2. WATCH STATE
+    #region 2. WATCH POLICE STATE
     void StartWatchPolice()
     {
         thinkingCloudBehaviour.UpdateCloud(1);
@@ -105,20 +140,7 @@ public class CriminalBehaviour : MonoBehaviour
         return Status.Running;
     }
 
-    bool IsWatchingPoliceman()
-    {
-        foreach(var trigger in vision.VisibleTriggers)
-        {
-            var police = trigger.GetComponent<PoliceBehaviour>();
-            if(police != null)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
     #endregion
-
 
     #region 3. FLEE STATE
 
@@ -127,16 +149,78 @@ public class CriminalBehaviour : MonoBehaviour
         thinkingCloudBehaviour.UpdateCloud(2);
         agent.isStopped = false;
         ChangePatrolPoint(-1);
+        animator.SetTrigger("Huir");
     }
 
     public Status Fleeing()
     {
         if(isPathComplete())
         {
+            agent.speed = fleeSpeed;
             ChangePatrolPoint(-1);
         }
         return Status.Running;
     }
+    #endregion
+
+    #region 4. WATCH EXPLORER
+
+    void StartWatchExplorer()
+    {
+        thinkingCloudBehaviour.UpdateCloud(1);
+        agent.isStopped = true;
+    }
+
+    public Status WatchExplorer()
+    {
+        return Status.Running;
+    }
+
+    #endregion
+
+    #region 5. KILL
+
+    void StartKill()
+    {
+        thinkingCloudBehaviour.UpdateCloud(4);
+        agent.isStopped = false;
+        agent.speed = killSpeed;
+        animator.SetTrigger("Perseguir");
+
+        foreach (var visibleTrigger in vision.VisibleTriggers)
+        {
+            explorer = visibleTrigger.GetComponent<ExplorerBehaviour>();
+            if(explorer != null)
+            {
+                return;
+            }
+        }
+        
+
+    }
+
+    public Status Killing()
+    {
+        if(explorer != null)
+        {
+            agent.SetDestination(explorer.transform.position);
+
+            if(Vector3.Distance(agent.transform.position,explorer.transform.position) < distanciaMuerteExplroador)
+            {
+                thinkingCloudBehaviour.UpdateCloud(3);
+                animator.SetTrigger("Kill");
+                Destroy(explorer.gameObject);
+            }
+
+            return Status.Running;
+        }
+        else
+        {
+            return Status.Success;
+        }
+        
+    }
+
     #endregion
 
     void ChangePatrolPoint(int change)
@@ -161,10 +245,6 @@ public class CriminalBehaviour : MonoBehaviour
             (!agent.hasPath || agent.velocity.sqrMagnitude == 0f));
     }
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(transform.position + new Vector3(0, 1, 0), new Vector3(15, 1, 15));
-    }
+   
 
 }

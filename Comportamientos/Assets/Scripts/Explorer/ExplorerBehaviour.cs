@@ -165,6 +165,11 @@ public class ExplorerBehaviour : MonoBehaviour
     void Update()
     {
         _fsm.Update();
+        _animator.SetFloat("Velocity", agent.speed);
+        if (agent.isStopped == true)
+        {
+            _animator.SetFloat("Velocity", 0);
+        }
     }
     
     void ChangePatrolPoint(int change)
@@ -204,6 +209,7 @@ public class ExplorerBehaviour : MonoBehaviour
     {
         thinkingCloudBehaviour.UpdateCloud(0);
         Debug.Log("Estoy explorando");
+        agent.speed = 3.5f;
         agent.isStopped = false;
     }
 
@@ -213,10 +219,6 @@ public class ExplorerBehaviour : MonoBehaviour
         {
             if (_states != ExplorerStates.Exploring)
             {
-                if (agent.destination == explorePositions[explorePositions.Count - 1].position)
-                {
-                    Destroy(this.gameObject);
-                }
                 ChangePatrolPoint(0);
             }
             else
@@ -227,6 +229,10 @@ public class ExplorerBehaviour : MonoBehaviour
                 }
                 ChangePatrolPoint(1);
             }
+            if (agent.destination == explorePositions[explorePositions.Count - 1].position)
+            {
+                Destroy(this.gameObject);
+            }
         }
         _states = ExplorerStates.Exploring;
         return Status.Running;
@@ -236,7 +242,7 @@ public class ExplorerBehaviour : MonoBehaviour
     {
         _states = ExplorerStates.Observing;
         Debug.Log("Estoy observando");
-        thinkingCloudBehaviour.UpdateCloud(0);
+        thinkingCloudBehaviour.UpdateCloud(5);
         agent.isStopped = true;
     }
 
@@ -254,7 +260,7 @@ public class ExplorerBehaviour : MonoBehaviour
     {
         _states = ExplorerStates.Watching;
         Debug.Log("Estoy buscando el objetivo de interes");
-        thinkingCloudBehaviour.UpdateCloud(0);
+        thinkingCloudBehaviour.UpdateCloud(1);
         agent.isStopped = true;
         CalculateRotation(objective);
     }
@@ -269,7 +275,7 @@ public class ExplorerBehaviour : MonoBehaviour
     {
         _states = ExplorerStates.Advancing;
         Debug.Log("Estoy yendo hacia el objetivo de interes");
-        thinkingCloudBehaviour.UpdateCloud(0);
+        thinkingCloudBehaviour.UpdateCloud(2);
         agent.isStopped = false;
     }
 
@@ -283,7 +289,7 @@ public class ExplorerBehaviour : MonoBehaviour
     {
         _states = ExplorerStates.Fainted;
         Debug.Log("Me desmayo");
-        thinkingCloudBehaviour.UpdateCloud(0);
+        thinkingCloudBehaviour.UpdateCloud(3);
         agent.isStopped = true;
     }
 
@@ -295,7 +301,9 @@ public class ExplorerBehaviour : MonoBehaviour
 
     private IEnumerator Faint()
     {
+        _animator.SetBool("isFall", true);
         yield return new WaitForSeconds(faintingTime);
+        _animator.SetBool("isFall", false);
         _stoppedFaint = true;
         agent.isStopped = false;
     }
@@ -304,8 +312,9 @@ public class ExplorerBehaviour : MonoBehaviour
     {
         _states = ExplorerStates.Escaping;
         Debug.Log("Empiezo a escapar");
-        thinkingCloudBehaviour.UpdateCloud(0);
+        thinkingCloudBehaviour.UpdateCloud(4);
         agent.isStopped = false;
+        agent.speed = 5.5f;
     }
 
     public Status Escaping()
@@ -358,6 +367,7 @@ public class ExplorerBehaviour : MonoBehaviour
             {
                 if (!a.GetComponent<InterestPointController>().IsObnserved())
                 {
+                    objective = a;
                     return true;
                 }
             }
@@ -460,7 +470,8 @@ public class ExplorerBehaviour : MonoBehaviour
         health -= i;
         if (health <= 0)
         {
-            Destroy(this.gameObject);
+            _animator.SetBool("isFall", true);
+            DOVirtual.DelayedCall(3, ()=>Destroy(this.gameObject));
         }
     }
 }
