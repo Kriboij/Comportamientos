@@ -31,6 +31,10 @@ public class CriminalBehaviour : MonoBehaviour
     [SerializeField]
     ThinkingCloudBehaviour thinkingCloudBehaviour;
 
+    [SerializeField] float patrollSpeed;
+    [SerializeField] float killSpeed;
+    [SerializeField] float fleeSpeed;
+
     private NavMeshAgent agent;
     private Animator animator;
 
@@ -108,6 +112,8 @@ public class CriminalBehaviour : MonoBehaviour
     {
         thinkingCloudBehaviour.UpdateCloud(0);
         agent.isStopped = false;
+        agent.speed = patrollSpeed;
+        animator.SetTrigger("Patrulla");
     }
 
     public Status Patrolling()
@@ -143,12 +149,14 @@ public class CriminalBehaviour : MonoBehaviour
         thinkingCloudBehaviour.UpdateCloud(2);
         agent.isStopped = false;
         ChangePatrolPoint(-1);
+        animator.SetTrigger("Huir");
     }
 
     public Status Fleeing()
     {
         if(isPathComplete())
         {
+            agent.speed = fleeSpeed;
             ChangePatrolPoint(-1);
         }
         return Status.Running;
@@ -176,6 +184,8 @@ public class CriminalBehaviour : MonoBehaviour
     {
         thinkingCloudBehaviour.UpdateCloud(1);
         agent.isStopped = false;
+        agent.speed = killSpeed;
+        animator.SetTrigger("Perseguir");
 
         foreach (var visibleTrigger in vision.VisibleTriggers)
         {
@@ -197,6 +207,7 @@ public class CriminalBehaviour : MonoBehaviour
 
             if(Vector3.Distance(agent.transform.position,explorer.transform.position) < distanciaMuerteExplroador)
             {
+                animator.SetTrigger("Kill");
                 Destroy(explorer.gameObject);
             }
 
