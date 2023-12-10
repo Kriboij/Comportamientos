@@ -158,7 +158,7 @@ Transform:
   m_GameObject: {fileID: 66539785}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 28.18, y: 1.04, z: 9.52}
+  m_LocalPosition: {x: 28.51, y: 1.04, z: 9.52}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -270,6 +270,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1086515354}
     m_Modifications:
+    - target: {fileID: 4754005276562797252, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: images.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4754005276562797252, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: images.Array.data[0]
+      value: 
+      objectReference: {fileID: 21300000, guid: 5e4d623f2d67adc43bef18fc94a2dba5, type: 3}
+    - target: {fileID: 4754005276562797252, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: images.Array.data[1]
+      value: 
+      objectReference: {fileID: 21300000, guid: cb4b05e9768e5ed408f5f87f08ca4042, type: 3}
+    - target: {fileID: 4754005276562797252, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
+      propertyPath: images.Array.data[2]
+      value: 
+      objectReference: {fileID: 21300000, guid: 8045c8e6004c1ee40b2d1825d866cda6, type: 3}
     - target: {fileID: 7246430868342017469, guid: ba8ec74fa1027a441ac70cb90a7eb153, type: 3}
       propertyPath: m_Name
       value: Thinking bubble
@@ -1236,7 +1252,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1202091757}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.22975291, y: -0.000000018722702, z: 0.00000000441983, w: 0.973249}
+  m_LocalRotation: {x: 0.22975291, y: -0.000000017928658, z: 0.0000000042323816, w: 0.973249}
   m_LocalPosition: {x: 9.76, y: 4.999996, z: 0.8000002}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1386,7 +1402,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1320334668}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -3.5527137e-15, z: 8.881784e-16, w: 1}
+  m_LocalRotation: {x: -0, y: 5.4926197e-10, z: -2.746301e-10, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
