@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class CriminalBehaviour : MonoBehaviour
+public class CriminalBehaviour : MonoBehaviour, ScareObject
 {
 
     [SerializeField] Vision vision;
@@ -14,6 +14,7 @@ public class CriminalBehaviour : MonoBehaviour
     ExplorerBehaviour explorer;
 
     [SerializeField] float fleeTime;
+    [SerializeField] float fleeTimeGhost;
     [SerializeField] float killTime;
     [SerializeField] float distanciaMuerteExplroador;
 
@@ -37,6 +38,8 @@ public class CriminalBehaviour : MonoBehaviour
 
     private NavMeshAgent agent;
     private Animator animator;
+    [SerializeField] Transform fleeGhostPos;
+    private bool _isScared;
 
 
     // Start is called before the first frame update
@@ -67,7 +70,24 @@ public class CriminalBehaviour : MonoBehaviour
         TimerPerception fleeTimer = new TimerPerception(fleeTime);
 
         fsm.CreateTransition(watchPolice, flee, fleeTimer, statusFlags: StatusFlags.Running); //Transicion Ver Policia y Huir
+        
+        //Huir fantasma
 
+        FunctionalAction fleeGhostAction = new FunctionalAction(StartFleeGhost, FleeingGhost, null); //Estado
+        State fleeGhost = fsm.CreateState(fleeGhostAction);
+
+        ConditionPerception scaredCriminal = new ConditionPerception(null, IsScared, null);
+        fsm.CreateTransition(patrolling, fleeGhost, scaredCriminal, statusFlags: StatusFlags.Running); //Transicion Ver Policia y Huir
+
+
+        //De huir fantasma a patruyar
+
+        ConditionPerception noCheckGhost = new ConditionPerception(null, () => { return !vision.IsWatchingGhost(); }, null);
+        AndPerception timeAndNoWatchGhost = new AndPerception(noCheckGhost, fleeTimer);
+
+        TimerPerception fleeTimerGhost = new TimerPerception(fleeTimeGhost);
+
+        fsm.CreateTransition(fleeGhost, patrolling, timeAndNoWatchGhost, statusFlags: StatusFlags.Running); //Transicion huir y patrullar
 
         //De huir a patrullar
 
@@ -223,6 +243,30 @@ public class CriminalBehaviour : MonoBehaviour
 
     #endregion
 
+    #region 6. FLEE GHOST
+
+    void StartFleeGhost()
+    {
+        Debug.Log("susto");
+        thinkingCloudBehaviour.UpdateCloud(2);
+        agent.isStopped = false;
+        agent.SetDestination(fleeGhostPos.position);
+        agent.speed = fleeSpeed;
+        animator.SetTrigger("Huir");
+    }
+
+    public Status FleeingGhost()
+    {
+        if (agent.transform.position == fleeGhostPos.position)
+        {
+            agent.speed = fleeSpeed;
+            ChangePatrolPoint(-1);
+        }
+        return Status.Running;
+    }
+
+    #endregion
+    
     void ChangePatrolPoint(int change)
     {
         if(patrolPositions.Count == 0)
@@ -243,6 +287,24 @@ public class CriminalBehaviour : MonoBehaviour
         return (!agent.pathPending &&
             agent.remainingDistance <= agent.stoppingDistance &&
             (!agent.hasPath || agent.velocity.sqrMagnitude == 0f));
+    }
+    public void Escape()
+    {
+        _isScared = true;
+    }
+
+    bool IsScared()
+    {
+        Debug.Log(_isScared);
+        if (_isScared)
+        {
+            _isScared = false;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
    
