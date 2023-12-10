@@ -22,7 +22,7 @@ public class BeastBehaviour : MonoBehaviour
     [SerializeField] 
     private int currentHealth = 500;
     public int maxHealth = 500;
-    private int timeToHealSeconds = 20;
+    public int timeToHealSeconds = 20;
 
     [Header("Flee")]
     [SerializeField]
@@ -56,7 +56,7 @@ public class BeastBehaviour : MonoBehaviour
 
     public void Hunt()
     {
-        
+        Debug.Log("Bestia Cazando");
         enemyNotOnSight = true;
         animator.SetTrigger("Hunt");
         
@@ -89,7 +89,9 @@ public class BeastBehaviour : MonoBehaviour
     #region 2. RestState
     public void Rest() 
     {
-        Debug.Log("BestiaDescansa");
+        
+        animator.SetTrigger("Idle");
+        Debug.Log("Bestia Descansa");
         thinkingCloudBehaviour.UpdateCloud(3);
         if (currentCorutine != null)
         {
@@ -102,7 +104,6 @@ public class BeastBehaviour : MonoBehaviour
 
         IEnumerator RestCorutine() 
         {
-            animator.SetTrigger("Idle");
             yield return new WaitForSeconds(timeToHealSeconds);
             currentHealth = maxHealth;
         }
@@ -117,7 +118,6 @@ public class BeastBehaviour : MonoBehaviour
         Debug.Log("Bestia huye");
         animator.SetTrigger("Run");
         thinkingCloudBehaviour.UpdateCloud(2);
-        Debug.Log("Beast Fleeing");
         if (currentCorutine != null)
         {
             StopCoroutine(currentCorutine);
@@ -194,9 +194,11 @@ public class BeastBehaviour : MonoBehaviour
     
     public bool DetectEnemy()
     {
+        Debug.Log("detectando");
         foreach (var trigger in vision.VisibleTriggers)
         {
             
+            Debug.Log("detectando 2");
             if (trigger != null)
             {
                 

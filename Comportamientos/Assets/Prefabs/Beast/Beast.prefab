@@ -883,7 +883,7 @@ MonoBehaviour:
         - 61e2738a-420d-494c-9cf0-77832517e7e2
       - name: RestHunt
         id: e2ffc6c7-8e07-4d67-a762-e5478bb6f836
-        position: {x: 1164.8, y: 848}
+        position: {x: 1180.8, y: 856}
         node:
           rid: 5440873024055934989
         references:
@@ -983,7 +983,7 @@ MonoBehaviour:
           methodName: 
         check:
           componentName: BeastBehaviour
-          methodName: FinishedCombat
+          methodName: FinishCombat
         reset:
           componentName: 
           methodName: 
@@ -1091,14 +1091,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   vision: {fileID: 5967204897979952288}
-  currentHealth: 100
+  currentHealth: 70
   maxHealth: 100
+  timeToHealSeconds: 10
   fleePos: {fileID: 0}
   huntPositions:
   - {fileID: 0}
   - {fileID: 0}
   thinkingCloudBehaviour: {fileID: 8867951665899278996}
-  state: 0
 --- !u!1 &6927763813664068207
 GameObject:
   m_ObjectHideFlags: 0
