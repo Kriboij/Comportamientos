@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641275, b: 0.5748171, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -13095,6 +13095,58 @@ PrefabInstance:
     - target: {fileID: 2434979463614480542, guid: c783887f0142f634d87c2e3a0dec9c06, type: 3}
       propertyPath: m_Mesh
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3235750073378758929, guid: c783887f0142f634d87c2e3a0dec9c06, type: 3}
+      propertyPath: managedReferences[8148621654928654336]
+      value: BehaviourAPI.UnityToolkit.GUIDesigner.Framework BehaviourAPI.UnityToolkit.GUIDesigner.Framework.CustomPerception
+      objectReference: {fileID: 0}
+    - target: {fileID: 3235750073378758929, guid: c783887f0142f634d87c2e3a0dec9c06, type: 3}
+      propertyPath: managedReferences[8148621613969440768].StatusFlags
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3235750073378758929, guid: c783887f0142f634d87c2e3a0dec9c06, type: 3}
+      propertyPath: managedReferences[8148621654928654336].init.methodName
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3235750073378758929, guid: c783887f0142f634d87c2e3a0dec9c06, type: 3}
+      propertyPath: managedReferences[8148621654928654336].check.methodName
+      value: InTerror
+      objectReference: {fileID: 0}
+    - target: {fileID: 3235750073378758929, guid: c783887f0142f634d87c2e3a0dec9c06, type: 3}
+      propertyPath: managedReferences[8148621654928654336].pause.methodName
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3235750073378758929, guid: c783887f0142f634d87c2e3a0dec9c06, type: 3}
+      propertyPath: managedReferences[8148621654928654336].reset.methodName
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3235750073378758929, guid: c783887f0142f634d87c2e3a0dec9c06, type: 3}
+      propertyPath: managedReferences[8148621654928654336].init.componentName
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3235750073378758929, guid: c783887f0142f634d87c2e3a0dec9c06, type: 3}
+      propertyPath: managedReferences[8148621654928654336].unpause.methodName
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3235750073378758929, guid: c783887f0142f634d87c2e3a0dec9c06, type: 3}
+      propertyPath: managedReferences[8148621654928654336].check.componentName
+      value: PoliceBehaviour
+      objectReference: {fileID: 0}
+    - target: {fileID: 3235750073378758929, guid: c783887f0142f634d87c2e3a0dec9c06, type: 3}
+      propertyPath: managedReferences[8148621654928654336].pause.componentName
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3235750073378758929, guid: c783887f0142f634d87c2e3a0dec9c06, type: 3}
+      propertyPath: managedReferences[8148621654928654336].reset.componentName
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3235750073378758929, guid: c783887f0142f634d87c2e3a0dec9c06, type: 3}
+      propertyPath: managedReferences[8148621654928654336].unpause.componentName
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3235750073378758929, guid: c783887f0142f634d87c2e3a0dec9c06, type: 3}
+      propertyPath: data.graphs.Array.data[0].nodes.Array.data[9].references.Array.data[0].value
+      value: 8148621654928654336
       objectReference: {fileID: 0}
     - target: {fileID: 3245470596559846080, guid: c783887f0142f634d87c2e3a0dec9c06, type: 3}
       propertyPath: m_Name
