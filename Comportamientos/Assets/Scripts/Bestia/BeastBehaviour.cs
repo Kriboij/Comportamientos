@@ -10,23 +10,19 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 
-enum BeastStates 
-{
-    Hunt,
-    Eating
-}
+
 
 public class BeastBehaviour : MonoBehaviour
 {
     [SerializeField]
     private Vision vision;
-
-    private int timeToHealSeconds = 20;
+    private Animator animator;
 
     [Header("Health")] 
     [SerializeField] 
-    private int currentHealth = 100;
-    public int maxHealth = 100;
+    private int currentHealth = 500;
+    public int maxHealth = 500;
+    public int timeToHealSeconds = 20;
 
     [Header("Flee")]
     [SerializeField]
@@ -42,19 +38,16 @@ public class BeastBehaviour : MonoBehaviour
     [SerializeField]
     ThinkingCloudBehaviour thinkingCloudBehaviour;
     
-    [SerializeField]
-    private BeastStates state = BeastStates.Hunt;
 
-    private Animator animator;
-    private bool enemyNotOnSight;
     private AttackableEntity attackableEntity = null;
-    private bool inCombat = false;
     private NavMeshAgent agent;
     
-    // Start is called before the first frame update
+    //Bools
+    private bool inCombat = false;
+    private bool enemyNotOnSight;
+    
     private void Awake()
     {
-        Debug.Log("me despierto zzz");
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
     }
@@ -63,11 +56,12 @@ public class BeastBehaviour : MonoBehaviour
 
     public void Hunt()
     {
-        Debug.Log("Estoy cazando");
+        Debug.Log("Bestia Cazando");
         enemyNotOnSight = true;
+        animator.SetTrigger("Hunt");
         
+        //Thinking cloud caminar
         thinkingCloudBehaviour.UpdateCloud(1  );
-
         if (currentCorutine != null)
         {
             StopCoroutine(currentCorutine);
@@ -75,9 +69,9 @@ public class BeastBehaviour : MonoBehaviour
             agent.SetDestination(transform.position);
         }
 
-        currentCorutine = StartCoroutine(PatrolCorutine());
+        currentCorutine = StartCoroutine(HuntCorutine());
 
-        IEnumerator PatrolCorutine()
+        IEnumerator HuntCorutine()
         {
             while (true)
             {
@@ -93,9 +87,11 @@ public class BeastBehaviour : MonoBehaviour
     #endregion
     
     #region 2. RestState
-
     public void Rest() 
     {
+        
+        animator.SetTrigger("Idle");
+        Debug.Log("Bestia Descansa");
         thinkingCloudBehaviour.UpdateCloud(3);
         if (currentCorutine != null)
         {
@@ -108,21 +104,20 @@ public class BeastBehaviour : MonoBehaviour
 
         IEnumerator RestCorutine() 
         {
-            
-            animator.SetTrigger("Idle");
             yield return new WaitForSeconds(timeToHealSeconds);
             currentHealth = maxHealth;
         }
+        
     }
     #endregion
     
     #region 3. FleeState
     
-    public void Flee() 
+    public void Flee()
     {
+        Debug.Log("Bestia huye");
         animator.SetTrigger("Run");
         thinkingCloudBehaviour.UpdateCloud(2);
-        Debug.Log("Fleeing");
         if (currentCorutine != null)
         {
             StopCoroutine(currentCorutine);
@@ -145,8 +140,11 @@ public class BeastBehaviour : MonoBehaviour
 
     #region 4. FightState
 
-    public void Fight() 
+    public void Fight()
     {
+        Debug.Log("Bestia ataca!");
+        agent.stoppingDistance = 0.2f;
+        animator.SetTrigger("Run");
         thinkingCloudBehaviour.UpdateCloud(2);
         inCombat = true;
         if (currentCorutine != null)
@@ -155,32 +153,30 @@ public class BeastBehaviour : MonoBehaviour
             currentCorutine = null;
             agent.SetDestination(transform.position);
         }
-        agent.stoppingDistance = 2;
+        agent.stoppingDistance = 2; 
         currentCorutine = StartCoroutine(HitCorutine());
+        
 
         IEnumerator HitCorutine()
         {
             //TODO adjust stoppingDistance based on attack type
             while (true)
             {
-                
                 if (attackableEntity != null && attackableEntity.isAlive)
                 {
                     agent.SetDestination(attackableEntity.transform.position);
                     yield return new WaitUntil(() => { return IsPathComplete(); });
-                    //Hit animation and damage
-                    
-                    animator.SetTrigger("Hit Attack");
-                    
+                    animator.SetBool("Hit Attack", true);
                     transform.LookAt(attackableEntity.transform.position);
-                    Debug.Log("Gorilla paunch!");
                     thinkingCloudBehaviour.UpdateCloud(4);
                     attackableEntity.ReceiveAttack(50);
                     yield return new WaitForSeconds(2);
                 }
                 else
                 {
-                    Debug.Log("Ñam");
+                    
+                    agent.stoppingDistance = 0.2f;
+                    animator.SetTrigger("Run");
                     attackableEntity = null;
                     inCombat= false;
                     break;
@@ -198,14 +194,17 @@ public class BeastBehaviour : MonoBehaviour
     
     public bool DetectEnemy()
     {
+        Debug.Log("detectando");
         foreach (var trigger in vision.VisibleTriggers)
         {
+            
+            Debug.Log("detectando 2");
             if (trigger != null)
             {
+                
                 attackableEntity = trigger.GetComponent<PreyEntity>();
                 if (attackableEntity != null)
                 {
-                    Debug.Log("Presa Localizada");
                     enemyNotOnSight = false;
                     return true;
                 }
@@ -216,20 +215,40 @@ public class BeastBehaviour : MonoBehaviour
         return false;
     }
     
-    
-    public bool FinishedCombat()
+    public bool GetScared()
     {
-        return !inCombat;
+        foreach(var trigger in vision.VisibleTriggers)
+        {
+            GhostBehaviour ghost = null;
+            if (trigger != null)
+            {
+                ghost = trigger.GetComponent<GhostBehaviour>();
+                if (ghost != null)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
     
-    #endregion
-    
+    public bool FinishCombat() 
+    {
+        if (!inCombat) 
+        {
+            return true;
+        }
+        return false;
+    }
 
 
     public bool CheckFullHealth()
     {
         return currentHealth == 100;
     }
+    
+    #endregion
 
     public bool IsPathComplete()
     {
