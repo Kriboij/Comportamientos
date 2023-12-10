@@ -19,6 +19,7 @@ public class ThinkingCloudBehaviour : MonoBehaviour
 
     private void Update()
     {
+        cam = Camera.main.transform;
         transform.LookAt(cam);
     }
 
