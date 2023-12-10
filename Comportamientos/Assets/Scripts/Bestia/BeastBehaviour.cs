@@ -175,7 +175,7 @@ public class BeastBehaviour : MonoBehaviour
                 {
                     objective = attackableEntity.gameObject;
                     yield return new WaitUntil(() => { return IsPathComplete(); });
-                    if (Vector3.Distance(attackableEntity.transform.position, this.transform.position) < 5)
+                    if (Vector3.Distance(attackableEntity.transform.position, this.transform.position) < 2)
                     {
                         animator.SetBool("Hit Attack", true);
                         transform.LookAt(attackableEntity.transform.position);

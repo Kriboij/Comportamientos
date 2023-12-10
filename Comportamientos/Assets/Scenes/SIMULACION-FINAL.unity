@@ -8376,6 +8376,10 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3528711833318765860, guid: 26abf1dbfeb75584a943b6fc9992ee6c, type: 3}
+      propertyPath: distanciaMuerteExplroador
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3528711833318765860, guid: 26abf1dbfeb75584a943b6fc9992ee6c, type: 3}
       propertyPath: patrolPositions.Array.data[0]
       value: 
       objectReference: {fileID: 1606818065}
