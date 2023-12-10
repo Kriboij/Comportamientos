@@ -24,7 +24,7 @@ enum PoliceStates
 //TODO change police vision
 //TODO Finish BT 
 
-public class PoliceBehaviour : AttackableEntity
+public class PoliceBehaviour : AttackableEntity, ScareObject
 {
     [SerializeField]
     private int timeToHealSeconds = 10;
@@ -74,6 +74,7 @@ public class PoliceBehaviour : AttackableEntity
     private bool enemyNotOnSight;
     private Tween enemyLostTween = null;
     private bool inCombat = false;
+    private bool inTerror = false;
 
     // Start is called before the first frame update
     private void Awake()
@@ -210,6 +211,7 @@ public class PoliceBehaviour : AttackableEntity
     public void Flee() 
     {
         thinkingCloudBehaviour.UpdateCloud(2);
+        inTerror = false;
         if (currentCorutine != null)
         {
             StopCoroutine(currentCorutine);
@@ -510,6 +512,15 @@ public class PoliceBehaviour : AttackableEntity
         return Status.Running;
     }
 
+    public void Escape()
+    {
+        inTerror = true;
+    }
+
+    public bool InTerror() 
+    {
+        return inTerror;
+    }
 
     /*
     private void OnDrawGizmos()
