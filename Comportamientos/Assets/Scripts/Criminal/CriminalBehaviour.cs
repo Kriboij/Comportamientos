@@ -182,7 +182,7 @@ public class CriminalBehaviour : MonoBehaviour
 
     void StartKill()
     {
-        thinkingCloudBehaviour.UpdateCloud(1);
+        thinkingCloudBehaviour.UpdateCloud(4);
         agent.isStopped = false;
         agent.speed = killSpeed;
         animator.SetTrigger("Perseguir");
@@ -207,6 +207,7 @@ public class CriminalBehaviour : MonoBehaviour
 
             if(Vector3.Distance(agent.transform.position,explorer.transform.position) < distanciaMuerteExplroador)
             {
+                thinkingCloudBehaviour.UpdateCloud(3);
                 animator.SetTrigger("Kill");
                 Destroy(explorer.gameObject);
             }
